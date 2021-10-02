@@ -4,6 +4,15 @@ capstone-project-3900-h16a-404-not-found created by GitHub Classroom
 ## Caveat: Don't use npm for the project
 ## Caveat: Don't work on main branch
 ## Caveat: Create a Pull Request before merging into main branch
+## Caveat: Don't "git add .", just add the files you actuall modify
+
+## Database Setup
+1.  Download mongodb Community Server
+2.  Download robo 3t
+3.  Rename mongodb folder to be "mongodb" and create another folder "mongodb-data" in the same directory
+4.  Run the following command to start the DB server
+5.  Mac:  $YOURDIR/mongodb/bin/mongod --dbpath=$YOURDIR/mongodb-data/
+6.  Window: $YOURDIR/mongodb/bin/mongod.exe --dbpath=$YOURDIR/mongodb-data/
 
 ## frontend Scripts
 
