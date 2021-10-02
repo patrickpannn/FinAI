@@ -4,8 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon src/index.ts",
-    "prod": "node build/index.js",
+    "start": "nodemon src/server.ts",
+    "prod": "node build/server.js",
     "build": "tsc -p .",
     "lint": "eslint --ext .js,.ts src --color",
     "format": "prettier --write 'src/**/*.{ts,tsx,scss,css,json}'",
