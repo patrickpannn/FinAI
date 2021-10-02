@@ -2,6 +2,7 @@
 capstone-project-3900-h16a-404-not-found created by GitHub Classroom
 
 ## Caveat: Don't use npm for the project
+## Caveat: Don't work on main branch
 
 ## frontend Scripts
 
