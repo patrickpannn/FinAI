@@ -19,6 +19,9 @@ Run the command to start the page.
 
 Run this command to check the linting style
 
+### `yarn format`
+
+to format your codes
 
 
 ## backend Scripts
