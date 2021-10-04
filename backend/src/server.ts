@@ -1,24 +1,15 @@
-import express, { Application, Request, Response, NextFunction } from 'express';
-import Database from './db/database';
-import cors from 'cors';
-
-const port = process.env.PORT || 5000;
+import UserRoute from './routers/userRoute';
+import App from './app';
+import dotenv from 'dotenv';
+dotenv.config();
 
 async function main(): Promise<void> {
-    // Connect to MongoDB
-    await Database.connect();
+    const port: number | string = process.env.PORT || 5000;
+    const app = new App(port, [
+        new UserRoute(),
+    ]);
 
-    const app: Application = express();
-    app.use(express.json());
-    app.use(cors());
-    
-    app.get('/', (req: Request, res: Response, next: NextFunction) => {
-        res.send('hello world!');
-    });
-
-    app.listen(port, () => {
-        console.log(`Server is running at port ${port}`);
-    });
+    app.listen();
 }
 
 main();

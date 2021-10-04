@@ -1,4 +1,6 @@
 import { ConnectOptions, connect } from 'mongoose';
+import dotenv from 'dotenv';
+dotenv.config();
 
 interface Options {
     useNewUrlParser: boolean,
