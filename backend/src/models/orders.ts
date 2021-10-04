@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import { Schema , model, connect} from 'mongoose';
 
 // Document interface
 interface Order {
