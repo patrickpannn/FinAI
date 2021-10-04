@@ -1,0 +1,18 @@
+Week1
+Build a real-time stock price demo for front-end, backend and database 
+Going through the technical setup things, e.g react redux,  postgreSQL/Mongodb, webSocket, github and Typescript 
+
+Week2
+Work on acceptance criteria, software achitacture 
+Work on the Jira backlog, epic stories 
+Setup timeline for sprints
+work on ER diagram 
+
+Week3
+Setup github repo
+Setup Typescript Environment for Front-end and Back-end
+Setup Linter and prettier for front-end and back-end
+Install packages
+Create Redux state management for front-end
+Create Dababase connection for backend
+Setup git workflow, i.e. develop branch and feature branch
