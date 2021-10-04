@@ -2,8 +2,9 @@
 capstone-project-3900-h16a-404-not-found created by GitHub Classroom
 
 ## Caveat: Don't use npm for the project
-## Caveat: Don't work on main branch
-## Caveat: Create a Pull Request before merging into main branch
+## Caveat: Don't work on main or develop branch
+## Caveat: Branch off of develop branch
+## Caveat: Create a Pull Request before merging into develop branch
 ## Caveat: Don't "git add .", just add the files you actuall modify
 
 ## Database Setup
