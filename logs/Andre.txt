@@ -1,0 +1,6 @@
+2/10/2021:
+-setup database for mongodb using robo t3
+
+4/10/2021:
+-outlined models for database
+-begun work on first ticket
