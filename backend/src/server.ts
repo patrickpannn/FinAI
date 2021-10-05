@@ -1,14 +1,15 @@
-import express, { Application, Request, Response, NextFunction } from 'express';
-import Database from './db/database';
+import UserRoute from './routers/userRoute';
+import App from './app';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const app: Application = express();
-const port = process.env.PORT || 5000;
-Database.connect();
+async function main(): Promise<void> {
+    const port: number | string = process.env.PORT || 5000;
+    const app = new App(port, [
+        new UserRoute(),
+    ]);
 
-app.get('/', (req: Request, res: Response, next: NextFunction) => {
-    res.send('hello world!');
-});
+    app.listen();
+}
 
-app.listen(port, () => {
-    console.log(`Server is running at port ${port}`);
-});
+main();
