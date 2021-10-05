@@ -26,4 +26,4 @@ const PortfolioSchema = new Schema<PortfolioInterface>({
     }
 });
 
-PortfolioSchema.index({ email: 1, name: 1}, { "unique": true } );
+PortfolioSchema.index({ email: 1, name: 1 }, { "unique": true } );
