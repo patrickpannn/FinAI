@@ -1,0 +1,22 @@
+Week 1
+    - Group creation and project selection
+    - Discussed features that could be implemented into our project
+    - Read through documentation around RestAPI and MongoDB
+    - Created proposal document and prepared formatting
+    - Started research for background information for project proposal
+
+Week 2
+    - Finished project proposal background and problem statement
+    - Worked with Andre to finish the existing work comparison
+    - Created an initial database structure drawing
+    - Started writing up some user stories with the team and assisted Andre in moving them to JIRA
+
+Week 3
+    - Assisted with interface and flow diagram discussions in team meeting
+    - Cleaned up the database drawing and added this to the project proposal
+    - Added a section to the proposal for project objectives
+    - Wrote in acceptance criteria for the user stories
+
+Week 4
+    - Final edits and formatting for the report including referencing
+    - Did some initial defining of some database tables with Andre
