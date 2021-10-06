@@ -9,15 +9,18 @@ const accessKey: string = process.env.ACCESS_KEY || 'ezfinance111';
 type Token = { token: string};
 
 // Document interface
-interface WatchlistInterface extends Document {
+interface OrderInterface extends Document {
   email: string;
+  purchase_date: string;
+  purchase_quantity: number;
+  purchase_price: number;
   stock_ticker: string;
   tokens: Token[],
   generateAuth: () => string;
 }
 
 // Schema
-const WatchlistSchema = new Schema<WatchlistInterface>({
+const OrderSchema = new Schema<OrderInterface>({
   email: { type: String, 
     required: true ,
     trim: true,
@@ -27,9 +30,16 @@ const WatchlistSchema = new Schema<WatchlistInterface>({
       }
     }
   },
+  purchase_date: {type: String, required: true, trim: true},
+  purchase_quantity: {type: Number, required: true, trim: true},
+  purchase_price: {type: Number, required: true, trim: true},
   stock_ticker: { type: String, required: true, trim: true},
   tokens: [{token: {type: String, required: true, }}]
 });
 
+OrderSchema.methods.generateAuth = function(): string{
+  const token: string = jwt.sign({ _id: this._id }, accessKey);
+  return token;
+}
 
-export default model<WatchlistInterface>('watchlist', WatchlistSchema);
+export default model<OrderInterface>('order', OrderSchema);

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Watchlist from '../models/watchlistModel';
+import Order from '../models/orderModel';
 import User from '../models/userModel';
 
 export default class WatchListController {
@@ -8,11 +8,13 @@ export default class WatchListController {
         res: Response
     ): Promise<void> => {
         try {
-            const watchlistItem = new Watchlist(req.body);
-            const userExists = await User.exists({ email: watchlistItem.email });
+            const order = new Order(req.body);
+            const userExists = await User.exists({ email: order.email });
             if(userExists){
-                await watchlistItem.save();
-                res.status(201).json({ response: 'Item added to watchlist'});
+                const token: string = order.generateAuth();
+                order.tokens.push({ token });
+                await order.save();
+                res.status(201).json({token});
             } else {
                 res.status(400).json({ error: 'Bad Request'});
             }

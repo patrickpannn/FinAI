@@ -1,10 +1,11 @@
 import express, { Router } from 'express';
-import WatchlistController from '../controllers/watchlistController';
+import OrderController from '../controllers/orderController';
 import Route from '../interfaces/routeInterface';
 
-export default class WatchlistRoute implements Route {
+export default class UserRoute implements Route {
 
-    private path: string = '/watchlist';
+    private path: string = '/order';
+
     private router: Router = express.Router();
 
     constructor () {
@@ -12,7 +13,7 @@ export default class WatchlistRoute implements Route {
     }
 
     private initializeRoutes(): void {
-        this.router.post(`${this.path}/add`, WatchlistController.add);
+        this.router.post(`${this.path}/add`, OrderController.add);
     }
 
     public getRouter(): Router {
