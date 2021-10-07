@@ -1,0 +1,14 @@
+1/10/2021:
+-Setup DB with Mongoose
+-Tested DB
+
+2/10/2021:
+- Setup MongoDB with Robo T3
+
+4/10/2021:
+- Made skeletons for database models
+
+6/10/2021:
+- Made simple watchlistModel and User Model
+- Discussed a means of defining a user order such that it expires in 24 hrs
+- MongoDB has inbuilt functions to remove an entry after a certain amount of time
