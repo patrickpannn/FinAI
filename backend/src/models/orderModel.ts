@@ -1,7 +1,4 @@
 import { Schema, model, Document } from 'mongoose';
-import validator from 'validator';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -35,7 +32,7 @@ const OrderSchema = new Schema<OrderInterface>({
     required: true, 
     trim: true
   }
-}, {timestamps: true});
-OrderSchema.index({createdAt: 1}, {expireAfterSeconds: 86400});
+}, { timestamps: true });
+OrderSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400 });
 
 export default model<OrderInterface>('order', OrderSchema);

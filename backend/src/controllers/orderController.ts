@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import Order from '../models/orderModel';
-import User from '../models/userModel';
 
 export default class OrderController {
     public static add = async (
@@ -12,7 +11,7 @@ export default class OrderController {
             await order.save();
             res.sendStatus(201);
         } catch (e) {
-            res.status(400).json({ error: 'Bad Request'});
+            res.status(400).json({ error: 'Bad Request' });
         }
     };
 }

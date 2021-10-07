@@ -5,6 +5,7 @@ import Route from '../interfaces/routeInterface';
 export default class WatchlistRoute implements Route {
 
     private path: string = '/watchlist';
+    
     private router: Router = express.Router();
 
     constructor () {

@@ -1,7 +1,4 @@
 import { Schema, model, Document } from 'mongoose';
-import validator from 'validator';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -21,7 +18,8 @@ const WatchlistSchema = new Schema<WatchlistInterface>({
   stock_ticker: { 
     type: String, 
     required: true, 
-    trim: true}
+    trim: true
+  }
 });
 
 export default model<WatchlistInterface>('watchlist', WatchlistSchema);
