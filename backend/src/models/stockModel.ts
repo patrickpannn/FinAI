@@ -1,31 +1,23 @@
 import { Schema, model, Document } from 'mongoose';
-import validator from 'validator';
-import dotenv from 'dotenv';
-dotenv.config();
 
 interface StockInterface extends Document {
-    email: string,
-    portfolioName: string,
+    user: Schema.Types.ObjectID,
+    portfolio: Schema.Types.ObjectID,
     ticker: string,
     averagePrice: number,
     numUnits: number
 };
 
 const StockSchema = new Schema<StockInterface>({
-    email: {
-        type: String,
+    user: {
+        type: Schema.Types.ObjectID,
         required: true,
-        trim: true,
-        validate(value: string): void {
-            if (!validator.isEmail(value)) {
-                throw new Error('Email is invalid.');
-            }
-        }
+        ref: 'user'
     },
-    portfolioName: {
-        type: String,
+    portfolio: {
+        type: Schema.Types.ObjectID,
         required: true,
-        trim: true,
+        ref: 'portfolio'
     },
     ticker: {
         type: String,
@@ -42,4 +34,6 @@ const StockSchema = new Schema<StockInterface>({
     }
 });
 
-StockSchema.index({ email: 1, portfolioName: 1, ticker: 1 }, { "unique": true } );
+StockSchema.index({ user: 1, portfolio: 1, ticker: 1 }, { "unique": true } );
+
+export default model<StockInterface>('stock', StockSchema);
