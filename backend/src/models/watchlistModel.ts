@@ -5,15 +5,10 @@ import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const accessKey: string = process.env.ACCESS_KEY || 'ezfinance111';
-type Token = { token: string};
-
 // Document interface
 interface WatchlistInterface extends Document {
   email: string;
   stock_ticker: string;
-  tokens: Token[],
-  generateAuth: () => string;
 }
 
 // Schema
@@ -27,9 +22,7 @@ const WatchlistSchema = new Schema<WatchlistInterface>({
       }
     }
   },
-  stock_ticker: { type: String, required: true, trim: true},
-  tokens: [{token: {type: String, required: true, }}]
+  stock_ticker: { type: String, required: true, trim: true}
 });
-
 
 export default model<WatchlistInterface>('watchlist', WatchlistSchema);

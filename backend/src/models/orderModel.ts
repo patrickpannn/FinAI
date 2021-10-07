@@ -5,8 +5,6 @@ import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const accessKey: string = process.env.ACCESS_KEY || 'ezfinance111';
-type Token = { token: string};
 
 // Document interface
 interface OrderInterface extends Document {
@@ -15,8 +13,6 @@ interface OrderInterface extends Document {
   purchase_quantity: number;
   purchase_price: number;
   stock_ticker: string;
-  tokens: Token[],
-  generateAuth: () => string;
 }
 
 // Schema
@@ -33,13 +29,8 @@ const OrderSchema = new Schema<OrderInterface>({
   purchase_date: {type: String, required: true, trim: true},
   purchase_quantity: {type: Number, required: true, trim: true},
   purchase_price: {type: Number, required: true, trim: true},
-  stock_ticker: { type: String, required: true, trim: true},
-  tokens: [{token: {type: String, required: true, }}]
+  stock_ticker: { type: String, required: true, trim: true}
 });
 
-OrderSchema.methods.generateAuth = function(): string{
-  const token: string = jwt.sign({ _id: this._id }, accessKey);
-  return token;
-}
 
 export default model<OrderInterface>('order', OrderSchema);

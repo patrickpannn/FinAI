@@ -11,10 +11,8 @@ export default class WatchListController {
             const order = new Order(req.body);
             const userExists = await User.exists({ email: order.email });
             if(userExists){
-                const token: string = order.generateAuth();
-                order.tokens.push({ token });
                 await order.save();
-                res.status(201).json({token});
+                res.status(201).json( { response: 'Order Created'});
             } else {
                 res.status(400).json({ error: 'Bad Request'});
             }
