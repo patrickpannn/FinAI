@@ -1,29 +1,23 @@
 import { Schema, model, Document } from 'mongoose';
-import validator from 'validator';
-import dotenv from 'dotenv';
-dotenv.config();
 
 interface PortfolioInterface extends Document {
-    email: string,
-    name: string
+    name: string,
+    user: Schema.Types.ObjectID
 };
 
 const PortfolioSchema = new Schema<PortfolioInterface>({
-    email: {
-        type: String,
-        required: true,
-        trim: true,
-        validate(value: string): void {
-            if (!validator.isEmail(value)) {
-                throw new Error('Email is invalid.');
-            }
-        }
-    },
     name: {
         type: String,
         required: true,
         trim: true,
+    },
+    user: {
+        type: Schema.Types.ObjectID,
+        required: true,
+        ref: 'user'
     }
 });
 
-PortfolioSchema.index({ email: 1, name: 1 }, { "unique": true } );
+PortfolioSchema.index({ name: 1, user: 1 }, { "unique": true } );
+
+export default model<PortfolioInterface>('portfolio', PortfolioSchema);
