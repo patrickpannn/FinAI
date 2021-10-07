@@ -7,22 +7,21 @@ dotenv.config();
 
 // Document interface
 interface WatchlistInterface extends Document {
-  email: string;
+  user: Schema.Types.ObjectId;
   stock_ticker: string;
 }
 
 // Schema
 const WatchlistSchema = new Schema<WatchlistInterface>({
-  email: { type: String, 
-    required: true ,
-    trim: true,
-    validate(value: string): void {
-      if (!validator.isEmail(value)){
-        throw new Error('Email is invalid');
-      }
-    }
+  user: {
+    type: Schema.Types.ObjectId, 
+    required: true, 
+    ref: 'user'
   },
-  stock_ticker: { type: String, required: true, trim: true}
+  stock_ticker: { 
+    type: String, 
+    required: true, 
+    trim: true}
 });
 
 export default model<WatchlistInterface>('watchlist', WatchlistSchema);

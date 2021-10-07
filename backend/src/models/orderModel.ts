@@ -5,11 +5,9 @@ import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 dotenv.config();
 
-
 // Document interface
 interface OrderInterface extends Document {
-  email: string;
-  purchase_date: string;
+  user: Schema.Types.ObjectId;
   purchase_quantity: number;
   purchase_price: number;
   stock_ticker: string;
@@ -17,20 +15,27 @@ interface OrderInterface extends Document {
 
 // Schema
 const OrderSchema = new Schema<OrderInterface>({
-  email: { type: String, 
-    required: true ,
-    trim: true,
-    validate(value: string): void {
-      if (!validator.isEmail(value)){
-        throw new Error('Email is invalid');
-      }
-    }
+  user: {
+    type: Schema.Types.ObjectId, 
+    required: true, 
+    ref: 'user'
   },
-  purchase_date: {type: String, required: true, trim: true},
-  purchase_quantity: {type: Number, required: true, trim: true},
-  purchase_price: {type: Number, required: true, trim: true},
-  stock_ticker: { type: String, required: true, trim: true}
-});
-
+  purchase_quantity: {
+    type: Number, 
+    required: true, 
+    trim: true
+  },
+  purchase_price: {
+    type: Number, 
+    required: true, 
+    trim: true
+  },
+  stock_ticker: { 
+    type: String, 
+    required: true, 
+    trim: true
+  }
+}, {timestamps: true});
+OrderSchema.index({createdAt: 1}, {expireAfterSeconds: 86400});
 
 export default model<OrderInterface>('order', OrderSchema);
