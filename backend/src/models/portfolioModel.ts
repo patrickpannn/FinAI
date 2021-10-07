@@ -2,7 +2,7 @@ import { Schema, model, Document } from 'mongoose';
 
 interface PortfolioInterface extends Document {
     name: string,
-    user: Schema.Types.ObjectID
+    user: Schema.Types.ObjectId
 };
 
 const PortfolioSchema = new Schema<PortfolioInterface>({
@@ -12,7 +12,7 @@ const PortfolioSchema = new Schema<PortfolioInterface>({
         trim: true,
     },
     user: {
-        type: Schema.Types.ObjectID,
+        type: Schema.Types.ObjectId,
         required: true,
         ref: 'user'
     }

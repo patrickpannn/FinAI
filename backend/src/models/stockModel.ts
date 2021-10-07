@@ -1,8 +1,8 @@
 import { Schema, model, Document } from 'mongoose';
 
 interface StockInterface extends Document {
-    user: Schema.Types.ObjectID,
-    portfolio: Schema.Types.ObjectID,
+    user: Schema.Types.ObjectId,
+    portfolio: Schema.Types.ObjectId,
     ticker: string,
     averagePrice: number,
     numUnits: number
@@ -10,12 +10,12 @@ interface StockInterface extends Document {
 
 const StockSchema = new Schema<StockInterface>({
     user: {
-        type: Schema.Types.ObjectID,
+        type: Schema.Types.ObjectId,
         required: true,
         ref: 'user'
     },
     portfolio: {
-        type: Schema.Types.ObjectID,
+        type: Schema.Types.ObjectId,
         required: true,
         ref: 'portfolio'
     },
