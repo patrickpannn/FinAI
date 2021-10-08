@@ -29,7 +29,10 @@ export default class UserController {
             const inputEmail = req.body.email; 
             const inputPassword = await bcrypt.hash(req.body.password, 10);
 
-            const query = User.findOne({ email: inputEmail, password: inputPassword } );
+            const query = User.findOne({
+                email: inputEmail,
+                password: inputPassword
+            });
             const user = await query.exec();
 
             if (!user) {
