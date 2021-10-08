@@ -1,7 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 
 interface StockInterface extends Document {
-    user: Schema.Types.ObjectId,
     portfolio: Schema.Types.ObjectId,
     ticker: string,
     averagePrice: number,
@@ -9,11 +8,6 @@ interface StockInterface extends Document {
 };
 
 const StockSchema = new Schema<StockInterface>({
-    user: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: 'user'
-    },
     portfolio: {
         type: Schema.Types.ObjectId,
         required: true,
@@ -34,6 +28,6 @@ const StockSchema = new Schema<StockInterface>({
     }
 });
 
-StockSchema.index({ user: 1, portfolio: 1, ticker: 1 }, { "unique": true } );
+StockSchema.index({ portfolio: 1, ticker: 1 }, { "unique": true } );
 
 export default model<StockInterface>('stock', StockSchema);
