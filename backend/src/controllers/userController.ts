@@ -33,7 +33,7 @@ export default class UserController {
             } else if (await bcrypt.compare(req.body.password, user.password)) {
                 const token: string = user.generateAuth();
                 user.tokens.push({ token });
-                await User.findOneAndUpdate({ email: inputEmail }, user);
+                await user.save();
                 res.status(200).json({ token });
             } else {
                 res.sendStatus(400);
