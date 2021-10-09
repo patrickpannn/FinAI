@@ -25,23 +25,18 @@ export default class UserController {
         res: Response
     ): Promise<void> => {
         try {
-            // Unsure how to reference email or password
-            const inputEmail = req.body.email; 
-            const inputPassword = await bcrypt.hash(req.body.password, 10);
-
-            const query = User.findOne({
-                email: inputEmail,
-                password: inputPassword
-            });
-            const user = await query.exec();
+            const inputEmail = req.body.email;
+            const user = await User.findOne({ email: inputEmail });
 
             if (!user) {
-                res.status(403).json({ error: 'Incorrect Email or Password' });
+                res.sendStatus(400);
+            } else if (await bcrypt.compare(req.body.password, user.password)) {
+                const token: string = user.generateAuth();
+                user.tokens.push({ token });
+                await User.findOneAndUpdate({ email: inputEmail }, user);
+                res.status(200).json({ token });
             } else {
-               const token: string = user.generateAuth();
-               user.tokens.push({ token });
-               await User.findOneAndUpdate({ email: inputEmail }, user);
-               res.status(201).json({ token });
+                res.sendStatus(400);
             }
 
         } catch (e) {
