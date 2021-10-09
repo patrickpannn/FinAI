@@ -28,15 +28,14 @@ export default class UserController {
             const inputEmail = req.body.email;
             const user = await User.findOne({ email: inputEmail });
 
-            if (!user) {
+            if (!user || 
+                !(await bcrypt.compare(req.body.password, user.password))) {
                 res.sendStatus(400);
-            } else if (await bcrypt.compare(req.body.password, user.password)) {
+            } else {
                 const token: string = user.generateAuth();
                 user.tokens.push({ token });
                 await user.save();
                 res.status(200).json({ token });
-            } else {
-                res.sendStatus(400);
             }
 
         } catch (e) {
