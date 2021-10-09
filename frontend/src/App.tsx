@@ -1,16 +1,33 @@
 import React from 'react';
-import './styles/app.css';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.min.css";
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
 
 
 interface Props { }
 
 const App: React.FC<Props> = () => {
     return (
-        <div className='app'>
-            <ToastContainer autoClose={3000}/>
-        </div>
+        <>
+            <ToastContainer autoClose={3000} />
+            <Router>
+                <Switch>
+                    <Route exact path='/'>
+                        <Login />
+                    </Route>
+                    <Route path='/signup'>
+                        <Signup />
+                    </Route>
+                    <Route path='/dashboard'>
+                        <h1>welcome</h1>
+                    </Route>
+                </Switch>
+
+            </Router>
+        </>
     );
 };
 
