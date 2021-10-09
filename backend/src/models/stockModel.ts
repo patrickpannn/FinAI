@@ -21,10 +21,20 @@ const StockSchema = new Schema<StockInterface>({
     averagePrice: {
         type: Number,
         required: true,
+        validate(value: number): void {
+            if (value <= 0) {
+                throw new Error('The average price should greater than zero.');
+            }
+        }
     },
     numUnits: {
         type: Number,
         required: true,
+        validate(value: number): void {
+            if (value <= 0) {
+                throw new Error('At least one unit should be owned.');
+            }
+        }
     }
 });
 
