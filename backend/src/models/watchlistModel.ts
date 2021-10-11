@@ -4,8 +4,9 @@ dotenv.config();
 
 // Document interface
 interface WatchlistInterface extends Document {
-  user: Schema.Types.ObjectId;
-  stock_ticker: string;
+  user: Schema.Types.ObjectId,
+  stock_ticker: string,
+  tickers: Array<String>
 }
 
 // Schema
@@ -15,11 +16,13 @@ const WatchlistSchema = new Schema<WatchlistInterface>({
     required: true, 
     ref: 'user'
   },
-  stock_ticker: { 
-    type: String, 
-    required: true, 
-    trim: true
-  }
+  tickers: [{
+    ticker: {
+      type: String,
+      required: true,
+      trim: true
+    }
+  }]
 });
 
 export default model<WatchlistInterface>('watchlist', WatchlistSchema);

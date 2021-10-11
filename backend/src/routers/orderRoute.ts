@@ -2,7 +2,7 @@ import express, { Router } from 'express';
 import OrderController from '../controllers/orderController';
 import Route from '../interfaces/routeInterface';
 
-export default class UserRoute implements Route {
+export default class OrderRoute implements Route {
 
     private path: string = '/order';
 

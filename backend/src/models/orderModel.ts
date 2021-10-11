@@ -4,10 +4,11 @@ dotenv.config();
 
 // Document interface
 interface OrderInterface extends Document {
-  user: Schema.Types.ObjectId;
-  purchase_quantity: number;
-  purchase_price: number;
-  stock_ticker: string;
+  user: Schema.Types.ObjectId,
+  purchase_quantity: number,
+  purchase_price: number,
+  stock_ticker: string,
+  executed: boolean
 }
 
 // Schema
@@ -31,8 +32,14 @@ const OrderSchema = new Schema<OrderInterface>({
     type: String, 
     required: true, 
     trim: true
+  },
+  executed: {
+    type: Boolean,
+    trim: true,
+    default: false
   }
 }, { timestamps: true });
+
 OrderSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400 });
 
 export default model<OrderInterface>('order', OrderSchema);

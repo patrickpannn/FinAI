@@ -7,12 +7,8 @@ export default class WatchListController {
         res: Response
     ): Promise<void> => {
         try {
-            const watchlistItem = new Watchlist(
-                { user: 
-                    req.user._id, 
-                    ...req.body 
-                }); //TODO
-            await watchlistItem.save();
+            const watchlist = await Watchlist.findOne({ user: req.user._id });
+            watchlist.tickers.push({ ticker: req.body.ticker });
             res.sendStatus(201);
         } catch (e) {
             res.status(400).json({ error: 'Bad Request' });
