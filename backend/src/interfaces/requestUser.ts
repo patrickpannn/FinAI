@@ -3,12 +3,13 @@ import { Document } from 'mongoose';
 
 type Token = { token: string };
 
-interface UserInterface extends Document {
+export interface UserInterface extends Document {
     username: string,
     email: string,
     password: string,
     balance: number,
-    tokens: Token[]
+    tokens: Token[],
+    generateAuth: () => string,
 };
 
 export interface RequestUser extends Request {
