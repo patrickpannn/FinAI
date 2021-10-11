@@ -30,7 +30,7 @@ export default class UserController {
 
             if (!user || 
                 !(await bcrypt.compare(req.body.password, user.password))) {
-                res.sendStatus(400);
+                res.status(400).json({ error: 'Bad Request.' });
             } else {
                 const token: string = user.generateAuth();
                 user.tokens.push({ token });
