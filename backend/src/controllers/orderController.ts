@@ -9,7 +9,7 @@ export default class OrderController {
         try {
             const order = new Order({ user: req.user._id, ...req.body }); //TODO
             await order.save();
-            res.sendStatus(201);
+            res.status(201).json({ response: 'Successful'});
         } catch (e) {
             res.status(400).json({ error: 'Bad Request' });
         }
