@@ -1,4 +1,5 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model } from 'mongoose';
+import { UserInterface } from '../interfaces/requestUser';
 import validator from 'validator';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
@@ -6,17 +7,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const accessKey: string = process.env.ACCESS_KEY || 'ezfinance111';
-
-type Token = { token: string };
-
-interface UserInterface extends Document {
-    username: string,
-    email: string,
-    password: string,
-    balance: number,
-    tokens: Token[],
-    generateAuth: () => string,
-};
 
 const UserSchema = new Schema<UserInterface>({
     username: {
