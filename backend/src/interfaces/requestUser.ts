@@ -13,6 +13,6 @@ export interface UserInterface extends Document {
 };
 
 export interface RequestUser extends Request {
-    user?: UserInterface,
-    token?: string,
+    user: UserInterface,
+    token: string,
 }
