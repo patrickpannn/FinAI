@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 import UserController from '../controllers/userController';
 import Route from '../interfaces/routeInterface';
+import UserAuthentication from '../middlewares/authentication';
 
 export default class UserRoute implements Route {
 
@@ -14,6 +15,8 @@ export default class UserRoute implements Route {
 
     private initializeRoutes(): void {
         this.router.post(`${this.path}/signup`, UserController.signup);
+
+        this.router.post(`${this.path}/updateProfile`, UserAuthentication.auth, UserController.updateProfile);
     }
 
     public getRouter(): Router {
