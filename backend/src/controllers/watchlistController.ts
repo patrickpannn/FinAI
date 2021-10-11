@@ -9,7 +9,7 @@ export default class WatchListController {
         try {
             const watchlist = await Watchlist.findOne({ user: req.user._id });
             watchlist.tickers.push({ ticker: req.body.ticker });
-            res.status(201).json( { response: 'Successful'});
+            res.status(201).json( { response: 'Successful' });
         } catch (e) {
             res.status(400).json({ error: 'Bad Request' });
         }
