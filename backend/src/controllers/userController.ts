@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import User from '../models/userModel';
+import bcrypt from 'bcryptjs';
 
 export default class UserController {
     public static signup = async (
@@ -14,6 +15,29 @@ export default class UserController {
             await user.save();
 
             res.status(201).json({ token });
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request.' });
+        }
+    };
+
+    public static login = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            const inputEmail = req.body.email;
+            const user = await User.findOne({ email: inputEmail });
+
+            if (!user || 
+                !(await bcrypt.compare(req.body.password, user.password))) {
+                res.status(400).json({ error: 'Bad Request.' });
+            } else {
+                const token: string = user.generateAuth();
+                user.tokens.push({ token });
+                await user.save();
+                res.status(200).json({ token });
+            }
+
         } catch (e) {
             res.status(400).json({ error: 'Bad Request.' });
         }
