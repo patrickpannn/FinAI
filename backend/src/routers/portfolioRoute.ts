@@ -1,0 +1,22 @@
+import express, { Router } from 'express';
+import PortfolioController from '../controllers/portfolioController';
+import Route from '../interfaces/routeInterface';
+
+export default class PortfolioRoute implements Route {
+
+    private path: string = '/user/portfolio';
+
+    private router: Router = express.Router();
+
+    constructor () {
+        this.initializeRoutes();
+    }
+
+    private initializeRoutes(): void {
+        this.router.post(`${this.path}/create`, PortfolioController.create);
+    }
+
+    public getRouter(): Router {
+        return this.router;
+    }
+}
