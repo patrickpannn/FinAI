@@ -7,7 +7,7 @@ interface OrderInterface extends Document {
   user: Schema.Types.ObjectId,
   purchase_quantity: number,
   purchase_price: number,
-  stock_ticker: string,
+  ticker: string,
   executed: boolean
 }
 
@@ -20,15 +20,23 @@ const OrderSchema = new Schema<OrderInterface>({
   },
   purchase_quantity: {
     type: Number, 
-    required: true, 
-    trim: true
+    default: 0,
+    validate(value: number): void {
+      if (value <= 0){
+        throw new Error("Quantity specified must be greater than 0");
+      }
+    }
   },
   purchase_price: {
     type: Number, 
-    required: true, 
-    trim: true
+    default: 0,
+    validate(value: number): void {
+      if (value <= 0){
+        throw new Error("Price specified must be greater than 0");
+      }
+    }
   },
-  stock_ticker: { 
+  ticker: { 
     type: String, 
     required: true, 
     trim: true

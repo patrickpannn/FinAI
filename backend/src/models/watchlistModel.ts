@@ -2,11 +2,12 @@ import { Schema, model, Document } from 'mongoose';
 import dotenv from 'dotenv';
 dotenv.config();
 
+type Ticker = { ticker : string };
+
 // Document interface
 interface WatchlistInterface extends Document {
   user: Schema.Types.ObjectId,
-  stock_ticker: string,
-  tickers: Array<String>
+  tickers: Array<Ticker>
 }
 
 // Schema

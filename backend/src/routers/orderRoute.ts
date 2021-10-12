@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 import OrderController from '../controllers/orderController';
 import Route from '../interfaces/routeInterface';
+import UserAuthentication from '../middlewares/authentication';
 
 export default class OrderRoute implements Route {
 
@@ -13,7 +14,7 @@ export default class OrderRoute implements Route {
     }
 
     private initializeRoutes(): void {
-        this.router.post(`${this.path}/add`, OrderController.add);
+        this.router.post(`${this.path}/add`, UserAuthentication.auth, OrderController.add);
     }
 
     public getRouter(): Router {
