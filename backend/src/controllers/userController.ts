@@ -93,6 +93,7 @@ export default class UserController {
             await User.findOneAndDelete({ _id: req.user._id });
             await Watchlist.findOneAndDelete({ user: req.user.id });
             await Order.remove({ user: req.user.id });
+            //Add watchlist remove here
             res.status(200).json( "User was deleted" );
         } catch (e) {
             res.status(400).json({ error: 'Bad Request.' });

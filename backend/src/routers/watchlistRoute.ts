@@ -14,7 +14,7 @@ export default class WatchlistRoute implements Route {
     }
 
     private initializeRoutes(): void {
-        this.router.post(`${this.path}/add`, UserAuthentication.auth, WatchlistController.add);
+        this.router.put(`${this.path}/add`, UserAuthentication.auth, WatchlistController.add);
     }
 
     public getRouter(): Router {

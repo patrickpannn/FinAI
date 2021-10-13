@@ -14,7 +14,7 @@ export default class OrderRoute implements Route {
     }
 
     private initializeRoutes(): void {
-        this.router.post(`${this.path}/add`, UserAuthentication.auth, OrderController.add);
+        this.router.put(`${this.path}/add`, UserAuthentication.auth, OrderController.add);
     }
 
     public getRouter(): Router {
