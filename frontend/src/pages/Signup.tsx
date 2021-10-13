@@ -25,7 +25,6 @@ const Signup: React.FC<Props> = () => {
         e: React.FormEvent<HTMLFormElement>
     ): Promise<void> => {
         e.preventDefault();
-        console.log(`${process.env.REACT_APP_URL}/user/signup`);
         try {
             if (password.length < 8) {
                 setToast({ type: 'error', message: 'MinLength for password is 8' });
@@ -48,7 +47,6 @@ const Signup: React.FC<Props> = () => {
                     throw new Error('Email Already Taken');
                 } else {
                     const { token } = await response.json();
-                    console.log(token);
                     sessionStorage.setItem('access_token', token);
                     history.push('/dashboard');
                 }

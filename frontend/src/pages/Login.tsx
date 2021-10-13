@@ -1,15 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, TextField, Grid, Typography, Box, Button, Avatar } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { useStyles, Form, Container } from '../styles/homepage.style';
 import { Link, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { actionCreators } from '../state/index';
 
 interface Props { }
 
 const Login: React.FC<Props> = () => {
     const styles = useStyles();
+    const dispatch = useDispatch();
+    const { setToast } = bindActionCreators(actionCreators, dispatch);
     const history = useHistory();
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+
+    const handleSubmit = async (
+        e: React.FormEvent<HTMLFormElement>
+    ): Promise<void> => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`${process.env.REACT_APP_URL}/user/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            });
+
+            if (response.status === 400) {
+                throw new Error('Email and Password do not match');
+            } else {
+                const { token } = await response.json();
+                sessionStorage.setItem('access_token', token);
+                history.push('/dashboard');
+            }
+
+        } catch (error) {
+            setToast({ type: 'error', message: `${error}` });
+        }
+
+    };
     return (
         <Container>
             <Card sx={{ borderRadius: 5 }} className={styles.card}>
@@ -27,12 +66,14 @@ const Login: React.FC<Props> = () => {
                     />
                     <Avatar className={styles.avatar}><LockIcon /></Avatar>
                     <Typography variant="h3" className={styles.title}>Sign in</Typography>
-                    <Form>
+                    <Form onSubmit={(e): Promise<void> => handleSubmit(e)}>
                         <TextField
                             margin="normal"
                             id="email"
                             label="Email"
                             type='email'
+                            value={email}
+                            onChange={(e): void => setEmail(e.target.value)}
                             required
                             fullWidth
                         />
@@ -41,6 +82,8 @@ const Login: React.FC<Props> = () => {
                             id="password"
                             label="Password"
                             type="password"
+                            value={password}
+                            onChange={(e): void => setPassword(e.target.value)}
                             required
                             fullWidth
                         />
