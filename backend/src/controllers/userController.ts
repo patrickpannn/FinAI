@@ -3,6 +3,8 @@ import Watchlist from '../models/watchlistModel';
 import User from      '../models/userModel';
 import { RequestUser } from '../interfaces/requestUser';
 import bcrypt from 'bcryptjs';
+import OrderController from './orderController';
+import Order from '../models/orderModel';
 
 export default class UserController {
     public static signup = async (
@@ -77,8 +79,9 @@ export default class UserController {
         res: Response
     ): Promise<void> => {
         try {
-            User.findOneAndDelete({ _id: req.user?._id });
-            Watchlist.findOneAndDelete({ user: req.user?.id });
+            await User.findOneAndDelete({ _id: req.user?._id });
+            await Watchlist.findOneAndDelete({ user: req.user?.id });
+            await Order.findOneAndDelete({ user: req.user?.id });
             res.status(201).json( "User was deleted" );
         } catch (e) {
             res.status(400).json({ error: 'Bad Request.' });
