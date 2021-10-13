@@ -7,6 +7,9 @@ import { Link, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
+import CardMedia from '@mui/material/CardMedia';
+import loginPage from '../assets/loginPage.png';
+
 
 interface Props { }
 
@@ -51,21 +54,21 @@ const Login: React.FC<Props> = () => {
     };
     return (
         <Container>
-            <Card sx={{ borderRadius: 5 }} className={styles.card}>
-                <Box sx={{ flex: 1 }}>
-                    <h1>Smart Portfolio</h1>
-                    <h3>
-                        Trade US stock and Crypto with confidence
-                    </h3>
-                </Box>
+            <Card className={styles.card}>
+                <CardMedia
+                    component="img"
+                    image={loginPage}
+                    alt="login page"
+                    sx={{ flex: 1 }}
+                />
                 <Box className={styles.box}>
                     <ChevronLeftIcon
                         aria-label="go back button"
                         className={styles.backBtn}
                         onClick={(): void => history.push('/')}
                     />
-                    <Avatar className={styles.avatar}><LockIcon /></Avatar>
                     <Typography variant="h3" className={styles.title}>Sign in</Typography>
+                    <Avatar className={styles.avatar}><LockIcon /></Avatar>
                     <Form onSubmit={(e): Promise<void> => handleSubmit(e)}>
                         <TextField
                             margin="normal"

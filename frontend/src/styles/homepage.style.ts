@@ -5,13 +5,13 @@ import { Card } from "@mui/material";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     avatar: {
-        background: 'linear-gradient(-45deg, #5273c4, #7085cc, #5273c4, #072bee)',
+        background: 'linear-gradient(-45deg, #5273c4, #072bee)',
         position: 'absolute',
-        top: -120,
+        top: -180,
     },
     card: {
-        width: '1500px',
-        height: '800px',
+        width: '100%',
+        height: '100vh',
         display: 'flex',
     },
     box: {
@@ -28,7 +28,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     title: {
         position: 'absolute',
-        top: 160
+        top: 260
     },
     notes: {
         fontSize: 6,
@@ -59,7 +59,7 @@ export const Container = styled('main')({
     height: '100vh',
     margin: 0,
     padding: 0,
-    background: 'linear-gradient(-45deg, #7085cc, #072bee)',
+    // background: 'linear-gradient(-45deg, #7085cc, #072bee)',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

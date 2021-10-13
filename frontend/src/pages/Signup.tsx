@@ -7,6 +7,8 @@ import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
 import { useHistory, Link } from 'react-router-dom';
+import CardMedia from '@mui/material/CardMedia';
+import signUpPage from '../assets/signupPage.png';
 
 interface Props { }
 
@@ -58,15 +60,15 @@ const Signup: React.FC<Props> = () => {
 
     return (
         <Container>
-            <Card sx={{ borderRadius: 5 }} className={styles.card}>
+            <Card className={styles.card}>
                 <Box className={styles.box}>
                     <ChevronLeftIcon
                         aria-label="go back button"
                         className={styles.backBtn}
                         onClick={(): void => history.push('/')}
                     />
-                    <Avatar className={styles.avatar}><LockIcon /></Avatar>
                     <Typography variant="h3" className={styles.title}>Create Account</Typography>
+                    <Avatar className={styles.avatar}><LockIcon /></Avatar>
                     <Form onSubmit={handleSubmit}>
                         <TextField
                             margin="normal"
@@ -129,12 +131,12 @@ const Signup: React.FC<Props> = () => {
 
                     </Form>
                 </Box>
-                <Box sx={{ flex: 1 }}>
-                    <h1>Smart Portfolio</h1>
-                    <h3>
-                        Trade US stock and Crypto with confidence
-                    </h3>
-                </Box>
+                <CardMedia
+                    component="img"
+                    image={signUpPage}
+                    alt="signup page"
+                    sx={{ flex: 1 }}
+                />
             </Card>
         </Container>
     );
