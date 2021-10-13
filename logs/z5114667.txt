@@ -20,3 +20,14 @@ Week 3
 Week 4
     - Final edits and formatting for the report including referencing
     - Did some initial defining of some database tables with Andre
+    - Had some issues with software set up so slow to get going initially
+    - Re-defined the database models for stocks and portfolios
+    - Added in code to verify an attempt at login in the backend
+
+Week 5
+    - Database models for stocks and portfolios were cleaned up further and merged into develop
+    - Log in code was tested and merged into the develop branch
+    - Added code for:
+        - Changing user details such as passwords and usernames
+        - Create a default portfolio on user sign up
+        - Creating new portfolios
