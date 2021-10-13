@@ -1,4 +1,3 @@
-import { Request } from 'express';
 import { Document } from 'mongoose';
 
 type Token = { token: string };
@@ -11,8 +10,3 @@ export interface UserInterface extends Document {
     tokens: Token[],
     generateAuth: () => string,
 };
-
-export interface RequestUser extends Request {
-    user?: UserInterface,
-    token?: string,
-}
