@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import User from '../models/userModel';
 import bcrypt from 'bcryptjs';
-import { RequestUser } from '../interfaces/requestUser';
 
 export default class UserController {
     public static signup = async (
@@ -45,21 +44,17 @@ export default class UserController {
     };
 
     public static updateProfile = async (
-        req: RequestUser,
+        req: Request,
         res: Response
     ): Promise<void> => {
         try {
-            if(req.user) {
-                if (req.body.password) {
-                    req.user.password = req.body.password;
-                }
-                if (req.body.username) {
-                    req.user.username = req.body.username;
-                }
-                await req.user.save();
-            } else {
-                throw new Error('Authentication failed.');
+            if (req.body.password) {
+                req.user.password = req.body.password;
             }
+            if (req.body.username) {
+                req.user.username = req.body.username;
+            }
+            await req.user.save();
             res.status(201).json({ response: 'Successful' });
         } catch (e) {
             res.status(400).json({ error: 'Bad Request.' });
