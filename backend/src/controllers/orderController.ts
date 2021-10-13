@@ -1,18 +1,21 @@
 import { Request, Response } from 'express';
 import Order from '../models/orderModel';
-import { RequestUser } from '../interfaces/requestUser';
 
 export default class OrderController {
     public static add = async (
-        req: RequestUser,
+        req: Request,
         res: Response
     ): Promise<void> => {
         try {
-            const order = new Order({ user: req.user?.id, ...req.body });
-            if (!order)
+            if(!req.body.purchase_price)
             {
-                throw new Error('Could not create order');
+                throw new Error("You must input a purchase price for the order");
             }
+            if(!req.body.purchase_quantity)
+            {
+                throw new Error("You must input a purchase quantity for the order");
+            }
+            const order = new Order({ user: req.user.id, ...req.body });
             await order.save();
             res.status(201).json({ response: 'Successful' });
         } catch (e) {

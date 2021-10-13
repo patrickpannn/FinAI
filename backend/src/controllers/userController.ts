@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import Watchlist from '../models/watchlistModel';
 import User from      '../models/userModel';
-import { RequestUser } from '../interfaces/requestUser';
 import bcrypt from 'bcryptjs';
+import Order from '../models/orderModel';
 
 export default class UserController {
     public static signup = async (
@@ -26,22 +26,17 @@ export default class UserController {
     };
     
     public static logout = async (
-        req: RequestUser,
+        req: Request,
         res: Response
     ): Promise<void> => {
         try {
             const token = req.token; 
-            if(!token){
-                throw new Error("Logout failed");
-            }
-            const tokens = req.user?.tokens; 
-            if(!tokens){
-                throw new Error("Logout failed");
-            }
+            const tokens = req.user.tokens; 
             const stringTokens = tokens.map(String);       
             const index = stringTokens.indexOf(token);
             req.user?.tokens.splice(index, 1);
             await req.user?.save();
+
             res.status(400).json({ response: "Successfully logged out" });
         } catch(e) {
             console.log(e);
@@ -73,15 +68,33 @@ export default class UserController {
     };
 
     public static change_balance = async (
-        req: RequestUser,
+        req: Request,
         res: Response
     ): Promise<void> => {
         try {
-            req.user?.changeBalance(req.body.value);
-            await req.user?.save();
-            res.status(201).json({ response: "Balance changed to", balance: req.user?.balance });
+            if(!req.user.balance)
+            {
+                throw new Error(" You must input a specified amount to add or remove");
+            }
+            req.user.changeBalance(req.body.value);
+            await req.user.save();
+            res.status(201).json("Balance updated!");
         } catch(e) {
             res.status(400).json({ error: 'Bad Request.'});
+        }
+    };
+
+    public static delete_account = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            await User.findOneAndDelete({ _id: req.user._id });
+            await Watchlist.findOneAndDelete({ user: req.user.id });
+            await Order.remove({ user: req.user.id });
+            res.status(201).json( "User was deleted" );
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request.' });
         }
     }
 }
