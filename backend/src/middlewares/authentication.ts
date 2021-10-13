@@ -1,6 +1,5 @@
-import { Response, NextFunction } from 'express';
+import { Response, NextFunction, Request } from 'express';
 import User from '../models/userModel';
-import { RequestUser } from '../interfaces/requestUser';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -10,7 +9,7 @@ const accessKey: string = process.env.ACCESS_KEY || 'ezfinance111';
 class UserAuthentication {
 
     public static async auth(
-        req: RequestUser,
+        req: Request,
         res: Response,
         next: NextFunction
     ): Promise<void> {
