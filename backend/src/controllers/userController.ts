@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import Watchlist from '../models/watchlistModel';
 import User from      '../models/userModel';
-import { RequestUser } from '../interfaces/requestUser';
+//import { RequestUser } from '../interfaces/requestUser';
 import bcrypt from 'bcryptjs';
-import OrderController from './orderController';
 import Order from '../models/orderModel';
 
 export default class UserController {
@@ -28,22 +27,16 @@ export default class UserController {
     };
     
     public static logout = async (
-        req: RequestUser,
+        req: Request,
         res: Response
     ): Promise<void> => {
         try {
             const token = req.token; 
-            if(!token){
-                throw new Error("Logout failed");
-            }
-            const tokens = req.user?.tokens; 
-            if(!tokens){
-                throw new Error("Logout failed");
-            }
+            const tokens = req.user.tokens; 
             const stringTokens = tokens.map(String);       
             const index = stringTokens.indexOf(token);
-            req.user?.tokens.splice(index, 1);
-            req.user?.save();
+            req.user.tokens.splice(index, 1);
+            req.user.save();
             res.status(400).json({ response: "Successfully logged out" });
         } catch(e) {
             console.log(e);
@@ -75,13 +68,13 @@ export default class UserController {
     };
 
     public static delete_account = async (
-        req: RequestUser,
+        req: Request,
         res: Response
     ): Promise<void> => {
         try {
-            await User.findOneAndDelete({ _id: req.user?._id });
-            await Watchlist.findOneAndDelete({ user: req.user?.id });
-            await Order.findOneAndDelete({ user: req.user?.id });
+            await User.findOneAndDelete({ _id: req.user._id });
+            await Watchlist.findOneAndDelete({ user: req.user.id });
+            await Order.remove({ user: req.user.id });
             res.status(201).json( "User was deleted" );
         } catch (e) {
             res.status(400).json({ error: 'Bad Request.' });
