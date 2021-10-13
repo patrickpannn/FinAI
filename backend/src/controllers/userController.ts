@@ -72,7 +72,7 @@ export default class UserController {
         res: Response
     ): Promise<void> => {
         try {
-            if(!req.user.balance)
+            if(!req.body.value)
             {
                 throw new Error(" You must input a specified amount to add or remove");
             }
