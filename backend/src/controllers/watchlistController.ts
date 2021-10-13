@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import Watchlist from '../models/watchlistModel';
-//import { RequestUser } from '../interfaces/requestUser';
 
 export default class WatchListController {
     public static add = async (

@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import Watchlist from '../models/watchlistModel';
 import User from      '../models/userModel';
-//import { RequestUser } from '../interfaces/requestUser';
 import bcrypt from 'bcryptjs';
 import Order from '../models/orderModel';
 
