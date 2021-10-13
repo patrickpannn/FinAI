@@ -10,6 +10,7 @@ export interface UserInterface extends Document {
     balance: number,
     tokens: Token[],
     generateAuth: () => string,
+    changeBalance: (value : number) => boolean;
 };
 
 export interface RequestUser extends Request {

@@ -57,6 +57,18 @@ UserSchema.pre('save', async function (next): Promise<void> {
     next();
 });
 
+//This is a clas method to change the users balance
+UserSchema.methods.changeBalance = function (value: number): boolean {
+    const newBalance = this.balance + value;
+    if(newBalance < 0)
+    {
+        throw new Error('The cash balance should be greater than 0.');
+        return false;
+    }
+    this.balance = newBalance;
+    return true;
+}
+
 // This is a class method to generate authentication token
 UserSchema.methods.generateAuth = function (): string {
     const token: string = jwt.sign({ _id: this._id }, accessKey);

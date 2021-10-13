@@ -41,7 +41,7 @@ export default class UserController {
             const stringTokens = tokens.map(String);       
             const index = stringTokens.indexOf(token);
             req.user?.tokens.splice(index, 1);
-            req.user?.save();
+            await req.user?.save();
             res.status(400).json({ response: "Successfully logged out" });
         } catch(e) {
             console.log(e);
@@ -71,4 +71,17 @@ export default class UserController {
             res.status(400).json({ error: 'Bad Request.' });
         }
     };
+
+    public static change_balance = async (
+        req: RequestUser,
+        res: Response
+    ): Promise<void> => {
+        try {
+            req.user?.changeBalance(req.body.value);
+            await req.user?.save();
+            res.status(201).json({ response: "Balance changed to", balance: req.user?.balance });
+        } catch(e) {
+            res.status(400).json({ error: 'Bad Request.'});
+        }
+    }
 }
