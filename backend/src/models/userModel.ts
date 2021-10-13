@@ -67,7 +67,7 @@ UserSchema.methods.changeBalance = function (value: number): boolean {
     }
     this.balance = newBalance;
     return true;
-}
+};
 
 // This is a class method to generate authentication token
 UserSchema.methods.generateAuth = function (): string {

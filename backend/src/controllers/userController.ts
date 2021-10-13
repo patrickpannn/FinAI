@@ -34,10 +34,10 @@ export default class UserController {
             const tokens = req.user.tokens; 
             const stringTokens = tokens.map(String);       
             const index = stringTokens.indexOf(token);
-            req.user?.tokens.splice(index, 1);
-            await req.user?.save();
+            req.user.tokens.splice(index, 1);
+            await req.user.save();
 
-            res.status(400).json({ response: "Successfully logged out" });
+            res.status(200).json({ response: "Successfully logged out" });
         } catch(e) {
             console.log(e);
             res.status(400).json({ error: 'Bad Request.' });
@@ -59,7 +59,7 @@ export default class UserController {
                 const token: string = user.generateAuth();
                 user.tokens.push({ token });
                 await user.save();
-                res.status(200).json({ token });
+                res.status(201).json({ token });
             }
 
         } catch (e) {
@@ -79,8 +79,9 @@ export default class UserController {
             req.user.changeBalance(req.body.value);
             await req.user.save();
             res.status(201).json("Balance updated!");
+
         } catch(e) {
-            res.status(400).json({ error: 'Bad Request.'});
+            res.status(400).json({ error: 'Bad Request.' });
         }
     };
 
@@ -92,9 +93,9 @@ export default class UserController {
             await User.findOneAndDelete({ _id: req.user._id });
             await Watchlist.findOneAndDelete({ user: req.user.id });
             await Order.remove({ user: req.user.id });
-            res.status(201).json( "User was deleted" );
+            res.status(200).json( "User was deleted" );
         } catch (e) {
             res.status(400).json({ error: 'Bad Request.' });
         }
-    }
+    };
 }
