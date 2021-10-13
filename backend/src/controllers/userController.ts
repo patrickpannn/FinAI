@@ -71,4 +71,17 @@ export default class UserController {
             res.status(400).json({ error: 'Bad Request.' });
         }
     };
+
+    public static delete_account = async (
+        req: RequestUser,
+        res: Response
+    ): Promise<void> => {
+        try {
+            User.findOneAndDelete({ _id: req.user?._id });
+            Watchlist.findOneAndDelete({ user: req.user?.id });
+            res.status(201).json( "User was deleted" );
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request.' });
+        }
+    }
 }
