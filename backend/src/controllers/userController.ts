@@ -49,7 +49,11 @@ export default class UserController {
     ): Promise<void> => {
         try {
             if (req.body.password) {
-                req.user.password = req.body.password;
+                if (!(await bcrypt.compare(req.body.password, req.user.password))) {
+                    req.user.password = req.body.password;
+                } else {
+                    throw new Error('New password cannot be the same as old password.');
+                }
             }
             if (req.body.username) {
                 req.user.username = req.body.username;
