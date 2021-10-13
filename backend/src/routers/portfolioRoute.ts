@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 import PortfolioController from '../controllers/portfolioController';
 import Route from '../interfaces/routeInterface';
+import UserAuthentication from '../middlewares/authentication';
 
 export default class PortfolioRoute implements Route {
 
@@ -13,7 +14,7 @@ export default class PortfolioRoute implements Route {
     }
 
     private initializeRoutes(): void {
-        this.router.post(`${this.path}/create`, PortfolioController.create);
+        this.router.post(`${this.path}/create`, UserAuthentication.auth, PortfolioController.create);
     }
 
     public getRouter(): Router {

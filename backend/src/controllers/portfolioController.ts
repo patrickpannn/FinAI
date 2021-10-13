@@ -1,25 +1,28 @@
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import Portfolio from '../models/portfolioModel';
-import { RequestUser } from '../interfaces/requestUser';
 
 export default class PortfolioController {
     public static create = async (
-        req: RequestUser,
+        req: Request,
         res: Response
     ): Promise<void> => {
         try {
 
-            const portfolio = new Portfolio({ user: req.user.id, ...req.body });
+            if (!req.body.name) {
+                throw new Error('Could not create portfolio');
+            }
+
+            const portfolio = new Portfolio({ 
+                user: req.user._id, name: req.body.name });
 
             if (!portfolio) {
-                throw new Error('Could not create order');
+                throw new Error('Could not create portfolio');
             }
+
             await portfolio.save();
-
             res.status(201).json({ response: 'Successful' });
-
         } catch (e) {
-            res.status(400).json({ error: 'Bad Request' });
+            res.status(400).json({ error: 'Portfolio Bad Request' });
         }
     };
 
