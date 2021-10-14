@@ -12,6 +12,8 @@ import signUpPage from '../assets/signupPage.png';
 
 interface Props { }
 
+const url = process.env.REACT_APP_URL || 'http://localhost:5000';
+
 const Signup: React.FC<Props> = () => {
     const styles = useStyles();
     const dispatch = useDispatch();
@@ -34,7 +36,7 @@ const Signup: React.FC<Props> = () => {
                 setToast({ type: 'error', message: 'Passwords do not match' });
             } else {
 
-                const response = await fetch(`${process.env.REACT_APP_URL}/user/signup`, {
+                const response = await fetch(`${url}/user/signup`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

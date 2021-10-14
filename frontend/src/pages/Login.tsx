@@ -13,6 +13,8 @@ import loginPage from '../assets/loginPage.png';
 
 interface Props { }
 
+const url = process.env.REACT_APP_URL || 'http://localhost:5000';
+
 const Login: React.FC<Props> = () => {
     const styles = useStyles();
     const dispatch = useDispatch();
@@ -28,7 +30,7 @@ const Login: React.FC<Props> = () => {
     ): Promise<void> => {
         e.preventDefault();
         try {
-            const response = await fetch(`${process.env.REACT_APP_URL}/user/login`, {
+            const response = await fetch(`${url}/user/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
