@@ -48,6 +48,25 @@ export default class UserController {
         res: Response
     ): Promise<void> => {
         try {
+
+            if (!Object.keys(req.body).length) {
+                throw new Error('No fields to update.');
+            }
+
+            const allowedFields = ['password', 'username'];
+
+            for (let key in req.body) {
+                let found = false;
+                for (let i = 0; i < allowedFields.length; i++) {
+                    if (key == allowedFields[i]) {
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    throw new Error('Attempting to change invalid field.');
+                }
+            }
+
             if (req.body.password) {
                 if (!(await bcrypt.compare(req.body.password,
                                             req.user.password))) {
@@ -59,6 +78,7 @@ export default class UserController {
             if (req.body.username) {
                 req.user.username = req.body.username;
             }
+
             await req.user.save();
             res.status(200).json({ response: 'Successful' });
         } catch (e) {
