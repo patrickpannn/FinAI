@@ -46,4 +46,41 @@ export default class UserController {
             res.status(400).json({ error: 'Bad Request.' });
         }
     };
+
+    public static updateProfile = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+
+            if (!Object.keys(req.body).length) {
+                throw new Error('No fields to update.');
+            }
+
+            const allowedFields = ['password', 'username'];
+
+            for (let key in req.body) {
+                if (!allowedFields.includes(key)) {
+                    throw new Error('Attempting to change invalid field.');
+                }
+            }
+
+            if (req.body.password) {
+                if (!(await bcrypt.compare(req.body.password,
+                                            req.user.password))) {
+                    req.user.password = req.body.password;
+                } else {
+                    throw new Error('New password cannot be the same as old password.');
+                }
+            }
+            if (req.body.username) {
+                req.user.username = req.body.username;
+            }
+
+            await req.user.save();
+            res.status(200).json({ response: 'Successful' });
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request.' });
+        }
+    };
 }
