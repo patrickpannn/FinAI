@@ -31,3 +31,13 @@ Week 5
         - Changing user details such as passwords and usernames
         - Create a default portfolio on user sign up
         - Creating new portfolios
+    - Prepared for the first progressive demonstration
+    - Took notes for the first retrospective
+
+Week 6
+    - Took part of the first team code review session
+        - In this session I fixed up code relating to:
+            - Modifying user details
+            - Creating a portfolio
+        - Modifying user details code was pushed into develop
+        - Minor changes to creating a portfolio were required and were pushed to the branch awaiting final approval
