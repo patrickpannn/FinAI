@@ -8,6 +8,18 @@ export default class PortfolioController {
     ): Promise<void> => {
         try {
 
+            if (!Object.keys(req.body).length) {
+                throw new Error('No portfolio name given.');
+            }
+
+            const allowedFields = ['name'];
+
+            for (let key in req.body) {
+                if (!allowedFields.includes(key)) {
+                    throw new Error('More fields than required are provided.');
+                }
+            }
+
             if (!req.body.name) {
                 throw new Error('Could not create portfolio');
             }
