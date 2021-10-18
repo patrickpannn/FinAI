@@ -1,6 +1,4 @@
 import { Schema, model, Document } from 'mongoose';
-import dotenv from 'dotenv';
-dotenv.config();
 
 type Ticker = { ticker : string };
 
