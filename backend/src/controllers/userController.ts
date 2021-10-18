@@ -56,13 +56,7 @@ export default class UserController {
             const allowedFields = ['password', 'username'];
 
             for (let key in req.body) {
-                let found = false;
-                for (let i = 0; i < allowedFields.length; i++) {
-                    if (key == allowedFields[i]) {
-                        found = true;
-                    }
-                }
-                if (!found) {
+                if (!allowedFields.includes(key)) {
                     throw new Error('Attempting to change invalid field.');
                 }
             }
