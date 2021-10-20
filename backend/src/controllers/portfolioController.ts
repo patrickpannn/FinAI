@@ -57,18 +57,22 @@ export default class PortfolioController {
                 }
             }
 
-            if (!req.body.name) {
+            if (!req.body.name || req.body.name === "Default") {
                 throw new Error('Could not delete portfolio');
             }
 
-            const portfolio = await Portfolio.findOneAndDelete({
+            const deletedPortfolio = await Portfolio.findOneAndDelete({
                 user: req.user._id, name: req.body.name });
 
-            if (!portfolio) {
+            const defaultPortfolio = await Portfolio.findOne({
+                user: req.user._id, name: "Default" });
+
+            if (!deletedPortfolio || !defaultPortfolio) {
                 throw new Error('Could not delete portfolio');
             }
 
-            await Stock.where({ portfolio: portfolio._id }).update({ name: "Default" });
+            await Stock.where({ portfolio: deletedPortfolio._id })
+                       .update({ portfolio: defaultPortfolio._id });
 
             res.status(200).json({ response: 'Successful' });
         } catch (e) {
