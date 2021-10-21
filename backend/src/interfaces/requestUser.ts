@@ -8,5 +8,6 @@ export interface UserInterface extends Document {
     password: string,
     balance: number,
     tokens: Token[],
+    resetToken: string,
     generateAuth: () => string,
 };
