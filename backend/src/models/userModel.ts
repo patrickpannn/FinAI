@@ -63,7 +63,6 @@ UserSchema.methods.changeBalance = function (value: number): boolean {
     if(newBalance < 0)
     {
         throw new Error('The cash balance should be greater than 0.');
-        return false;
     }
     this.balance = newBalance;
     return true;

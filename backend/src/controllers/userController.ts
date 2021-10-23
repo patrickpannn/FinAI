@@ -18,7 +18,7 @@ export default class UserController {
             await user.save();
             await watchlist.save();
 
-            res.status(201).json({ token });
+            res.status(200).json({ token });
         } catch (e) {
             console.log(e);
             res.status(400).json({ error: 'Bad Request.' });
@@ -78,7 +78,7 @@ export default class UserController {
             }
             req.user.changeBalance(req.body.value);
             await req.user.save();
-            res.status(201).json("Balance updated!");
+            res.status(200).json("Balance updated!");
 
         } catch(e) {
             res.status(400).json({ error: 'Bad Request.' });
