@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import User from '../models/userModel';
+import Portfolio from '../models/portfolioModel';
 import bcrypt from 'bcryptjs';
 
 export default class UserController {
@@ -13,6 +14,9 @@ export default class UserController {
             user.tokens.push({ token });
             user.balance = 0;
             await user.save();
+
+            const portfolio = new Portfolio({ user: user.id, name: "Default" });
+            await portfolio.save();
 
             res.status(201).json({ token });
         } catch (e) {
