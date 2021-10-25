@@ -28,3 +28,8 @@ Week5
 -- create toast component in react
 -- create authentication middleware
 -- reviewed and tested codes from Andre and Arun
+
+Week6
+-- create forgot password routes/controller/model/middleware
+-- create yml file to do linting check in github 
+-- discuss with Ella, bingyu about the high-fidelity page in figma
