@@ -22,7 +22,9 @@ export default class EmailService {
             from: appEmail,
             to: userEmail,
             subject: "Smart Portfolio: Password Reset",
-            html: `<h2> Your reset code: ${reset_code} </h2>`,
+            html: `<h2> Your reset code: ${reset_code} </h2>
+                <h3>The code will expire in 30 minutes</h3>
+            `,
         };
         await transporter.sendMail(mailOptions);
     }

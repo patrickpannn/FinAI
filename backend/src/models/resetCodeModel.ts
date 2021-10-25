@@ -18,6 +18,6 @@ const ResetCodeSchema = new Schema<ResetCodeInterface>({
     }
 }, { timestamps: true });
 
-ResetCodeSchema.index({ createdAt: 1 }, { expireAfterSeconds: 600 });
+ResetCodeSchema.index({ createdAt: 1 }, { expireAfterSeconds: 1800 });
 
 export default model<ResetCodeInterface>('resetCode', ResetCodeSchema);
