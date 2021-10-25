@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import User from '../models/userModel';
+import Portfolio from '../models/portfolioModel';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import EmailService from '../services/emailService';
@@ -31,6 +32,7 @@ export default class UserController {
 
             const portfolio = new Portfolio({ user: user.id, name: "Default" });
             await portfolio.save();
+
             res.status(201).json({ token });
         } catch (e) {
             res.status(400).json({ error: 'Bad Request.' });
