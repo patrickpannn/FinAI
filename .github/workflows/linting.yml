@@ -37,11 +37,11 @@ jobs:
         working-directory: ./backend
         run: |
           yarn install
-          yarn build --if-present
+          yarn build
           yarn lint
       - name: linting frontend
         working-directory: ./frontend
         run: |
           yarn install
-          yarn build --if-present
+          yarn build
           yarn lint
