@@ -33,15 +33,7 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-      - name: run linter
-        run: | 
-          cd backend
-          yarn ci
-          yarn build --if-present
-          yarn lint
-          cd ..
-
-          cd frontend
+      - run: cd backend |
           yarn ci
           yarn build --if-present
           yarn lint
