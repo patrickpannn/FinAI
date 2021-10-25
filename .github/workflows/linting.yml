@@ -36,12 +36,12 @@ jobs:
       - name: linting backend
         working-directory: ./backend
         run: |
-          yarn ci
+          yarn install
           yarn build --if-present
           yarn lint
       - name: linting frontend
         working-directory: ./frontend
         run: |
-          yarn ci
+          yarn install
           yarn build --if-present
           yarn lint
