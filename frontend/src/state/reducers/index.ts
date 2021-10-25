@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import errMessageReducer from './errMessageReducer';
+import toastReducer from './toastReducer';
 
 const reducers = combineReducers({
-    errMessage: errMessageReducer
+    toastReducer: toastReducer
 });
 
 export default reducers;
