@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, TextField, Typography, Box, Button, Avatar } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { useStyles, Form, Container } from '../styles/homepage.style';
+import { useStyles, Form, Container, InnerContainer } from '../styles/homepage.style';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
@@ -69,8 +69,15 @@ const Signup: React.FC<Props> = () => {
                         className={styles.backBtn}
                         onClick={(): void => history.push('/')}
                     />
-                    <Typography variant="h3" className={styles.title}>Create Account</Typography>
                     <Avatar className={styles.avatar}><LockIcon /></Avatar>
+                    <InnerContainer page='signup'>
+                        <Typography variant="h3" gutterBottom component="div">
+                            Welcome to Join
+                        </Typography>
+                        <Typography variant="subtitle1" className={styles.subtitle} gutterBottom component="div">
+                            Register your account
+                        </Typography>
+                    </InnerContainer>
                     <Form onSubmit={handleSubmit}>
                         <TextField
                             margin="normal"
