@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import User from '../models/userModel';
-import Portfolio from '../models/portfolioModel';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import EmailService from '../services/emailService';
