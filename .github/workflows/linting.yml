@@ -36,16 +36,12 @@ jobs:
       - name: linting backend
         working-directory: ./backend
         run: |
-          cd backend
           yarn ci
           yarn build --if-present
           yarn lint
-          cd ..
       - name: linting frontend
         working-directory: ./frontend
         run: |
-          cd frontend
           yarn ci
           yarn build --if-present
           yarn lint
-          cd ..
