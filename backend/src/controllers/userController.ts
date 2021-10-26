@@ -128,7 +128,7 @@ export default class UserController {
         res: Response
     ): Promise<void> => {
         try {
-            if (Object.keys(req.body).length !== 2) {
+            if (Object.keys(req.body).length !== 2 || !req.body.code) {
                 throw new Error('Invalid Input');
             }
             const resetCode = await ResetCode.findOne({
