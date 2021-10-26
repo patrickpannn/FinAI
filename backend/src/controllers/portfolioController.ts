@@ -71,12 +71,12 @@ export default class PortfolioController {
                 throw new Error('Could not delete portfolio');
             }
 
-            await Stock.where({ portfolio: deletedPortfolio._id })
-                       .update({ portfolio: defaultPortfolio._id });
+            await Stock.updateMany({ portfolio: deletedPortfolio._id },
+                                   { portfolio: defaultPortfolio._id });
 
             res.status(200).json({ response: 'Successful' });
         } catch (e) {
-            res.status(400).json({ error: 'Portfolio Bad Request' });
+            res.status(400).json({ error: 'Delete Portfolio - Bad Request' });
         }
     };
 
