@@ -3,6 +3,7 @@ import WatchlistRoute from './routers/watchlistRoute';
 import OrderRoute from './routers/orderRoute';
 import App from './app';
 import dotenv from 'dotenv';
+import PortfolioRoute from './routers/portfolioRoute';
 dotenv.config();
 
 async function main(): Promise<void> {
@@ -11,6 +12,7 @@ async function main(): Promise<void> {
         new UserRoute(),
         new WatchlistRoute(),
         new OrderRoute(),
+        new PortfolioRoute()
     ]);
 
     app.listen();

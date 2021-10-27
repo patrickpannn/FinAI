@@ -27,7 +27,7 @@ export default class OrderController {
             {
             } else
             {
-                throw new Error("")
+                throw new Error("You must specify if the stock is being bought or sold");
             }
 
             const order = new Order({ user: req.user.id, ...req.body });
