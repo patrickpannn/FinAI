@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import Portfolio from '../models/portfolioModel';
-import Stock from '../models/stockModel';
 
 export default class PortfolioController {
     public static create = async (
@@ -64,15 +63,9 @@ export default class PortfolioController {
             const deletedPortfolio = await Portfolio.findOneAndDelete({
                 user: req.user._id, name: req.body.name });
 
-            const defaultPortfolio = await Portfolio.findOne({
-                user: req.user._id, name: "Default" });
-
-            if (!deletedPortfolio || !defaultPortfolio) {
+            if (!deletedPortfolio) {
                 throw new Error('Could not delete portfolio');
             }
-
-            await Stock.updateMany({ portfolio: deletedPortfolio._id },
-                                   { portfolio: defaultPortfolio._id });
 
             res.status(200).json({ response: 'Successful' });
         } catch (e) {

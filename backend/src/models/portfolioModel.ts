@@ -1,4 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
+import Stock from './stockModel';
+import Portfolio from './portfolioModel'
 
 interface PortfolioInterface extends Document {
     user: Schema.Types.ObjectId,
@@ -16,6 +18,23 @@ const PortfolioSchema = new Schema<PortfolioInterface>({
         required: true,
         trim: true,
     }
+});
+
+PortfolioSchema.post('remove', async function (next): Promise<void> {
+    if (this.name === "Default") {
+        await Stock.remove({ portfolio: this._id });
+    } else {
+        const defaultPortfolio = await Portfolio.findOne({
+            user: this.user, name: "Default" });
+
+        if (!defaultPortfolio) {
+            throw new Error('Could not delete portfolio');
+        }
+        
+        await Stock.updateMany({ portfolio: this._id },
+                               { portfolio: defaultPortfolio._id });
+    }
+    next();
 });
 
 PortfolioSchema.index({ user: 1, name: 1 }, { "unique": true } );
