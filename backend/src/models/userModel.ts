@@ -45,7 +45,11 @@ const UserSchema = new Schema<UserInterface>({
             type: String,
             required: true,
         }
-    }]
+    }],
+    resetToken: {
+        type: String,
+        default: "",
+    }
 });
 
 // The function will be executed before saving the data to the DB
