@@ -5,7 +5,7 @@ import UserAuthentication from '../middlewares/authentication';
 
 export default class OrderRoute implements Route {
 
-    private path: string = '/order';
+    private path: string = 'user/order';
 
     private router: Router = express.Router();
 
