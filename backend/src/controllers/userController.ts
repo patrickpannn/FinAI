@@ -2,8 +2,22 @@ import { Request, Response } from 'express';
 import User from '../models/userModel';
 import Portfolio from '../models/portfolioModel';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
+import EmailService from '../services/emailService';
+import ResetCode from '../models/resetCodeModel';
+import dotenv from 'dotenv';
+dotenv.config();
 
+const provider = process.env.PROVIDER || 'gmail';
+const email = process.env.FROMEMAIL || '404.Not.Found.3900@gmail.com';
+const password = process.env.FROMPASSWORD || '404isnotfound';
+
+/*
+    Class UserController has several handlers to handle different endpoint requests
+    i.e. signup, login, sendCode, verifyCode, resetPassword, updateProfile
+*/
 export default class UserController {
+
     public static signup = async (
         req: Request,
         res: Response
@@ -69,6 +83,7 @@ export default class UserController {
                 if (!(await bcrypt.compare(req.body.password,
                                             req.user.password))) {
                     req.user.password = req.body.password;
+                    req.user.tokens = [];
                 } else {
                     throw new Error('New password cannot be the same as old password.');
                 }
@@ -81,6 +96,77 @@ export default class UserController {
             res.status(200).json({ response: 'Successful' });
         } catch (e) {
             res.status(400).json({ error: 'Bad Request.' });
+        }
+    };
+
+    public static sendCode = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            if (Object.keys(req.body).length !== 1) {
+                throw new Error('Invalid Input');
+            }
+            const code = crypto.randomBytes(3).toString("hex");
+            await ResetCode.findOneAndDelete({ user: req.user._id });
+
+            const resetCode = new ResetCode({
+                user: req.user._id,
+                code: code
+            });
+            await resetCode.save();
+            await EmailService.sendMail(provider, email, password,
+                req.body.email, code);
+            res.status(200).json({ response: "Email was sent" });
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request.' });
+        }
+    };
+
+    public static verifyCode = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            if (Object.keys(req.body).length !== 2 || !req.body.code) {
+                throw new Error('Invalid Input');
+            }
+            const resetCode = await ResetCode.findOne({
+                user: req.user._id,
+                code: req.body.code
+            });
+            if (!resetCode) {
+                throw new Error('Invalid Code.');
+            }
+            const token = req.user.generateAuth();
+            req.user.resetToken = token;
+
+            await req.user.save();
+            await resetCode.remove();
+            res.status(200).json({ resetToken: token });
+
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request.' });
+
+        }
+    };
+
+    public static resetPassword = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            if (Object.keys(req.body).length !== 1 || !req.body.password) {
+                throw new Error('Invalid Input');
+            }
+            req.user.password = req.body.password;
+            req.user.resetToken = '';
+            req.user.tokens = [];
+
+            await req.user.save();
+            res.status(200).json({ response: 'Success' });
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request' });
         }
     };
 }
