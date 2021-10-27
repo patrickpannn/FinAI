@@ -21,18 +21,22 @@ const PortfolioSchema = new Schema<PortfolioInterface>({
 });
 
 PortfolioSchema.post('remove', async function (next): Promise<void> {
-    if (this.name === "Default") {
-        await Stock.remove({ portfolio: this._id });
-    } else {
-        const defaultPortfolio = await Portfolio.findOne({
-            user: this.user, name: "Default" });
-
-        if (!defaultPortfolio) {
-            throw new Error('Could not delete portfolio');
+    try {
+        if (this.name === "Default") {
+            await Stock.remove({ portfolio: this._id });
+        } else {
+            const defaultPortfolio = await Portfolio.findOne({
+                user: this.user, name: "Default" });
+    
+            if (!defaultPortfolio) {
+                throw new Error('Could not delete portfolio');
+            }
+            
+            await Stock.updateMany({ portfolio: this._id },
+                                   { portfolio: defaultPortfolio._id });
         }
-        
-        await Stock.updateMany({ portfolio: this._id },
-                               { portfolio: defaultPortfolio._id });
+    } catch (e) {
+        console.log('Failed in post remove portfolio function');
     }
     next();
 });
