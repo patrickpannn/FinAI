@@ -1,9 +1,9 @@
 import { Schema, model, Document } from 'mongoose';
 
-type Ticker = { ticker : string };
+export type Ticker = { ticker: string };
 
 // Document interface
-interface WatchlistInterface extends Document {
+export interface WatchlistInterface extends Document {
   user: Schema.Types.ObjectId,
   tickers: Array<Ticker>
 }
@@ -11,8 +11,8 @@ interface WatchlistInterface extends Document {
 // Schema
 const WatchlistSchema = new Schema<WatchlistInterface>({
   user: {
-    type: Schema.Types.ObjectId, 
-    required: true, 
+    type: Schema.Types.ObjectId,
+    required: true,
     ref: 'user'
   },
   tickers: [{
