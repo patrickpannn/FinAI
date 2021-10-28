@@ -5,7 +5,7 @@ import UserAuthentication from '../middlewares/authentication';
 
 export default class WatchlistRoute implements Route {
 
-    private path: string = 'user/watchlist';
+    private path: string = '/user/watchlist';
 
     private router: Router = express.Router();
 
