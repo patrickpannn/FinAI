@@ -76,7 +76,7 @@ export default class UserController {
                 const token: string = user.generateAuth();
                 user.tokens.push({ token });
                 await user.save();
-                res.status(201).json({ token });
+                res.status(200).json({ token });
             }
 
         } catch (e) {
