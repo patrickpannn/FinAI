@@ -90,8 +90,10 @@ export default class UserController {
             }
 
             if (req.body.password) {
-                if (!(await bcrypt.compare(req.body.password,
-                    req.user.password))) {
+                if (!(await bcrypt.compare(
+                    req.body.password,
+                    req.user.password)
+                )) {
                     req.user.password = req.body.password;
                     req.user.tokens = [];
                 } else {
