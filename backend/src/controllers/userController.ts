@@ -25,11 +25,11 @@ export default class UserController {
     ): Promise<void> => {
         try {
             const user = new User(req.body);
-            const watchlist = new Watchlist({ user: user.id });
             const token: string = user.generateAuth();
             user.tokens.push({ token });
             user.balance = 0;
             await user.save();
+            const watchlist = new Watchlist({ user: user.id });
             await watchlist.save();
             const portfolio = new Portfolio({ user: user.id, name: "Default" });
             await portfolio.save();
