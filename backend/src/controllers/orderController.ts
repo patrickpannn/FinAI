@@ -23,7 +23,7 @@ export default class OrderController {
             {
                 throw new Error("You must choose a specific stock for this order");
             }
-            if(req.body.direction == "SELL" || req.body.direction == "BUY")
+            if(req.body.direction === "SELL" || req.body.direction === "BUY")
             {
             } else
             {
