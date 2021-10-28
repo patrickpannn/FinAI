@@ -29,6 +29,8 @@ export default class OrderController {
             {
                 throw new Error("You must specify if the stock is being bought or sold");
             }
+            // TODO
+            // Handle logic for creating order 
 
             const order = new Order({ user: req.user.id, ...req.body });
             await order.save();

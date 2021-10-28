@@ -146,6 +146,23 @@ export default class UserController {
         }
     };
 
+    public static changeBalance = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            if (!req.body.value) {
+                throw new Error(" You must input a specified amount to add or remove");
+            }
+            req.user.changeBalance(req.body.value);
+            await req.user.save();
+            res.status(200).json("Balance updated!");
+
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request.' });
+        }
+    };
+
     public static verifyCode = async (
         req: Request,
         res: Response

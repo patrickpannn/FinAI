@@ -1,5 +1,8 @@
 import { Schema, model, Document } from 'mongoose';
 import dotenv from 'dotenv';
+import User from '../models/userModel';
+import Stock from '../models/stockModel';
+
 dotenv.config();
 
 enum Direction {
@@ -57,6 +60,7 @@ const OrderSchema = new Schema<OrderInterface>({
   }
 }, { timestamps: true });
 
+// set the class expiry to be 24 hours after creation
 OrderSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400 });
 
 export default model<OrderInterface>('order', OrderSchema);
