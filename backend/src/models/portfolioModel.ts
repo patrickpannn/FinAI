@@ -1,6 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 import Stock from './stockModel';
-import Portfolio from './portfolioModel'
+import Portfolio from './portfolioModel';
 
 interface PortfolioInterface extends Document {
     user: Schema.Types.ObjectId,
@@ -20,7 +20,7 @@ const PortfolioSchema = new Schema<PortfolioInterface>({
     }
 });
 
-PortfolioSchema.post('remove', async function (next): Promise<void> {
+PortfolioSchema.pre('deleteOne', { document: true }, async function (next): Promise<void> {
     try {
         if (this.name === "Default") {
             await Stock.remove({ portfolio: this._id });

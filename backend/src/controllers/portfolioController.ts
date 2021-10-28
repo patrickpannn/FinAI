@@ -60,12 +60,14 @@ export default class PortfolioController {
                 throw new Error('Could not delete portfolio');
             }
 
-            const deletedPortfolio = await Portfolio.findOneAndDelete({
+            const deletedPortfolio = await Portfolio.findOne({
                 user: req.user._id, name: req.body.name });
 
             if (!deletedPortfolio) {
                 throw new Error('Could not delete portfolio');
             }
+
+            await deletedPortfolio.deleteOne();
 
             res.status(200).json({ response: 'Successful' });
         } catch (e) {
