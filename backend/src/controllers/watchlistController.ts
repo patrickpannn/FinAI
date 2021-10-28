@@ -18,7 +18,7 @@ export default class WatchListController {
             }
             watchlist.tickers.push({ ticker: req.body.ticker });
             await watchlist.save();
-            res.status(201).json( { response: 'Successful' });
+            res.status(200).json( { response: 'Successful' });
         } catch (e) {
             res.status(400).json({ error: 'Bad Request' });
         }
