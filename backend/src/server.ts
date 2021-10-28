@@ -1,6 +1,5 @@
 import UserRoute from './routers/userRoute';
 import WatchlistRoute from './routers/watchlistRoute';
-import OrderRoute from './routers/orderRoute';
 import App from './app';
 import dotenv from 'dotenv';
 import PortfolioRoute from './routers/portfolioRoute';
@@ -11,7 +10,6 @@ async function main(): Promise<void> {
     const app = new App(port, [
         new UserRoute(),
         new WatchlistRoute(),
-        new OrderRoute(),
         new PortfolioRoute()
     ]);
 
