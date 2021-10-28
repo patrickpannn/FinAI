@@ -23,7 +23,7 @@ const PortfolioSchema = new Schema<PortfolioInterface>({
 PortfolioSchema.pre('deleteOne', { document: true }, async function (next): Promise<void> {
     try {
         if (this.name === "Default") {
-            await Stock.remove({ portfolio: this._id });
+            await Stock.deleteMany({ portfolio: this._id });
         } else {
             const defaultPortfolio = await Portfolio.findOne({
                 user: this.user, name: "Default" });
