@@ -17,7 +17,7 @@ export default class UserRoute implements Route {
     private initializeRoutes(): void {
         this.router.post(`${this.path}/signup`, UserController.signup);
         this.router.post(`${this.path}/login`, UserController.login);
-        this.router.post(`${this.path}/logout `, UserAuthentication.auth, UserController.logout);
+        this.router.post(`${this.path}/logout`, UserAuthentication.auth, UserController.logout);
         this.router.post(`${this.path}/sendCode`, VerifyUser.verifyUser, UserController.sendCode);
         this.router.post(`${this.path}/verifyCode`, VerifyUser.verifyUser, UserController.verifyCode);
         this.router.put(`${this.path}/changeBalance`, UserAuthentication.auth, UserController.changeBalance);
