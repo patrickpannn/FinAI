@@ -1,6 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 
-export type Ticker = { ticker: string };
+export type Ticker = { ticker: string, stockName: string };
 
 // Document interface
 export interface WatchlistInterface extends Document {
@@ -17,6 +17,11 @@ const WatchlistSchema = new Schema<WatchlistInterface>({
   },
   tickers: [{
     ticker: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    stockName: {
       type: String,
       required: true,
       trim: true

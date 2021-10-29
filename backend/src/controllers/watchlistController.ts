@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Ticker } from '../models/watchlistModel';
+import Watchlist, { Ticker } from '../models/watchlistModel';
 
 export default class WatchListController {
     public static add = async (
@@ -7,15 +7,26 @@ export default class WatchListController {
         res: Response
     ): Promise<void> => {
         try {
-            const tickers = req.watchlist.tickers;
-            if (!tickers.every(
-                (t: Ticker) => t.ticker !== req.body.ticker.toUpperCase())
+            const { ticker, stockName } = req.params;
+            const watchlist = await Watchlist.findOne({ user: req.user._id });
+            if (!watchlist) {
+                throw new Error('Watchlist not found');
+            }
+
+            const tickers = watchlist.tickers;
+            if (!tickers.every((t: Ticker) => {
+                return t.ticker !== ticker.toUpperCase()
+                    && t.stockName !== stockName;
+            })
             ) {
                 throw new Error('Duplicate tickers');
             }
 
-            tickers.push({ ticker: req.body.ticker.toUpperCase() });
-            await req.watchlist.save();
+            tickers.push({
+                ticker: ticker.toUpperCase(),
+                stockName: stockName
+            });
+            await watchlist.save();
 
             res.status(200).json({ response: 'Successful' });
         } catch (e) {
@@ -28,15 +39,19 @@ export default class WatchListController {
         res: Response
     ): Promise<void> => {
         try {
-            let isTicker = false;
-            const watchlist = req.watchlist;
+            const ticker = req.params.ticker;
+            const watchlist = await Watchlist.findOne({ user: req.user._id });
+            if (!watchlist) {
+                throw new Error('Watchlist not found');
+            }
 
+            let isTickers = false;
             watchlist.tickers = watchlist.tickers.filter((t: Ticker) => {
-                if (t.ticker === req.body.ticker) isTicker = true;
-                return t.ticker !== req.body.ticker;
+                if (t.ticker === ticker) isTickers = true;
+                return t.ticker !== ticker;
             });
 
-            if (!isTicker) {
+            if (!isTickers) {
                 throw new Error('No such ticker');
             }
             await watchlist.save();
