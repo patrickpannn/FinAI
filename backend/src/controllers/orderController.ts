@@ -32,11 +32,7 @@ export default class OrderController {
             {
                 throw new Error("Cannot access stock");
             }
-            const existingOrder = await Order.findOne({ portfolio: portfolio.id });
-            if(!existingOrder)
-            {
-                throw new Error("Cannot access order");
-            }
+            
 
             if(req.body.direction == "SELLING")
             {
@@ -44,10 +40,7 @@ export default class OrderController {
                {
                    throw new Error("You must specify a valid quantity to sell");
                } 
-               if(existingOrder)
-               {
-
-               }
+               
             } else if (req.body.direction == "BUYING")
             {
  
