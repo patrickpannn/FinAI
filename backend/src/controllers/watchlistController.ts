@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import Watchlist, { Ticker } from '../models/watchlistModel';
 
 export default class WatchListController {
-    public static add = async (
+    public static addTicker = async (
         req: Request,
         res: Response
     ): Promise<void> => {
