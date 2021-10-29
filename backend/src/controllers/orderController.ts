@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import Order from '../models/orderModel';
-import Portfolio from '../models/Portfolio';
+import Portfolio from '../models/portfolioModel';
 import Stock from '../models/stockModel';
+import Order from '../models/orderModel'
 
 export default class OrderController {
     public static create = async (
@@ -31,13 +32,22 @@ export default class OrderController {
             {
                 throw new Error("Cannot access stock");
             }
-            
+            const existingOrder = await Order.findOne({ portfolio: portfolio.id });
+            if(!existingOrder)
+            {
+                throw new Error("Cannot access order");
+            }
+
             if(req.body.direction == "SELLING")
             {
                if(stock.numUnits - req.body.units < 0)
                {
                    throw new Error("You must specify a valid quantity to sell");
                } 
+               if(existingOrder)
+               {
+
+               }
             } else if (req.body.direction == "BUYING")
             {
  
@@ -48,7 +58,7 @@ export default class OrderController {
 
 
 
-            const order = new Order({ user: req.user.id, ...req.body });
+            //const order = new Order({ user: req.user.id, ...req.body });
             await order.save();
             res.status(201).json({ response: 'Successful' });
         } catch (e) {
