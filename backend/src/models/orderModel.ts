@@ -1,6 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
 import dotenv from 'dotenv';
-import User from '../models/userModel';
 import Stock from '../models/stockModel';
 
 dotenv.config();
@@ -12,9 +11,8 @@ enum Direction {
 
 // Document interface
 interface OrderInterface extends Document {
-  user: Schema.Types.ObjectId,
-  purchase_quantity: number,
-  purchase_price: number,
+  portfolio: Schema.Types.ObjectId,
+  numUnits: number,
   ticker: string,
   executed: boolean,
   direction: string,
@@ -22,24 +20,16 @@ interface OrderInterface extends Document {
 
 // Schema
 const OrderSchema = new Schema<OrderInterface>({
-  user: {
+  portfolio: {
     type: Schema.Types.ObjectId, 
     required: true, 
-    ref: 'user',
+    ref: 'portfolio',
   },
-  purchase_quantity: {
+  numUnits: {
     type: Number, 
     validate(value: number): void {
       if (value <= 0){
-        throw new Error("Quantity specified must be greater than 0");
-      }
-    }
-  },
-  purchase_price: {
-    type: Number, 
-    validate(value: number): void {
-      if (value <= 0){
-        throw new Error("Price specified must be greater than 0");
+        throw new Error("Number of units specified must be greater than 0");
       }
     }
   },
@@ -62,5 +52,31 @@ const OrderSchema = new Schema<OrderInterface>({
 
 // set the class expiry to be 24 hours after creation
 OrderSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400 });
+
+OrderSchema.post('remove', { document : true }, async function (next): Promise<void> {
+  if(this.executed === true)
+  {
+    const stock = await Stock.findOne({ portfolio: this.portfolio });
+    if(!stock)
+    {
+      throw new Error ("This stock no longer exists!");
+    }
+
+    if(this.direction == "SELL")
+    {
+
+      stock.numUnits = stock.numUnits - this.numUnits;
+      if (stock.numUnits === 0)
+      {
+        stock.remove();
+      }
+      stock.save();
+    } else // BUY
+    {
+      stock.numUnits = stock.numUnits + this.numUnits;
+      stock.save();
+    }
+  }
+});
 
 export default model<OrderInterface>('order', OrderSchema);

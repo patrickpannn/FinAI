@@ -5,7 +5,6 @@ import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import EmailService from '../services/emailService';
 import ResetCode from '../models/resetCodeModel';
-import Watchlist from '../models/watchlistModel';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -25,13 +24,12 @@ export default class UserController {
     ): Promise<void> => {
         try {
             const user = new User(req.body);
-            const watchlist = new Watchlist({ user: user.id });
             const token: string = user.generateAuth();
             user.tokens.push({ token });
             user.balance = 0;
             await user.save();
-            await watchlist.save();
             const portfolio = new Portfolio({ user: user.id, name: "Default" });
+
             await portfolio.save();
 
             res.status(201).json({ token });
