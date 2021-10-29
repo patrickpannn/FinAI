@@ -203,7 +203,7 @@ export default class UserController {
             }
             req.user.changeBalance(req.body.value);
             await req.user.save();
-            res.status(200).json("Balance updated!");
+            res.status(200).json({ response: "Balance updated!" });
 
         } catch (e) {
             res.status(400).json({ error: 'Bad Request.' });
