@@ -3,7 +3,7 @@ import { Schema, model, Document } from 'mongoose';
 export type Ticker = { ticker: string, stockName: string };
 
 // Document interface
-export interface WatchlistInterface extends Document {
+interface WatchlistInterface extends Document {
   user: Schema.Types.ObjectId,
   tickers: Array<Ticker>
 }
