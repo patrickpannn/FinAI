@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import EmailService from '../services/emailService';
 import ResetCode from '../models/resetCodeModel';
+import Watchlist from '../models/watchlistModel';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -28,12 +29,34 @@ export default class UserController {
             user.tokens.push({ token });
             user.balance = 0;
             await user.save();
-
+            const watchlist = new Watchlist({ user: user.id });
+            await watchlist.save();
             const portfolio = new Portfolio({ user: user.id, name: "Default" });
             await portfolio.save();
 
             res.status(201).json({ token });
+            
         } catch (e) {
+            console.log(e);
+            res.status(400).json({ error: 'Bad Request.' });
+        }
+    };
+    
+    public static logout = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            const token = req.token; 
+            const tokens = req.user.tokens; 
+            const stringTokens = tokens.map(String);       
+            const index = stringTokens.indexOf(token);
+            req.user.tokens.splice(index, 1);
+            await req.user.save();
+
+            res.status(200).json({ response: "Successfully logged out" });
+        } catch(e) {
+            console.log(e);
             res.status(400).json({ error: 'Bad Request.' });
         }
     };
@@ -169,4 +192,22 @@ export default class UserController {
             res.status(400).json({ error: 'Bad Request' });
         }
     };
+
+    public static changeBalance = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            if (!req.body.value) {
+                throw new Error(" You must input a specified amount to add or remove");
+            }
+            req.user.changeBalance(req.body.value);
+            await req.user.save();
+            res.status(200).json({ response: "Balance updated!" });
+
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request.' });
+        }
+    };
+
 }
