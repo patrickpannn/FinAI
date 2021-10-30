@@ -16,6 +16,7 @@ export default class PortfolioRoute implements Route {
     private initializeRoutes(): void {
         this.router.post(`${this.path}/create`, UserAuthentication.auth, PortfolioController.create);
         this.router.delete(`${this.path}/delete`, UserAuthentication.auth, PortfolioController.delete);
+        this.router.put(`${this.path}/move`, UserAuthentication.auth, PortfolioController.move);
     }
 
     public getRouter(): Router {
