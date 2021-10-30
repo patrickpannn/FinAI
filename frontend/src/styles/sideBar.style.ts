@@ -22,8 +22,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         fontWeight: 700,
         fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
         fontSize: '14pt',
-        textAlign: 'center',
-        margin: '30px 0',
+        margin: '0 8px',
     },
     topup: {
         justifyContent: 'center',
@@ -39,5 +38,11 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     btnColor: {
         color: '#0017ea',
         fontWeight: 600,
+    },
+    userInfo: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: '30px 0',
     }
 }));
