@@ -4,7 +4,9 @@ import "react-toastify/dist/ReactToastify.min.css";
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import HomePage from './pages/HomePage';
+import ForgotPassword from './pages/ForgotPassword';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Dashboard from './pages/Dashboard';
 
 interface Props { }
 
@@ -24,7 +26,10 @@ const App: React.FC<Props> = () => {
                         <Signup />
                     </Route>
                     <Route path='/dashboard'>
-                        <h1>welcome</h1>
+                        <Dashboard />
+                    </Route>
+                    <Route path='/forgotpassword'>
+                        <ForgotPassword />
                     </Route>
                 </Switch>
 

@@ -3,11 +3,15 @@ import { styled } from '@mui/material/styles';
 import backImg from '../assets/homeBackGround.png';
 import { Card } from "@mui/material";
 
+interface InnerContainerProps {
+    page: string
+}
+
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     avatar: {
         background: 'linear-gradient(-45deg, #5273c4, #072bee)',
         position: 'absolute',
-        top: -180,
+        top: -80,
     },
     card: {
         width: '100%',
@@ -26,32 +30,19 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
             fontSize: '35pt',
         }
     },
-    title: {
-        position: 'absolute',
-        top: 260
-    },
     notes: {
         fontSize: 6,
-    },
-    appBar: {
-        fontFamily: 'Arial',
-        '& p': {
-            fontSize: '25pt',
-            fontWeight: '600',
-        },
-        '& button': {
-            margin: '5px',
-            borderRadius: '10px',
-            fontSize: '1.1rem',
-        }
     },
     backBtn: {
         position: 'absolute',
         top: '5%',
         left: '5%',
         cursor: 'pointer',
-    }
-
+    },
+    subtitle: {
+        color: '#9fa1b6',
+        fontSize: '14pt!important',
+    },
 }));
 
 export const Container = styled('main')({
@@ -59,15 +50,14 @@ export const Container = styled('main')({
     height: '100vh',
     margin: 0,
     padding: 0,
-    // background: 'linear-gradient(-45deg, #7085cc, #072bee)',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
 });
 
 export const Form = styled('form')({
-    marginTop: '20px',
-    width: '400px',
+    marginTop: '40px',
+    width: '500px',
     height: '320px',
     display: 'flex',
     flexDirection: 'column',
@@ -107,3 +97,12 @@ export const StyledCard = styled(Card)({
     }
 });
 
+export const InnerContainer = styled('div')<InnerContainerProps>((
+        props: InnerContainerProps
+    ) => ({
+        width: '500px',
+        height: '120px',
+        textAlign: 'center',
+        marginBottom: (props.page === 'signup') ? '50px' : '0',
+    })
+);
