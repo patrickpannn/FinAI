@@ -10,4 +10,5 @@ export interface UserInterface extends Document {
     tokens: Token[],
     resetToken: string,
     generateAuth: () => string,
+    changeBalance: (value : number) => boolean;
 };
