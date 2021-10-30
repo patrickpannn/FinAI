@@ -49,7 +49,7 @@ export default class PortfolioController {
                 throw new Error('No input data given.');
             }
 
-            const allowedFields = ['oldPortfolioName', 'newPortfolioName', 'ticker'];
+            const allowedFields = ['oldPortfolioName', 'newPortfolioName', 'ticker', 'amount'];
 
             for (let key in req.body) {
                 if (!allowedFields.includes(key)) {
@@ -74,9 +74,11 @@ export default class PortfolioController {
                 throw new Error('Could not find stocks');
             }
 
-            stockToMove.portfolio = newPortfolio._id;
+            if (req.body.amount > stockToMove.numUnits) {
+                throw new Error('Moving more stocks than possible');
+            }
 
-            await stockToMove.save();
+            stockToMove.merge(newPortfolio._id, req.body.amount);
 
             res.status(200).json({ response: 'Successful' });
         } catch (e) {
