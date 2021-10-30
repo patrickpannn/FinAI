@@ -69,7 +69,7 @@ export default class UserController {
             const inputEmail = req.body.email;
             const user = await User.findOne({ email: inputEmail });
 
-            if (!user || 
+            if (!user ||
                 !(await bcrypt.compare(req.body.password, user.password))) {
                 res.status(400).json({ error: 'Bad Request.' });
             } else {
@@ -82,6 +82,16 @@ export default class UserController {
         } catch (e) {
             res.status(400).json({ error: 'Bad Request.' });
         }
+    };
+
+    public static getProfile = (
+        req: Request,
+        res: Response
+    ): void => {
+        res.status(200).json({
+            username: req.user.username,
+            balance: req.user.balance
+        });
     };
 
     public static updateProfile = async (
@@ -103,8 +113,10 @@ export default class UserController {
             }
 
             if (req.body.password) {
-                if (!(await bcrypt.compare(req.body.password,
-                                            req.user.password))) {
+                if (!(await bcrypt.compare(
+                    req.body.password,
+                    req.user.password)
+                )) {
                     req.user.password = req.body.password;
                     req.user.tokens = [];
                 } else {
