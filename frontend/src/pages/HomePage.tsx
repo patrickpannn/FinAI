@@ -5,7 +5,7 @@ import Header from '../components/Header';
 const HomePage: React.FC = () => {
     return (
         <>
-            <Header home={true} />
+            <Header page={'HOME'} />
             <Main>
                 <StyledCard>
                     <h1>Take control of your portfolio.</h1>
