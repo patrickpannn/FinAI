@@ -32,8 +32,12 @@ PortfolioSchema.pre('deleteOne', { document: true }, async function (next): Prom
                 throw new Error('Could not delete portfolio');
             }
             
-            await Stock.updateMany({ portfolio: this._id },
-                                   { portfolio: defaultPortfolio._id });
+            const stocks = await Stock.find({ portfolio: this._id });
+
+            for (var i = 0; i < stocks.length; i++) {
+                var stock = stocks[i];
+                stock.merge(defaultPortfolio._id, stock.numUnits);
+            }
         }
     } catch (e) {
         console.log('Failed in post remove portfolio function');
