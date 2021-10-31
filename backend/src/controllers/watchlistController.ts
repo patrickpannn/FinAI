@@ -1,0 +1,63 @@
+import { Request, Response } from 'express';
+import Watchlist, { Ticker } from '../models/watchlistModel';
+
+export default class WatchListController {
+    public static addTicker = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            const { ticker, stockName } = req.params;
+            const watchlist = await Watchlist.findOne({ user: req.user._id });
+            if (!watchlist) {
+                throw new Error('Watchlist not found');
+            }
+
+            const tickers = watchlist.tickers;
+            if (!tickers.every((t: Ticker) => {
+                return t.ticker !== ticker.toUpperCase()
+                    && t.stockName !== stockName;
+            })
+            ) {
+                throw new Error('Duplicate tickers');
+            }
+
+            tickers.push({
+                ticker: ticker.toUpperCase(),
+                stockName: stockName
+            });
+            await watchlist.save();
+
+            res.status(200).json({ response: 'Successful' });
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request' });
+        }
+    };
+
+    public static removeTicker = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            const ticker = req.params.ticker;
+            const watchlist = await Watchlist.findOne({ user: req.user._id });
+            if (!watchlist) {
+                throw new Error('Watchlist not found');
+            }
+
+            let isTickers = false;
+            watchlist.tickers = watchlist.tickers.filter((t: Ticker) => {
+                if (t.ticker === ticker) isTickers = true;
+                return t.ticker !== ticker;
+            });
+
+            if (!isTickers) {
+                throw new Error('No such ticker');
+            }
+            await watchlist.save();
+            res.status(200).json({ response: 'Successful' });
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request' });
+        }
+    };
+}

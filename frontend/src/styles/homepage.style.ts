@@ -33,18 +33,6 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     notes: {
         fontSize: 6,
     },
-    appBar: {
-        fontFamily: 'Arial',
-        '& p': {
-            fontSize: '25pt',
-            fontWeight: '600',
-        },
-        '& button': {
-            margin: '5px',
-            borderRadius: '10px',
-            fontSize: '1.1rem',
-        }
-    },
     backBtn: {
         position: 'absolute',
         top: '5%',
