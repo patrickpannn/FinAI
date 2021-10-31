@@ -1,29 +1,24 @@
 import { Schema, model, Document } from 'mongoose';
 import dotenv from 'dotenv';
 import Stock from '../models/stockModel';
-
 dotenv.config();
-
-enum Direction {
-  Sell= "SELL",
-  Buy= "BUY",
-}
 
 // Document interface
 interface OrderInterface extends Document {
-  portfolio: Schema.Types.ObjectId,
+  user: Schema.Types.ObjectId,
   numUnits: number,
   ticker: string,
+  name: string,
   executed: boolean,
   direction: string,
 }
 
 // Schema
 const OrderSchema = new Schema<OrderInterface>({
-  portfolio: {
+  user: {
     type: Schema.Types.ObjectId, 
     required: true, 
-    ref: 'portfolio',
+    ref: 'order',
   },
   numUnits: {
     type: Number, 
@@ -38,6 +33,11 @@ const OrderSchema = new Schema<OrderInterface>({
     required: true, 
     trim: true,
   },
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
   executed: {
     type: Boolean,
     trim: true,
@@ -45,18 +45,15 @@ const OrderSchema = new Schema<OrderInterface>({
   },
   direction: {
     type: String,
-    enum: ['SELL', 'BUY'],
     required: true,
   }
 }, { timestamps: true });
 
-// set the class expiry to be 24 hours after creation
-OrderSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400 });
-
 OrderSchema.post('remove', { document : true }, async function (next): Promise<void> {
   if(this.executed === true)
   {
-    const stock = await Stock.findOne({ portfolio: this.portfolio });
+    /*
+    const stock = await Stock.findOne({ user: this.order });
     if(!stock)
     {
       throw new Error ("This stock no longer exists!");
@@ -76,6 +73,7 @@ OrderSchema.post('remove', { document : true }, async function (next): Promise<v
       stock.numUnits = stock.numUnits + this.numUnits;
       stock.save();
     }
+    */
   }
 });
 

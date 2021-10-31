@@ -2,57 +2,77 @@ import { Request, Response } from 'express';
 import Order from '../models/orderModel';
 import Portfolio from '../models/portfolioModel';
 import Stock from '../models/stockModel';
-import Order from '../models/orderModel'
 
 export default class OrderController {
-    public static create = async (
+    public static buyLimitOrder = async (
         req: Request,
         res: Response
     ): Promise<void> => {
         try {
-            if(Object.keys(req.body).length !== 3)
+            /*
+            const order = await Order.findOne({ user: req.user.id, ticker: req.body.ticker });
+            if(!order)
             {
-                throw new Error('Invalid input');
+                throw new Error('Order could not be loaded');
             }
-            if(!req.body.units)
-            {
-                throw new Error("You must input a purchase quantity for the order");
-            }
-            if(!req.body.ticker)
-            {
-                throw new Error("You must choose a specific stock for this order");
-            }
-            const portfolio = await Portfolio.findOne({ user: req.user.id, name: req.body.name });
-            if(!portfolio)
-            {
-                throw new Error("Cannot access portfolio");
-            }
-            const stock = await Stock.findOne({ portfolio: portfolio.id });
-            if(!stock)
-            {
-                throw new Error("Cannot access stock");
-            }
-            
+            */
+           const order = new Order({ user: req.body.user, numUnits: req.body.units, ticker: req.body.ticker,
+                                     name: req.body.name, direction: req.body.direction });
+            res.status(201).json({ response: 'Successful' });
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request' });
+        }
+    };
 
-            if(req.body.direction == "SELLING")
-            {
-               if(stock.numUnits - req.body.units < 0)
-               {
-                   throw new Error("You must specify a valid quantity to sell");
-               } 
-               
-            } else if (req.body.direction == "BUYING")
-            {
- 
-            } else 
-            {
-                throw new Error("You must specify if the stock is being bought or sold"); 
-            }
+    public static sellLimitOrder = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            res.status(201).json({ response: 'Successful' });
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request' });
+        }
+    };
 
+    public static buyMarketOrder = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            res.status(201).json({ response: 'Successful' });
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request' });
+        }
+    };
 
+    public static sellMarketOrder = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            res.status(201).json({ response: 'Successful' });
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request' });
+        }
+    };
 
-            //const order = new Order({ user: req.user.id, ...req.body });
-            await order.save();
+    public static cancelBuyLimitOrder = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            res.status(201).json({ response: 'Successful' });
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request' });
+        }
+    };
+
+    public static cancelSellLimitOrder = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
             res.status(201).json({ response: 'Successful' });
         } catch (e) {
             res.status(400).json({ error: 'Bad Request' });
