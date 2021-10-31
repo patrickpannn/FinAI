@@ -1,16 +1,19 @@
 import { Schema, model, Document } from 'mongoose';
 import dotenv from 'dotenv';
 import Stock from '../models/stockModel';
+import { StringifyOptions } from 'querystring';
 dotenv.config();
 
 // Document interface
 interface OrderInterface extends Document {
   user: Schema.Types.ObjectId,
   numUnits: number,
+  executePrice: number,
   ticker: string,
   name: string,
   executed: boolean,
   direction: string,
+  portfolio: string,
 }
 
 // Schema
@@ -22,11 +25,11 @@ const OrderSchema = new Schema<OrderInterface>({
   },
   numUnits: {
     type: Number, 
-    validate(value: number): void {
-      if (value <= 0){
-        throw new Error("Number of units specified must be greater than 0");
-      }
-    }
+    required: true,
+  },
+  executePrice: {
+    type: Number,
+    required: true,
   },
   ticker: { 
     type: String, 
@@ -46,6 +49,11 @@ const OrderSchema = new Schema<OrderInterface>({
   direction: {
     type: String,
     required: true,
+  },
+  portfolio: {
+    type: String,
+    required: true,
+    trim: true,
   }
 }, { timestamps: true });
 

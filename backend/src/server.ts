@@ -1,5 +1,4 @@
 import UserRoute from './routers/userRoute';
-import WatchlistRoute from './routers/watchlistRoute';
 import OrderRoute from './routers/orderRoute';
 import App from './app';
 import dotenv from 'dotenv';
