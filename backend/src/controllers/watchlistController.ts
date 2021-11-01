@@ -7,6 +7,10 @@ export default class WatchListController {
         res: Response
     ): Promise<void> => {
         try {
+            if (Object.keys(req.body).length) {
+                throw new Error('Inputs are given but not needed.');
+            }
+
             const watchlist = await Watchlist.findOne({ user: req.user._id });
 
             if (!watchlist) {
