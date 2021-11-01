@@ -2,8 +2,6 @@ import { Request, Response } from 'express';
 import Portfolio from '../models/portfolioModel';
 import Stock from '../models/stockModel';
 
-//export type StockObject = { ticker: string, averagePrice: number, numUnits: number };
-//export type PortfolioList = { name: string, stocks: Array<StockObject> };
 interface Stock {
     ticker: string,
     averagePrice: number,
