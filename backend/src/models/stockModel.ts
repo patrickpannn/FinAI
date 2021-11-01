@@ -65,6 +65,7 @@ StockSchema.methods.merge = async function
                 this.numUnits -= amount;
                 const newStock = new Stock({ portfolio: newPortfolioId,
                                             ticker: this.ticker,
+                                            name: this.name,
                                             averagePrice: this.averagePrice,
                                             numUnits: amount });
                 await newStock.save();
