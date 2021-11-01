@@ -4,6 +4,7 @@ import Stock from './stockModel';
 interface StockInterface extends Document {
     portfolio: Schema.Types.ObjectId,
     ticker: string,
+    name: string,
     averagePrice: number,
     numUnits: number,
     merge: (newPortfolioId: Schema.Types.ObjectId,
@@ -17,6 +18,11 @@ const StockSchema = new Schema<StockInterface>({
         ref: 'portfolio'
     },
     ticker: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    name: {
         type: String,
         required: true,
         trim: true,

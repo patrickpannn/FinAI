@@ -4,6 +4,7 @@ import Stock from '../models/stockModel';
 
 interface StockObject {
     ticker: string,
+    name: string,
     averagePrice: number,
     numUnits: number
 };
@@ -38,6 +39,7 @@ export default class PortfolioController {
                 for (let j = 0; j < stocks.length; j++) {
                     let stockObj = {
                         ticker: stocks[j].ticker,
+                        name: stocks[j].name,
                         averagePrice: stocks[j].averagePrice,
                         numUnits: stocks[j].numUnits
                     };
