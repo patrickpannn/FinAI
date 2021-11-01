@@ -56,7 +56,7 @@ StockSchema.methods.merge = async function
         }
 
         const originalStock = await Stock.findOne({ portfolio: newPortfolioId,
-                                                        ticker: this.ticker });
+                                                    ticker: this.ticker });
 
         if (!originalStock) {
             if (amount === this.numUnits) {
