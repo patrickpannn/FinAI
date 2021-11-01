@@ -82,7 +82,7 @@ export default class PortfolioController {
                 list.push(portfolioInfo);
             }
 
-            res.status(200).send(list);
+            res.status(200).json(list);
         } catch (e) {
             res.status(400).json({ error: 'List of Portfolios Bad Request' });
         }
