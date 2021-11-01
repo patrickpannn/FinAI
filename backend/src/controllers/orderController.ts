@@ -33,9 +33,14 @@ export default class OrderController {
             {
                 throw new Error('Available Balance is too low to make this order');
             }
-            const order = new Order({ user: req.user.id, numUnits: req.body.units, executePrice : req.body.setPrice,
-                                        ticker: req.body.ticker, name: req.body.name, direction: req.body.direction,
-                                                                                    portfolio: req.body.portfolio });
+            const order = new Order({ 
+                user: req.user.id, 
+                numUnits: req.body.units, 
+                executePrice : req.body.setPrice,
+                ticker: req.body.ticker, 
+                name: req.body.name, 
+                direction: req.body.direction,
+                portfolio: req.body.portfolio });
             if(!order)
             {
                 throw new Error('Order cannot be made');
@@ -60,11 +65,13 @@ export default class OrderController {
             {
                 throw new Error('Direction given is not correct for this route');
             }
-            const portfolio = await Portfolio.findOne({ user: req.user.id, 
-                                                name: req.body.portfolio });
+            const portfolio = await Portfolio.findOne({ 
+                user: req.user.id, 
+                name: req.body.portfolio });
             
-            const stock = await Stock.findOne({ portfolio: portfolio?.id, 
-                                                ticker : req.body.ticker});
+            const stock = await Stock.findOne({ 
+                portfolio: portfolio?.id, 
+                ticker : req.body.ticker});
             if(!stock)
             {
                 throw new Error('Stock does not exist in portfolio');
@@ -73,11 +80,14 @@ export default class OrderController {
                 throw new Error('Cannot sell more shares than you own');
             }
             stock.numUnits = stock.numUnits - req.body.units;
-            const order = new Order({ user: req.user.id, numUnits: req.body.units, 
-                                                  executePrice: req.body.setPrice,
-                                     ticker: req.body.ticker, name: req.body.name, 
-                                                    direction: req.body.direction, 
-                                                 portfolio: req.body.portfolio });
+            const order = new Order({ 
+                user: req.user.id,
+                numUnits: req.body.units, 
+                executePrice: req.body.setPrice,
+                ticker: req.body.ticker, 
+                name: req.body.name, 
+                direction: req.body.direction, 
+                portfolio: req.body.portfolio });
             if(!order)
             {
                 throw new Error('Order cannot be made');
@@ -95,20 +105,37 @@ export default class OrderController {
         res: Response
     ): Promise<void> => {
         try {
-           const response = await axios.get(`https://finnhub.io/api/v1/quote?symbol=${req.body.ticker}&token=c5vln0iad3ibtqnna830`);
+            const response = await axios.get(`https://finnhub.io/api/v1/quote?symbol=${req.body.ticker}&token=c5vln0iad3ibtqnna830`);
+            const totalCost = response.data.c * req.body.units;
+            if(req.user.availableBalance - totalCost < 0)
+            {
+                throw new Error('Availaable Balance too low to purchase stocks');
+            }
+            
+            const portfolio = await Portfolio.findOne({ 
+                user: req.user.id,
+                name: req.body.portfolio });
+            const existingStock = await Stock.findOne({ 
+                portfolio: portfolio?.id,
+                ticker: req.body.ticker });
+            if(!existingStock){
+                const stock = new Stock({
+                    portfolio: portfolio?.id, 
+                    ticker: req.body.ticker,
+                    stockName: req.body.stockName, 
+                    averagePrice : response.data.c, 
+                    numUnits: req.body.numUnits
+                });
+                if(!stock)
+                {
+                    throw new Error('Could not make stock');
+                }
+                req.user.balance = req.user.balance - totalCost;
+                req.user.balance = req.user.availableBalance - totalCost;
+                await stock.save();
+            }
 
-            /*
-            const portfolio = await Portfolio.findOne({ user: req.user.id,
-                                                name: req.body.portfolio });
-            const stock = await Stock.findOne({ portfolio: portfolio?.id,
-                                                ticker: req.body.ticker });
-            if(!stock){
-                const stock = new Stock({portfolio: portfolio?.id, ticker: req.body.ticker,
-                              stockName: req.body.stockName, averagePrice : req.body.setPrice, 
-                                                                numUnits: req.body.numUnits});
-
-            }  
-            */         
+                     
             res.status(201).json({ response: 'Successful' });
         } catch (e) {
             console.log(e);
