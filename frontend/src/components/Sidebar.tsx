@@ -8,7 +8,8 @@ import {
     Dialog,
     DialogTitle,
     DialogActions,
-    Button
+    Button,
+    Avatar,
 } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import BarChartIcon from '@mui/icons-material/BarChart';
@@ -99,8 +100,10 @@ const Sidebar: React.FC<Props> = ({
                     onClick={onClose}
                     onKeyDown={onClose}
                 >
-                    <h1 className={styles.username}>John</h1>
-
+                    <div className={styles.userInfo}>
+                        <Avatar sx={{ width: 32, height: 32 }}>J</Avatar>
+                        <h1 className={styles.username}>John</h1>
+                    </div>
                     <Stack className={styles.topup} direction="row">
                         <LargeButton
                             variant='contained'
