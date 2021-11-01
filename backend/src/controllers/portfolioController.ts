@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import Portfolio from '../models/portfolioModel';
 import Stock from '../models/stockModel';
 
-interface Stock {
+interface StockObject {
     ticker: string,
     averagePrice: number,
     numUnits: number
@@ -65,7 +65,7 @@ export default class PortfolioController {
             let list = [];
 
             for (let i = 0; i < portfolios.length; i++) {
-                let stockList: Stock[] = [];
+                let stockList: StockObject[] = [];
                 let portfolioInfo = { name: portfolios[i].name,
                                       stocks: stockList };
 
