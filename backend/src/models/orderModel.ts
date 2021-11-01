@@ -26,10 +26,22 @@ const OrderSchema = new Schema<OrderInterface>({
   numUnits: {
     type: Number, 
     required: true,
+    validate(units: number): void {
+      if(units <=0)
+      {
+        throw new Error('You must order a positive quantity of stock shares');
+      }
+    }
   },
   executePrice: {
     type: Number,
     required: true,
+    validate(price: number): void {
+      if(price <=0)
+      {
+        throw new Error('You must specify a positive price for your limit order');
+      }
+    }
   },
   ticker: { 
     type: String, 

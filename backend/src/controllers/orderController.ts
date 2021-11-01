@@ -3,6 +3,9 @@ import Order from '../models/orderModel';
 import User from '../models/userModel';
 import Portfolio from '../models/portfolioModel';
 import Stock from '../models/stockModel';
+//import fetch from 'node-fetch';
+//const fetch = require('node-fetch');
+import axios from 'axios';
 
 enum Direction {
     Sell= "SELL",
@@ -57,8 +60,11 @@ export default class OrderController {
             {
                 throw new Error('Direction given is not correct for this route');
             }
-            const portfolio = await Portfolio.findOne({ user: req.user.id, name: req.body.portfolio });
-            const stock = await Stock.findOne({ user: req.user.id, ticker : req.body.ticker });
+            const portfolio = await Portfolio.findOne({ user: req.user.id, 
+                                                name: req.body.portfolio });
+            
+            const stock = await Stock.findOne({ portfolio: portfolio?.id, 
+                                                ticker : req.body.ticker});
             if(!stock)
             {
                 throw new Error('Stock does not exist in portfolio');
@@ -67,9 +73,11 @@ export default class OrderController {
                 throw new Error('Cannot sell more shares than you own');
             }
             stock.numUnits = stock.numUnits - req.body.units;
-            const order = new Order({ user: req.user.id, numUnits: req.body.units, executePrice : req.body.setPrice,
-                ticker: req.body.ticker, name: req.body.name, direction: req.body.direction, 
-                                                            portfolio: req.body.portfolio });
+            const order = new Order({ user: req.user.id, numUnits: req.body.units, 
+                                                  executePrice: req.body.setPrice,
+                                     ticker: req.body.ticker, name: req.body.name, 
+                                                    direction: req.body.direction, 
+                                                 portfolio: req.body.portfolio });
             if(!order)
             {
                 throw new Error('Order cannot be made');
@@ -87,8 +95,23 @@ export default class OrderController {
         res: Response
     ): Promise<void> => {
         try {
+           const response = await axios.get(`https://finnhub.io/api/v1/quote?symbol=${req.body.ticker}&token=c5vln0iad3ibtqnna830`);
+
+            /*
+            const portfolio = await Portfolio.findOne({ user: req.user.id,
+                                                name: req.body.portfolio });
+            const stock = await Stock.findOne({ portfolio: portfolio?.id,
+                                                ticker: req.body.ticker });
+            if(!stock){
+                const stock = new Stock({portfolio: portfolio?.id, ticker: req.body.ticker,
+                              stockName: req.body.stockName, averagePrice : req.body.setPrice, 
+                                                                numUnits: req.body.numUnits});
+
+            }  
+            */         
             res.status(201).json({ response: 'Successful' });
         } catch (e) {
+            console.log(e);
             res.status(400).json({ error: 'Bad Request' });
         }
     };
