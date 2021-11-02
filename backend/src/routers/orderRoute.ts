@@ -17,8 +17,8 @@ export default class OrderRoute implements Route {
     private initializeRoutes(): void {
         this.router.post(`${this.path}/buyOrder`, UserAuthentication.auth, VerifyOrder.verifyOrder, OrderController.buyLimitOrder);
         this.router.post(`${this.path}/sellOrder`, UserAuthentication.auth, VerifyOrder.verifyOrder, OrderController.sellLimitOrder);
-        this.router.post(`${this.path}/buyStock`, UserAuthentication.auth, VerifyOrder.verifyStock, OrderController.buyMarketOrder);
-        this.router.post(`${this.path}/sellStock`, UserAuthentication.auth, VerifyOrder.verifyStock, OrderController.sellMarketOrder);
+        this.router.post(`${this.path}/buyMarketOrder`, UserAuthentication.auth, VerifyOrder.verifyStock, OrderController.buyMarketOrder);
+        this.router.post(`${this.path}/sellMarketOrder`, UserAuthentication.auth, VerifyOrder.verifyStock, OrderController.sellMarketOrder);
         this.router.post(`${this.path}/cancelOrder`, UserAuthentication.auth, OrderController.cancelOrder);
     }
 

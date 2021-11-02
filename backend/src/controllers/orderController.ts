@@ -18,13 +18,6 @@ export default class OrderController {
         res: Response
     ): Promise<void> => {
         try {
-            /*
-            const order = await Order.findOne({ user: req.user.id, ticker: req.body.ticker });
-            if(!order)
-            {
-                throw new Error('Order could not be loaded');
-            }
-            */
             if(req.body.direction !== Direction.Buy)
             {
                 throw new Error('Direction given is not correct for this route');
@@ -107,11 +100,11 @@ export default class OrderController {
         try {
             const response = await axios.get(`https://finnhub.io/api/v1/quote?symbol=${req.body.ticker}&token=c5vln0iad3ibtqnna830`);
             const totalCost = response.data.c * req.body.units;
+            const marketPrice = response.data.c;
             if(req.user.availableBalance - totalCost < 0)
             {
-                throw new Error('Availaable Balance too low to purchase stocks');
+                throw new Error('Available Balance too low to purchase stocks');
             }
-            
             const portfolio = await Portfolio.findOne({ 
                 user: req.user.id,
                 name: req.body.portfolio });
@@ -122,19 +115,29 @@ export default class OrderController {
                 const stock = new Stock({
                     portfolio: portfolio?.id, 
                     ticker: req.body.ticker,
-                    stockName: req.body.stockName, 
-                    averagePrice : response.data.c, 
-                    numUnits: req.body.numUnits
+                    stockName: req.body.name, 
+                    averagePrice : marketPrice, 
+                    numUnits: req.body.units
                 });
                 if(!stock)
                 {
                     throw new Error('Could not make stock');
                 }
-                req.user.balance = req.user.balance - totalCost;
-                req.user.balance = req.user.availableBalance - totalCost;
+                req.user.balance = (req.user.balance - totalCost).toFixed(2);
+                req.user.availableBalance = (req.user.availableBalance - totalCost).toFixed(2);
                 await stock.save();
+                await req.user.save();
+            } else
+            {
+                const avg = (existingStock.numUnits * existingStock.averagePrice +
+                    req.body.units * marketPrice) / (existingStock.numUnits + req.body.units);
+                existingStock.numUnits += req.body.units;
+                existingStock.averagePrice = avg;
+                req.user.balance = (req.user.balance - totalCost).toFixed(2);
+                req.user.availableBalance = (req.user.availableBalance - totalCost).toFixed(2);
+                await existingStock.save();
+                await req.user.save();
             }
-
                      
             res.status(201).json({ response: 'Successful' });
         } catch (e) {
@@ -148,6 +151,38 @@ export default class OrderController {
         res: Response
     ): Promise<void> => {
         try {
+
+            const portfolio = await Portfolio.findOne({ 
+                user: req.user.id,
+                name: req.body.portfolio });
+            const existingStock = await Stock.findOne({ 
+                portfolio: portfolio?.id,
+                ticker: req.body.ticker });
+            if(!existingStock)
+            {
+                throw new Error('This stock doesnt exist');
+            }
+
+            const response = await axios.get(`https://finnhub.io/api/v1/quote?symbol=${req.body.ticker}&token=c5vln0iad3ibtqnna830`);
+            const totalCost = response.data.c * req.body.units;
+            const marketPrice = response.data.c;
+            const avg = (existingStock.numUnits * existingStock.averagePrice -
+                req.body.units * marketPrice) / (existingStock.numUnits - req.body.units);
+                
+
+            req.user.balance = (req.user.balance + totalCost).toFixed(2);
+            req.user.availableBalance = (req.user.availableBalance + totalCost).toFixed(2);
+
+            existingStock.numUnits -= req.body.units;
+            existingStock.averagePrice = avg;
+            if(existingStock.numUnits == 0)
+            {
+                existingStock.delete();
+            } else
+            {
+                await existingStock.save();
+            }
+            await req.user.save();
             res.status(201).json({ response: 'Successful' });
         } catch (e) {
             res.status(400).json({ error: 'Bad Request' });
