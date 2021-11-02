@@ -50,45 +50,42 @@ const StockSchema = new Schema<StockInterface>({
 StockSchema.methods.merge = async function 
                             (newPortfolioId: Schema.Types.ObjectId,
                              amount: number): Promise<void> {
-    try {
-        if (amount > this.numUnits) {
-            throw new Error('Moving more stocks than possible');
-        }
 
-        const originalStock = await Stock.findOne({ portfolio: newPortfolioId,
-                                                    ticker: this.ticker });
+    if (amount > this.numUnits) {
+        throw new Error('Moving more stocks than possible');
+    }
 
-        if (!originalStock) {
-            if (amount === this.numUnits) {
-                this.portfolio = newPortfolioId;
-            } else {
-                this.numUnits -= amount;
-                const newStock = new Stock({ portfolio: newPortfolioId,
-                                             ticker: this.ticker,
-                                             name: this.name,
-                                             averagePrice: this.averagePrice,
-                                             numUnits: amount });
-                await newStock.save();
-            }
-            this.save();
+    const originalStock = await Stock.findOne({ portfolio: newPortfolioId,
+                                                ticker: this.ticker });
+
+    if (!originalStock) {
+        if (amount === this.numUnits) {
+            this.portfolio = newPortfolioId;
         } else {
-            const avg = (originalStock.numUnits * originalStock.averagePrice + 
-                         amount * this.averagePrice) / 
-                        (originalStock.numUnits + amount);
-
-            originalStock.numUnits += amount;
-            originalStock.averagePrice = avg;
-            originalStock.save();
-
-            if (amount === this.numUnits) {
-                this.remove();
-            } else {
-                this.numUnits -= amount;
-                this.save();
-            }
+            this.numUnits -= amount;
+            const newStock = new Stock({ portfolio: newPortfolioId,
+                                            ticker: this.ticker,
+                                            name: this.name,
+                                            averagePrice: this.averagePrice,
+                                            numUnits: amount });
+            await newStock.save();
         }
-    } catch (e) {
-        console.log('Failed to merge stocks together');
+        this.save();
+    } else {
+        const avg = (originalStock.numUnits * originalStock.averagePrice + 
+                        amount * this.averagePrice) / 
+                    (originalStock.numUnits + amount);
+
+        originalStock.numUnits += amount;
+        originalStock.averagePrice = avg;
+        originalStock.save();
+
+        if (amount === this.numUnits) {
+            this.remove();
+        } else {
+            this.numUnits -= amount;
+            this.save();
+        }
     }
 };
 
