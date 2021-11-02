@@ -14,6 +14,7 @@ export default class WatchlistRoute implements Route {
     }
 
     private initializeRoutes(): void {
+        this.router.get(`${this.path}`, UserAuthentication.auth, WatchlistController.list);
         this.router.put(`${this.path}/:ticker/:stockName`, UserAuthentication.auth, WatchlistController.addTicker);
         this.router.delete(`${this.path}/:ticker`, UserAuthentication.auth, WatchlistController.removeTicker);
     }

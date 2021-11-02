@@ -2,6 +2,35 @@ import { Request, Response } from 'express';
 import Watchlist, { Ticker } from '../models/watchlistModel';
 
 export default class WatchListController {
+    public static list = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            if (Object.keys(req.body).length) {
+                throw new Error('Inputs are given but not needed.');
+            }
+
+            const watchlist = await Watchlist.findOne({ user: req.user._id });
+
+            if (!watchlist) {
+                throw new Error('Watchlist not found');
+            }
+
+            let tickerList: Ticker[] = [];
+
+            for (let i = 0; i < watchlist.tickers.length; i++) {
+                let tickerObj = { ticker: watchlist.tickers[i].ticker,
+                                  stockName: watchlist.tickers[i].stockName };
+                tickerList.push(tickerObj);
+            }
+
+            res.status(200).json(tickerList);
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request' });
+        }
+    };
+
     public static addTicker = async (
         req: Request,
         res: Response
