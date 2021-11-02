@@ -9,9 +9,7 @@ interface StockObject {
     numUnits: number
 };
 
-
 export default class PortfolioController {
-
     public static create = async (
         req: Request,
         res: Response
