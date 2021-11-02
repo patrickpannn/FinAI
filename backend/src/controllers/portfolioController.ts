@@ -126,10 +126,6 @@ export default class PortfolioController {
                 throw new Error('Could not find stocks');
             }
 
-            if (req.body.amount > stockToMove.numUnits) {
-               throw new Error('Moving more stocks than possible');
-            }
-
             await stockToMove.merge(newPortfolio._id, req.body.amount);
 
             res.status(200).json({ response: 'Successful' });
