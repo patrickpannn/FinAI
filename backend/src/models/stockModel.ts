@@ -56,7 +56,7 @@ StockSchema.methods.merge = async function
         }
 
         const originalStock = await Stock.findOne({ portfolio: newPortfolioId,
-                                                        ticker: this.ticker });
+                                                    ticker: this.ticker });
 
         if (!originalStock) {
             if (amount === this.numUnits) {
@@ -64,15 +64,16 @@ StockSchema.methods.merge = async function
             } else {
                 this.numUnits -= amount;
                 const newStock = new Stock({ portfolio: newPortfolioId,
-                                            ticker: this.ticker,
-                                            averagePrice: this.averagePrice,
-                                            numUnits: amount });
+                                                ticker: this.ticker,
+                                                name: this.name,
+                                                averagePrice: this.averagePrice,
+                                                numUnits: amount });
                 await newStock.save();
             }
             this.save();
         } else {
             const avg = (originalStock.numUnits * originalStock.averagePrice + 
-                         amount * this.averagePrice) / 
+                            amount * this.averagePrice) / 
                         (originalStock.numUnits + amount);
 
             originalStock.numUnits += amount;
@@ -87,7 +88,7 @@ StockSchema.methods.merge = async function
             }
         }
     } catch (e) {
-        console.log('Failed to merge stocks together');
+        throw new Error('Stock merging failed');
     }
 };
 
