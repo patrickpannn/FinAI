@@ -3,20 +3,6 @@ import Portfolio from '../models/portfolioModel';
 import dotenv from 'dotenv';
 dotenv.config();
 
-// enum Direction {
-//     Sell= "SELL",
-//     Buy= "BUY",
-// }
-
-// enum OrderBody {
-//     direction = "direction",
-//     units = "units",
-//     name = "name",
-//     ticker = "ticker",
-//     setPrice = "setPrice",
-//     portfolio = "portfolio"
-// }
-
 enum StockBody {
     name = "name",
     ticker = "ticker",
@@ -40,8 +26,12 @@ class VerifyOrder {
             for(var parameter in StockBody)
             {
                 if(!Object.keys(req.body).includes(parameter)){
-                    throw new Error("Bad Request");
+                    throw new Error('Bad Request');
                 }
+            }
+            if(req.body.units <= 0)
+            {
+                throw new Error('Must specify a positive order of stocks');
             }
             const portfolio = await Portfolio.findOne({ 
                 user: req.user.id, name : req.body.portfolio });
@@ -52,7 +42,7 @@ class VerifyOrder {
             next();
         } catch (e) {
                 console.log(e);
-                res.status(401).json({ error: 'Order is incorrect' });
+                res.status(400).json({ error: 'Order is incorrect' });
         };
     };
 }
