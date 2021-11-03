@@ -189,13 +189,14 @@ const Watchlist: React.FC<Props> = ({
                                 <Tab value="Analysis" label="Analysis" className={styles.tab} />
                             </Tabs>
                         </TabContainer>
-                        <Stock
+
+                        {tab === 'Summary' && <Stock
                             ticker={currentTicker}
                             stockName={currentStockName}
                             inWatchlist={inWatchlist}
                             removeFromWatchlist={removeFromWatchlist}
                             addToWatchlist={addToWatchlist}
-                        />
+                        />}
                     </>
                 }
             </RightContent>
