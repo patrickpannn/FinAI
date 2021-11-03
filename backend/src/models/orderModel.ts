@@ -69,32 +69,4 @@ const OrderSchema = new Schema<OrderInterface>({
   }
 }, { timestamps: true });
 
-OrderSchema.post('remove', { document : true }, async function (next): Promise<void> {
-  if(this.executed === true)
-  {
-    /*
-    const stock = await Stock.findOne({ user: this.order });
-    if(!stock)
-    {
-      throw new Error ("This stock no longer exists!");
-    }
-
-    if(this.direction == "SELL")
-    {
-
-      stock.numUnits = stock.numUnits - this.numUnits;
-      if (stock.numUnits === 0)
-      {
-        stock.remove();
-      }
-      stock.save();
-    } else // BUY
-    {
-      stock.numUnits = stock.numUnits + this.numUnits;
-      stock.save();
-    }
-    */
-  }
-});
-
 export default model<OrderInterface>('order', OrderSchema);
