@@ -51,6 +51,10 @@ StockSchema.methods.merge = async function
                             (newPortfolioId: Schema.Types.ObjectId,
                              amount: number): Promise<void> {
     try {
+        if (amount <= 0) {
+            throw new Error('Need to move one or more stocks');
+        }
+
         if (amount > this.numUnits) {
             throw new Error('Moving more stocks than possible');
         }
