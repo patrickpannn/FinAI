@@ -4,7 +4,8 @@ dotenv.config();
 
 // Document interface
 interface OrderInterface extends Document {
-  portfolio: Schema.Types.ObjectId,
+  user: Schema.Types.ObjectId,
+  portfolio: string,
   numUnits: number,
   executePrice: number,
   ticker: string,
@@ -15,10 +16,14 @@ interface OrderInterface extends Document {
 
 // Schema
 const OrderSchema = new Schema<OrderInterface>({
-  portfolio: {
+  user: {
     type: Schema.Types.ObjectId, 
     required: true, 
-    ref: 'portfolio',
+    ref: 'user',
+  },
+  portfolio: {
+    type: String,
+    required: true,
   },
   numUnits: {
     type: Number, 

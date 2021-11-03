@@ -99,7 +99,8 @@ export default class OrderController {
             }
 
             const order = new Order({
-                portfolio: portfolio?.id,
+                user: req.user.id,
+                portfolio: req.body.portfolio,
                 numUnits: units,
                 executePrice: marketPrice,
                 ticker: req.body.ticker,
@@ -162,7 +163,8 @@ export default class OrderController {
             }
 
             const order = new Order({
-                portfolio: portfolio?.id,
+                user: req.user.id,
+                portfolio: req.body.portfolio,
                 numUnits: units,
                 executePrice: marketPrice,
                 ticker: req.body.ticker,
