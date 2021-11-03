@@ -25,12 +25,17 @@ export const Main = styled('div')({
 
 export const Title = styled('div')({
     textAlign: 'center',
+    '& h1:first-letter': {
+        textTransform: 'capitalize',
+    }
 });
 
 export const PriceChart = styled('div')({
     width: '100%',
+    height: '600px',
     display: 'flex',
     justifyContent: 'center',
+    alignItems: 'center',
 });
 
 export const Banner = styled('div')({

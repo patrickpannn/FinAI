@@ -1,23 +1,39 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Main, Title, Banner, useStyles, BuyBtn, ButtonGroup } from '../styles/stock.style';
 import StockChart from './StockChart';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import StarIcon from '@mui/icons-material/Star';
 import { IconButton } from '@mui/material';
 
-const Stock: React.FC = () => {
+interface Props {
+    ticker: string,
+    stockName: string,
+    inWatchlist: boolean,
+    removeFromWatchlist(ticker: string): Promise<void>,
+    addToWatchlist(ticker: string, stockName: string): Promise<void>,
+}
+
+const Stock: React.FC<Props> = ({
+    ticker,
+    stockName,
+    inWatchlist,
+    removeFromWatchlist,
+    addToWatchlist
+}) => {
     const styles = useStyles();
-    const [addToWatchlist, setAddToWatchlist] = useState(false);
-
+    
     const handleAddTicker = (): void => {
-        setAddToWatchlist(!addToWatchlist);
-
+        if (inWatchlist) {
+            removeFromWatchlist(ticker);
+        } else {
+            addToWatchlist(ticker, stockName);
+        }
     };
 
     return (
         <Main>
             <Title>
-                <h1>Apple inc</h1>
+                <h1>{stockName}</h1>
             </Title>
             <Banner>
                 <h1>$148.96</h1>
@@ -26,7 +42,7 @@ const Stock: React.FC = () => {
                     onClick={handleAddTicker}
                     type='button'
                 >
-                    {addToWatchlist
+                    {inWatchlist
                         ? <StarIcon fontSize='large' className={styles.selected} />
                         : <StarOutlineIcon fontSize='large' className={styles.unselected} />
                     }
@@ -40,7 +56,7 @@ const Stock: React.FC = () => {
                     Buy Shares
                 </BuyBtn>
             </ButtonGroup>
-            <StockChart />
+            <StockChart ticker={ticker} />
         </Main>
     );
 };

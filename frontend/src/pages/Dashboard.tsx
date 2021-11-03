@@ -8,18 +8,27 @@ import { Route } from 'react-router-dom';
 const Dashboard: React.FC = () => {
     const [topupOpen, setTopupOpen] = useState(false);
     const [updateProfileOpen, setUpdateProfileOpen] = useState(false);
+    const [searchTicker, setSearchTicker] = useState('');
+    const [searchStockName, setSearchStockName] = useState('');
+
+    const handleSearch = (ticker: string, stockName: string): void => {
+        setSearchTicker(ticker);
+        setSearchStockName(stockName);
+    };
+ 
     return (
         <main>
             <Header
                 page='DASHBOARD'
                 openTopupModal={(): void => setTopupOpen(true)}
                 openUpdateModal={(): void => setUpdateProfileOpen(true)}
+                handleSearch={handleSearch}
             />
             <Route exact path="/dashboard">
-                <Watchlist />
-            </Route>
-            <Route path="/dashboard/watchlist/:ticker">
-                <Watchlist />
+                <Watchlist
+                    searchTicker={searchTicker}
+                    searchStockName={searchStockName}
+                />
             </Route>
             <Topup open={topupOpen} onClose={(): void => setTopupOpen(false)} />
             <UpdateProfile

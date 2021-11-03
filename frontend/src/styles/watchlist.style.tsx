@@ -1,8 +1,13 @@
 import { createStyles, makeStyles, styled, Theme } from "@material-ui/core/styles";
-// import { styled } from '@mui/material/styles';
+
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
-   
+    selected: {
+        backgroundColor: 'lightgrey',
+    },
+    tab: {
+        fontSize: '14pt!important',
+    }
 }));
 
 export const Main = styled('div')({
@@ -12,7 +17,7 @@ export const Main = styled('div')({
 });
 
 export const LeftBar = styled('div')({
-    flex: 1,
+    flex: 1.5,
     overflow: 'auto',
     borderRight: '1px solid #edece8',
     '&::-webkit-scrollbar': {
@@ -27,23 +32,29 @@ export const WatchlistTitle = styled('div')({
 
 export const TickerItem = styled('div')({
     width: '100%',
-    height: '50px',
+    height: '80px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-around',
     cursor: 'pointer',
     '& p': {
         margin: 0,
+        fontSize: '14pt',
     },
     '&:hover': {
         backgroundColor: 'lightgrey',
     },
 });
 
-export const Symbol = styled('h3')({
+export const Symbol = styled('h2')({
     margin: 0,
 });
 
 export const RightContent = styled('div')({
     flex: 5,
 });
+
+export const TabContainer = styled('div')({
+    width: '100%',
+});
+
