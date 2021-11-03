@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Main, Title, Banner, useStyles, BuyBtn, ButtonGroup } from '../styles/stock.style';
 import StockChart from './StockChart';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import StarIcon from '@mui/icons-material/Star';
 import { IconButton } from '@mui/material';
+import OrderModal from './OrderModal';
 
 interface Props {
     ticker: string,
@@ -21,7 +22,8 @@ const Stock: React.FC<Props> = ({
     addToWatchlist
 }) => {
     const styles = useStyles();
-    
+    const [buyOpen, setBuyOpen] = useState(false);
+
     const handleAddTicker = (): void => {
         if (inWatchlist) {
             removeFromWatchlist(ticker);
@@ -52,11 +54,13 @@ const Stock: React.FC<Props> = ({
                 <BuyBtn
                     variant="contained"
                     type='button'
+                    onClick={(): void => setBuyOpen(true)}
                 >
                     Buy Shares
                 </BuyBtn>
             </ButtonGroup>
             <StockChart ticker={ticker} />
+            <OrderModal open={buyOpen} onClose={(): void => setBuyOpen(false)} />
         </Main>
     );
 };
