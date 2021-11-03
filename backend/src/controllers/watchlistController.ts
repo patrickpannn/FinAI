@@ -50,7 +50,7 @@ export default class WatchListController {
             ) {
                 throw new Error('Duplicate tickers');
             }
-            
+
             tickers.splice(0, 0, {
                 ticker: ticker.toUpperCase(),
                 stockName: stockName
