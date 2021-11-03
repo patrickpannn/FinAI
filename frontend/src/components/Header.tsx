@@ -18,6 +18,7 @@ interface Props {
     page: string,
     openTopupModal?: () => void,
     openUpdateModal?: () => void,
+    handleSearch?(ticker: string, stockName: string): void,
 }
 
 interface Stock {
@@ -25,20 +26,35 @@ interface Stock {
     symbol: string,
 }
 
-const Header: React.FC<Props> = ({ page, openTopupModal, openUpdateModal }) => {
+const Header: React.FC<Props> = ({
+    page,
+    openTopupModal,
+    openUpdateModal,
+    handleSearch
+}) => {
+
     const history = useHistory();
     const styles = useStyles();
     const [openSideBar, setOpenSideBar] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredData, setFilterData] = useState<Stock[]>([]);
 
-    const handleSearch = (
+    const handleSearchSubmit = (
         e: React.FormEvent<HTMLFormElement>
     ): void => {
         e.preventDefault();
+        if (filteredData.length !== 0 && handleSearch) {
+            handleSearch(
+                filteredData[0].symbol,
+                filteredData[0].description.toLowerCase()
+            );
+            history.push('/dashboard');
+        }
+        setFilterData([]);
+        setSearchTerm('');
     };
 
-    const handleSearchTerm = (
+    const updateSearchWord = (
         e: React.ChangeEvent<HTMLInputElement>
     ): void => {
         const searchWord = e.target.value;
@@ -58,16 +74,19 @@ const Header: React.FC<Props> = ({ page, openTopupModal, openUpdateModal }) => {
             });
             setFilterData(newData);
         }
-        console.log(searchWord);
     };
 
-    const handleSearchItem = (symbol: string): void => {
-        setSearchTerm(symbol);
-        setFilterData([]);
+    const handleSearchItem = (symbol: string, stockName: string): void => {
+        if (handleSearch) {
+            handleSearch(symbol, stockName.toLowerCase());
+            history.push('/dashboard');
+            setFilterData([]);
+            setSearchTerm('');
+        }
     };
 
     return (
-        <AppBar position='static' color='inherit' className={styles.appBar}>
+        <AppBar position={page === 'HOME' ? 'static' : 'sticky'} color='inherit' className={styles.appBar}>
             <Toolbar>
                 <Typography sx={{ flexGrow: 1, color: '#0017ea' }}>
                     Smart Portfolio.
@@ -92,19 +111,20 @@ const Header: React.FC<Props> = ({ page, openTopupModal, openUpdateModal }) => {
                 }
                 {page === 'DASHBOARD' &&
                     <>
-                        <SearchForm onSubmit={handleSearch}>
-                            <StyledIconBtn
-                                size="large"
-                                aria-label="search stock"
-                            >
-                                <SearchIcon />
-                            </StyledIconBtn>
+                        <SearchForm onSubmit={handleSearchSubmit}>
                             <StyledSearchBar
                                 type='text'
                                 placeholder='search...'
                                 value={searchTerm}
-                                onChange={handleSearchTerm}
+                                onChange={updateSearchWord}
                             />
+                            <StyledIconBtn
+                                size="large"
+                                aria-label="search stock"
+                                type='submit'
+                            >
+                                <SearchIcon />
+                            </StyledIconBtn>
                             {filteredData.length !== 0 &&
                                 (<div className={styles.searchDropdown}>
                                     <div className={styles.searchTitle}>
@@ -117,7 +137,10 @@ const Header: React.FC<Props> = ({ page, openTopupModal, openUpdateModal }) => {
                                             key={idx}
                                             className={styles.searchItem}
                                             onClick={(): void =>
-                                                handleSearchItem(val.symbol)
+                                                handleSearchItem(
+                                                    val.symbol,
+                                                    val.description
+                                                )
                                             }
                                         >
                                             <p>{val.symbol}</p>
