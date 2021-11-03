@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import User from '../models/userModel';
 import Portfolio from '../models/portfolioModel';
+import Watchlist from '../models/watchlistModel';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import EmailService from '../services/emailService';
 import ResetCode from '../models/resetCodeModel';
-import Watchlist from '../models/watchlistModel';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -32,6 +32,7 @@ export default class UserController {
             const watchlist = new Watchlist({ user: user.id });
             await watchlist.save();
             const portfolio = new Portfolio({ user: user.id, name: "Default" });
+
             await portfolio.save();
 
             res.status(201).json({ token });
