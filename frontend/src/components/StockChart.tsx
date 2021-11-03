@@ -60,7 +60,7 @@ const StockChart: React.FC<Props> = ({ ticker }) => {
     useEffect(() => {
         SetData([]);
         fetchPrices();
-    // eslint-disable-next-line
+        // eslint-disable-next-line
     }, [ticker]);
 
     return (
