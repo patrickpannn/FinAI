@@ -10,11 +10,13 @@ const url = process.env.REACT_APP_URL || 'http://localhost:5000';
 
 interface Props {
     open: boolean,
+    ticker: string,
+    stockName: string,
     onClose: () => void;
 }
 
-const OrderModal: React.FC<Props> = ({ open, onClose }) => {
-    const [units, setUnits] = useState<number>(0);
+const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
+    const [units, setUnits] = useState('');
     const styles = useStyles();
     const dispatch = useDispatch();
     const { setToast } = bindActionCreators(actionCreators, dispatch);
@@ -24,9 +26,33 @@ const OrderModal: React.FC<Props> = ({ open, onClose }) => {
     ): Promise<void> => {
         e.preventDefault();
         try {
-            if (units <= 0) {
+            if (!parseInt(units, 10)) {
                 console.log(units);
+                throw new Error('Please enter numbers');
+            } else if (+units <= 0) {
                 throw new Error('Units should be positive');
+            }
+
+            const response = await fetch(`${url}/user/order/buyMarketOrder`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+                },
+                body: JSON.stringify({
+                    units: units,
+                    portfolio: 'Default',
+                    ticker: ticker,
+                    name: stockName
+                }),
+            });
+            if (response.status === 200) {
+                setToast({ type: 'success', message: `Order Executed!` });
+                onClose();
+            } else if (response.status === 401) {
+                throw new Error('Authentication Failed');
+            } else {
+                throw new Error('Insufficient funds');
             }
         } catch (error) {
             setToast({ type: 'error', message: `${error}` });
@@ -46,10 +72,10 @@ const OrderModal: React.FC<Props> = ({ open, onClose }) => {
                     <TextField
                         id="outlined-number"
                         label="Units"
-                        type="number"
+                        type="text"
                         value={units}
                         onChange={
-                            (e): void => setUnits(parseInt(e.target.value, 10))
+                            (e): void => setUnits(e.target.value)
                         }
                         required
                         fullWidth

@@ -60,7 +60,12 @@ const Stock: React.FC<Props> = ({
                 </BuyBtn>
             </ButtonGroup>
             <StockChart ticker={ticker} />
-            <OrderModal open={buyOpen} onClose={(): void => setBuyOpen(false)} />
+            <OrderModal
+                ticker={ticker}
+                stockName={stockName}
+                open={buyOpen}
+                onClose={(): void => setBuyOpen(false)}
+            />
         </Main>
     );
 };
