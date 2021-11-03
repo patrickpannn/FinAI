@@ -82,7 +82,7 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
                     />
                     <DialogActions>
                         <SubmitButton autoFocus type='submit' variant="contained">
-                            Confirm
+                            Place buy Order
                         </SubmitButton>
                     </DialogActions>
                 </form>
