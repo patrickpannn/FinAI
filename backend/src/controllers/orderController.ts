@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import Portfolio from '../models/portfolioModel';
+import Order from '../models/orderModel';
 import Stock from '../models/stockModel';
 import axios from 'axios';
 
@@ -65,6 +66,20 @@ export default class OrderController {
                 await req.user.save();
             }
 
+            const order = new Order({
+                portfolio: portfolio?.id,
+                numUnits: units,
+                executePrice: marketPrice,
+                ticker: req.body.ticker,
+                name: req.body.name,
+                executed: true,
+                direction: "BUY" });
+            if(!order)
+            {
+                throw new Error('Could not make order');
+            }
+            await order.save();
+
             res.status(200).json({ response: 'Successful' });
         } catch (e) {
             console.log(e);
@@ -113,8 +128,23 @@ export default class OrderController {
             } else {
                 await existingStock.save();
             }
+
+            const order = new Order({
+                portfolio: portfolio?.id,
+                numUnits: units,
+                executePrice: marketPrice,
+                ticker: req.body.ticker,
+                name: req.body.name,
+                executed: true,
+                direction: "SELL" });
+            if(!order)
+            {
+                throw new Error('Could not make order');
+            }
+            await order.save();
+
             await req.user.save();
-            
+
             res.status(200).json({ response: 'Successful' });
         } catch (e) {
             res.status(400).json({ error: 'Bad Request' });
