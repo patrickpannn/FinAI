@@ -1,10 +1,43 @@
 import { Request, Response } from 'express';
 import Portfolio from '../models/portfolioModel';
+import Order from '../models/orderModel';
 import Stock from '../models/stockModel';
 import axios from 'axios';
 
 
 export default class OrderController {
+    public static list = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+
+            if (Object.keys(req.body).length) {
+                throw new Error('Inputs are given but not needed.');
+            }
+
+            const orders = await Order.find({ user: req.user._id });
+
+            let list = [];
+
+            for (let i = 0; i < orders.length; i++) {
+                let orderObj = {
+                    numUnits: orders[i].numUnits,
+                    executePrice: orders[i].executePrice,
+                    ticker: orders[i].ticker,
+                    name: orders[i].name,
+                    executed: orders[i].executed,
+                    direction: orders[i].direction,
+                    portfolio: orders[i].portfolio
+                };
+                list.push(orderObj);
+            }
+
+            res.status(200).json(list);
+        } catch (e) {
+            res.status(400).json({ error: 'List of Portfolios Bad Request' });
+        }
+    };
 
     public static buyMarketOrder = async (
         req: Request,
