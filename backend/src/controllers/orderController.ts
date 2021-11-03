@@ -217,7 +217,7 @@ export default class OrderController {
                 await existingStock.save();
             }
             await req.user.save();
-            res.status(201).json({ response: 'Successful' });
+            res.status(200).json({ response: 'Successful' });
         } catch (e) {
             res.status(400).json({ error: 'Bad Request' });
         }
@@ -265,7 +265,7 @@ export default class OrderController {
                 order.delete();
             }
 
-            res.status(201).json({ response: 'Successful' });
+            res.status(200).json({ response: 'Successful' });
         } catch (e) {
             console.log(e);
             res.status(400).json({ error: 'Bad Request' });
