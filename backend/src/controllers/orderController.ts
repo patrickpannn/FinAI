@@ -35,7 +35,7 @@ export default class OrderController {
 
             res.status(200).json(list);
         } catch (e) {
-            res.status(400).json({ error: 'List of Portfolios Bad Request' });
+            res.status(400).json({ error: 'List of Orders Bad Request' });
         }
     };
 
