@@ -26,21 +26,37 @@ export default class OrderController {
             {
                 throw new Error('Available Balance is too low to make this order');
             }
-            const order = new Order({ 
+
+            const existingOrder = await Order.findOne({ 
                 user: req.user.id, 
-                numUnits: req.body.units, 
-                executePrice : req.body.setPrice,
-                ticker: req.body.ticker, 
-                name: req.body.name, 
-                direction: req.body.direction,
-                portfolio: req.body.portfolio });
-            if(!order)
+                portfolio: req.body.portfolio,
+                ticker: req.body.ticker,
+                executePrice: req.body.setPrice,
+                direction: req.body.direction
+            });
+            if(existingOrder)
             {
-                throw new Error('Order cannot be made');
+                existingOrder.numUnits += req.body.units;
+                await existingOrder.save();
+            } else
+            {
+                const order = new Order({ 
+                    user: req.user.id, 
+                    numUnits: req.body.units, 
+                    executePrice : req.body.setPrice,
+                    ticker: req.body.ticker, 
+                    name: req.body.name, 
+                    direction: req.body.direction,
+                    portfolio: req.body.portfolio });
+                if(!order)
+                {
+                    throw new Error('Order cannot be made');
+                }
+                order.save();
+
             }
             req.user.availableBalance = req.user.availableBalance - req.body.setPrice * req.body.units;
             await req.user.save();
-            await order.save();
 
             res.status(201).json({ response: 'Successful' });
         } catch (e) {
@@ -72,20 +88,38 @@ export default class OrderController {
             if(stock.numUnits - req.body.units < 0){
                 throw new Error('Cannot sell more shares than you own');
             }
-            stock.numUnits = stock.numUnits - req.body.units;
-            const order = new Order({ 
-                user: req.user.id,
-                numUnits: req.body.units, 
+
+            const existingOrder = await Order.findOne({ 
+                user: req.user.id, 
+                portfolio: req.body.portfolio,
+                ticker: req.body.ticker,
                 executePrice: req.body.setPrice,
-                ticker: req.body.ticker, 
-                name: req.body.name, 
-                direction: req.body.direction, 
-                portfolio: req.body.portfolio });
-            if(!order)
+                direction: req.body.direction
+            });
+            if(existingOrder)
             {
-                throw new Error('Order cannot be made');
+                existingOrder.numUnits += req.body.units;
+                await existingOrder.save();
+            } else
+            {
+                const order = new Order({ 
+                    user: req.user.id,
+                    numUnits: req.body.units, 
+                    executePrice: req.body.setPrice,
+                    ticker: req.body.ticker, 
+                    name: req.body.name, 
+                    direction: req.body.direction, 
+                    portfolio: req.body.portfolio });
+                if(!order)
+                {
+                    throw new Error('Order cannot be made');
+                }
+                await order.save();
             }
-            await order.save();
+
+            stock.numUnits -= req.body.units;
+            await stock.save();
+
             res.status(201).json({ response: 'Successful' });
         } catch (e) {
             console.log(e)
@@ -194,8 +228,46 @@ export default class OrderController {
         res: Response
     ): Promise<void> => {
         try {
+            const order = await Order.findOne({ 
+                user: req.user.id, 
+                portfolio: req.body.portfolio,
+                ticker: req.body.ticker,
+                executePrice: req.body.setPrice,
+                units: req.body.units
+            });
+            if(!order)
+            {
+                throw new Error("This order doesn't exist");
+            }
+
+            if(req.body.direction == Direction.Buy)
+            {
+                req.user.availableBalance += req.body.setPrice * req.body.units;
+                req.user.save();
+                order.delete();
+            } else
+            {
+                const portfolio = await Portfolio.findOne({ 
+                    user: req.user.id,
+                    name: req.body.portfolio });
+
+                const stock = await Stock.findOne({ 
+                    portfolio: portfolio?.id,
+                    ticker: req.body.ticker
+                })
+                if(!stock)
+                {
+                    throw new Error("Cant access a stock that doesnt exist");
+                }
+
+                stock.numUnits += req.body.units;
+                stock.save();
+                order.delete();
+            }
+
             res.status(201).json({ response: 'Successful' });
         } catch (e) {
+            console.log(e);
             res.status(400).json({ error: 'Bad Request' });
         }
     };
