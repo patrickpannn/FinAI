@@ -1,16 +1,8 @@
 import { Request, Response } from 'express';
-import Order from '../models/orderModel';
-import User from '../models/userModel';
 import Portfolio from '../models/portfolioModel';
 import Stock from '../models/stockModel';
-//import fetch from 'node-fetch';
-//const fetch = require('node-fetch');
 import axios from 'axios';
 
-enum Direction {
-    Sell= "SELL",
-    Buy= "BUY",
-}
 
 export default class OrderController {
 
@@ -19,7 +11,8 @@ export default class OrderController {
         res: Response
     ): Promise<void> => {
         try {
-            const response = await axios.get(`https://finnhub.io/api/v1/quote?symbol=${req.body.ticker}&token=c5vln0iad3ibtqnna830`);
+            const response = await axios.get(
+                `https://finnhub.io/api/v1/quote?symbol=${req.body.ticker}&token=c5vln0iad3ibtqnna830`);
             const totalCost = response.data.c * req.body.units;
             const marketPrice = response.data.c;
             if(req.user.availableBalance - totalCost < 0)
@@ -45,17 +38,21 @@ export default class OrderController {
                     throw new Error('Could not make stock');
                 }
                 req.user.balance = (req.user.balance - totalCost).toFixed(2);
-                req.user.availableBalance = (req.user.availableBalance - totalCost).toFixed(2);
+                req.user.availableBalance = 
+                    (req.user.availableBalance - totalCost).toFixed(2);
                 await stock.save();
                 await req.user.save();
             } else
             {
-                const avg = (existingStock.numUnits * existingStock.averagePrice +
-                    req.body.units * marketPrice) / (existingStock.numUnits + req.body.units);
+                const avg = (
+                    existingStock.numUnits * existingStock.averagePrice +
+                    req.body.units * marketPrice) / 
+                    (existingStock.numUnits + req.body.units);
                 existingStock.numUnits += req.body.units;
                 existingStock.averagePrice = avg;
                 req.user.balance = (req.user.balance - totalCost).toFixed(2);
-                req.user.availableBalance = (req.user.availableBalance - totalCost).toFixed(2);
+                req.user.availableBalance = 
+                    (req.user.availableBalance - totalCost).toFixed(2);
                 await existingStock.save();
                 await req.user.save();
             }
@@ -84,15 +81,19 @@ export default class OrderController {
                 throw new Error('This stock doesnt exist');
             }
 
-            const response = await axios.get(`https://finnhub.io/api/v1/quote?symbol=${req.body.ticker}&token=c5vln0iad3ibtqnna830`);
+            const response = await axios.get(
+                `https://finnhub.io/api/v1/quote?symbol=${req.body.ticker}&token=c5vln0iad3ibtqnna830`);
             const totalCost = response.data.c * req.body.units;
             const marketPrice = response.data.c;
-            const avg = (existingStock.numUnits * existingStock.averagePrice -
-                req.body.units * marketPrice) / (existingStock.numUnits - req.body.units);
+            const avg = 
+                (existingStock.numUnits * existingStock.averagePrice -
+                req.body.units * marketPrice) / 
+                (existingStock.numUnits - req.body.units);
                 
 
             req.user.balance = (req.user.balance + totalCost).toFixed(2);
-            req.user.availableBalance = (req.user.availableBalance + totalCost).toFixed(2);
+            req.user.availableBalance = (
+                req.user.availableBalance + totalCost).toFixed(2);
 
             existingStock.numUnits -= req.body.units;
             existingStock.averagePrice = avg;

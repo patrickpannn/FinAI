@@ -1,7 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
 import dotenv from 'dotenv';
-import Stock from '../models/stockModel';
-import { StringifyOptions } from 'querystring';
 dotenv.config();
 
 // Document interface

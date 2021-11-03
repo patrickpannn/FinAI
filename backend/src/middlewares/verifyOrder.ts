@@ -1,8 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import validator from 'validator';
-import User from '../models/userModel';
 import Portfolio from '../models/portfolioModel';
-import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -11,7 +8,7 @@ enum Direction {
     Buy= "BUY",
 }
 
-enum orderBody {
+enum OrderBody {
     direction = "direction",
     units = "units",
     name = "name",
@@ -20,7 +17,7 @@ enum orderBody {
     portfolio = "portfolio"
 }
 
-enum stockBody {
+enum StockBody {
     name = "name",
     ticker = "ticker",
     portfolio = "portfolio",
@@ -39,13 +36,14 @@ class VerifyOrder {
             {
                 throw new Error('Invalid input');
             } 
-            for(var parameter in orderBody)
+            for(var parameter in OrderBody)
             {
                 if(!Object.keys(req.body).includes(parameter)){
                     throw new Error("Bad Request");
                 }
             }
-            const portfolio = await Portfolio.findOne({ user: req.user.id, name : req.body.portfolio });
+            const portfolio = await Portfolio.findOne({ 
+                user: req.user.id, name : req.body.portfolio });
             if(!portfolio)
             {
                 throw new Error('Portfolio specified doesn\'t exist');
@@ -72,13 +70,14 @@ class VerifyOrder {
                 //console.log(Object.keys(req.body).length);
                 throw new Error('Invalid input');
             } 
-            for(var parameter in stockBody)
+            for(var parameter in StockBody)
             {
                 if(!Object.keys(req.body).includes(parameter)){
                     throw new Error("Bad Request");
                 }
             }
-            const portfolio = await Portfolio.findOne({ user: req.user.id, name : req.body.portfolio });
+            const portfolio = await Portfolio.findOne({ 
+                user: req.user.id, name : req.body.portfolio });
             if(!portfolio)
             {
                 throw new Error('Portfolio specified doesn\'t exist');
