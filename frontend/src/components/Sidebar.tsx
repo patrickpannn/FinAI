@@ -119,7 +119,7 @@ const Sidebar: React.FC<Props> = ({
                     <List>
                         <SidebarBtn
                             text='Watchlist'
-                            onClick={(): void => console.log('watchlist')}
+                            onClick={(): void => history.push('/dashboard')}
                             childNode={
                                 <ShowChartIcon className={styles.btnColor} />
                             }
