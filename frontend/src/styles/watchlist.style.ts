@@ -13,6 +13,18 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    cardTitle: {
+        fontSize: "1em",
+        [theme.breakpoints.down("sm")]: {
+        fontSize: "0.75em",
+        },
+    },
+    cardBody: {
+        fontSize: "0.75em",
+        [theme.breakpoints.down("sm")]: {
+        fontSize: "0.5em",
+        },
     }
 }));
 
@@ -66,10 +78,10 @@ export const TabContainer = styled('div')({
 });
 
 export const StyledTabs = styled('div')({
-    width: '100%',
+    width: '76.9%',
     height: '60px',
     display: 'flex',
-    position: 'absolute',
+    position: 'fixed',
     bottom: 0,
 });
 

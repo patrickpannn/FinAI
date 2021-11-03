@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Main, LeftBar, RightContent, WatchlistTitle, TabContainer, useStyles, StyledTabs, StyledTab } from '../styles/watchlist.style';
 import WatchlistTicker from '../components/WatchlistTicker';
 import Stock from '../components/Stock';
+import News from '../components/News';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
@@ -113,6 +114,7 @@ const Watchlist: React.FC<Props> = ({
             });
             if (response.status === 200) {
                 const data = await response.json();
+                console.log(data);
                 const newData = data.map((val: StockInterface, idx: number) => {
                     if (idx === 0 && !searchTicker) {
                         val.selected = true;
@@ -184,6 +186,9 @@ const Watchlist: React.FC<Props> = ({
                             inWatchlist={inWatchlist}
                             removeFromWatchlist={removeFromWatchlist}
                             addToWatchlist={addToWatchlist}
+                        />}
+                        {tab === 'NEWS' && <News 
+                             name={currentStockName}
                         />}
                         <TabContainer>
                             <StyledTabs
