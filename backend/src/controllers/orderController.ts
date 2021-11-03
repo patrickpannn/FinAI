@@ -115,7 +115,7 @@ export default class OrderController {
                 const stock = new Stock({
                     portfolio: portfolio?.id, 
                     ticker: req.body.ticker,
-                    stockName: req.body.name, 
+                    name: req.body.name, 
                     averagePrice : marketPrice, 
                     numUnits: req.body.units
                 });

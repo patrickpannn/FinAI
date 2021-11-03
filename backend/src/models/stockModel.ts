@@ -3,7 +3,7 @@ import { Schema, model, Document } from 'mongoose';
 interface StockInterface extends Document {
     portfolio: Schema.Types.ObjectId,
     ticker: string,
-    stockName: string,
+    name: string,
     averagePrice: number,
     numUnits: number
 };
@@ -19,7 +19,7 @@ const StockSchema = new Schema<StockInterface>({
         required: true,
         trim: true,
     },
-    stockName: {
+    name: {
         type: String,
         required: true,
         trim: true,
