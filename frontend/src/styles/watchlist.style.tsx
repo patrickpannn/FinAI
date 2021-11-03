@@ -1,12 +1,18 @@
 import { createStyles, makeStyles, styled, Theme } from "@material-ui/core/styles";
 
-
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     selected: {
-        backgroundColor: 'lightgrey',
+        backgroundColor: '#d7eafd',
     },
     tab: {
         fontSize: '14pt!important',
+    },
+    noTickers: {
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 }));
 
@@ -42,7 +48,7 @@ export const TickerItem = styled('div')({
         fontSize: '14pt',
     },
     '&:hover': {
-        backgroundColor: 'lightgrey',
+        backgroundColor: '#d7eafd',
     },
 });
 
@@ -52,9 +58,35 @@ export const Symbol = styled('h2')({
 
 export const RightContent = styled('div')({
     flex: 5,
+    position: 'relative',
 });
 
 export const TabContainer = styled('div')({
     width: '100%',
+});
+
+export const StyledTabs = styled('div')({
+    width: '100%',
+    height: '60px',
+    display: 'flex',
+    position: 'absolute',
+    bottom: 0,
+});
+
+
+export const StyledTab = styled('div')({
+    flex: 1,
+    borderTop: '1px solid #edece8',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    fontSize: '18pt',
+    fontWeight: 600,
+    color: '#0017ea',
+    fontFamily: 'Arial',
+    '&:hover': {
+        backgroundColor: '#d7eafd',
+    }
 });
 

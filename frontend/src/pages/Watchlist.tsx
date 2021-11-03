@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Main, LeftBar, RightContent, WatchlistTitle, TabContainer, useStyles } from '../styles/watchlist.style';
+import { Main, LeftBar, RightContent, WatchlistTitle, TabContainer, useStyles, StyledTabs, StyledTab } from '../styles/watchlist.style';
 import WatchlistTicker from '../components/WatchlistTicker';
 import Stock from '../components/Stock';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 
 const url = process.env.REACT_APP_URL || 'http://localhost:5000';
 
@@ -21,6 +19,8 @@ interface Props {
     searchStockName: string,
 }
 
+type TabsType = 'SUMMARY' | 'NEWS' | 'ANALYSIS';
+
 const Watchlist: React.FC<Props> = ({
     searchTicker,
     searchStockName
@@ -32,11 +32,7 @@ const Watchlist: React.FC<Props> = ({
     const [currentTicker, setCurrentTicker] = useState('');
     const [currentStockName, setCurrentStockName] = useState('');
     const [inWatchlist, setInWatchlist] = useState(false);
-    const [tab, setTab] = React.useState('Summary');
-
-    const handleTab = (event: React.SyntheticEvent, newValue: string): void => {
-        setTab(newValue);
-    };
+    const [tab, setTab] = React.useState<TabsType>('SUMMARY');
 
     const handleSelected = (index: number): void => {
         let newTickers: StockInterface[] = [...tickers];
@@ -175,28 +171,40 @@ const Watchlist: React.FC<Props> = ({
             </LeftBar>
             <RightContent>
                 {tickers.length === 0 && !searchTicker
-                    ? <h1>No Tickers</h1>
+                    ? <div className={styles.noTickers}>
+                        <h1>
+                            Currently you don't have Tickers in the Watchlist
+                        </h1>
+                    </div>
                     : <>
-                        <TabContainer>
-                            <Tabs
-                                value={tab}
-                                onChange={handleTab}
-                                variant="fullWidth"
-                                aria-label="tabs"
-                            >
-                                <Tab value="Summary" label="Summary" className={styles.tab} />
-                                <Tab value="News" label="News" className={styles.tab} />
-                                <Tab value="Analysis" label="Analysis" className={styles.tab} />
-                            </Tabs>
-                        </TabContainer>
-
-                        {tab === 'Summary' && <Stock
+                        {tab === 'SUMMARY' && <Stock
                             ticker={currentTicker}
                             stockName={currentStockName}
                             inWatchlist={inWatchlist}
                             removeFromWatchlist={removeFromWatchlist}
                             addToWatchlist={addToWatchlist}
                         />}
+                        <TabContainer>
+                            <StyledTabs
+                                aria-label="tabs"
+                            >
+                                <StyledTab
+                                    className={`${tab === 'SUMMARY' && styles.selected}`}
+                                    onClick={(): void => setTab('SUMMARY')}>
+                                    SUMMARY
+                                </StyledTab>
+                                <StyledTab
+                                    className={`${tab === 'NEWS' && styles.selected}`}
+                                    onClick={(): void => setTab('NEWS')} >
+                                    NEWS
+                                </StyledTab>
+                                <StyledTab
+                                    className={`${tab === 'ANALYSIS' && styles.selected}`}
+                                    onClick={(): void => setTab('ANALYSIS')}>
+                                    ANALYSIS
+                                </StyledTab>
+                            </StyledTabs>
+                        </TabContainer>
                     </>
                 }
             </RightContent>

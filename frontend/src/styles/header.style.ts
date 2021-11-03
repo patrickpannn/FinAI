@@ -45,7 +45,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
             display: 'inline-block',
         },
         '&:hover': {
-            backgroundColor: 'lightgrey',
+            backgroundColor: '#d7eafd',
         },
     },
     stockName: {

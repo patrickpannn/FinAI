@@ -34,8 +34,6 @@ const StockChart: React.FC<Props> = ({ ticker }) => {
                     });
                 if (response.status === 200) {
                     const stockData = await response.json();
-                    setToast({ type: 'success', message: 'Success!' });
-
                     const length = stockData.c.length;
                     let newData: DataItem[][] = [];
 

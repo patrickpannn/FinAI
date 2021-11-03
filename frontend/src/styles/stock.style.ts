@@ -20,13 +20,17 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
 
 export const Main = styled('div')({
     width: '100%',
-    height: '100%',
+    height: 'calc(100% - 60px)',
 });
 
 export const Title = styled('div')({
     textAlign: 'center',
     '& h1:first-letter': {
         textTransform: 'capitalize',
+    },
+    '& h1': {
+        margin: '0',
+        padding: '20px 0',
     }
 });
 
