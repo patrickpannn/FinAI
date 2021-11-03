@@ -13,7 +13,19 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-    }
+    },
+    cardTitle: {
+        fontSize: "1em",
+        [theme.breakpoints.down("sm")]: {
+        fontSize: "0.75em",
+        },
+    },
+    cardBody: {
+        fontSize: "0.75em",
+        [theme.breakpoints.down("sm")]: {
+        fontSize: "0.5em",
+        },
+    },
 }));
 
 export const Main = styled('div')({
