@@ -16,13 +16,13 @@ const News: React.FC<Props> = ({ name }) => {
 
     useEffect(() => {
         const fetchArticles = async () : Promise<void> => {
-        try { 
-            const res = await fetch(
-                `https://api.nytimes.com/svc/search/v2/articlesearch.json?q=${name}&api-key=znXpYECdWv26apkWSTwsYGCASnnu6bDu`
-            );     
-            setArticles((await res.json()).response.docs);
+            try { 
+                const res = await fetch(
+                    `https://api.nytimes.com/svc/search/v2/articlesearch.json?q=${name}&api-key=znXpYECdWv26apkWSTwsYGCASnnu6bDu`
+                );     
+                setArticles((await res.json()).response.docs);
             } catch (error) {
-            console.error(error);
+                console.error(error);
             }
         };
         fetchArticles();
