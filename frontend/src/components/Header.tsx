@@ -36,6 +36,11 @@ const Header: React.FC<Props> = ({ page, openTopupModal, openUpdateModal }) => {
         e: React.FormEvent<HTMLFormElement>
     ): void => {
         e.preventDefault();
+        if (searchTerm) {
+            history.push(`/dashboard/watchlist/${searchTerm.toUpperCase()}`);
+        }
+        setFilterData([]);
+        setSearchTerm('');
     };
 
     const handleSearchTerm = (
@@ -62,12 +67,13 @@ const Header: React.FC<Props> = ({ page, openTopupModal, openUpdateModal }) => {
     };
 
     const handleSearchItem = (symbol: string): void => {
-        setSearchTerm(symbol);
+        history.push(`/dashboard/watchlist/${symbol}`);
         setFilterData([]);
+        setSearchTerm('');
     };
 
     return (
-        <AppBar position='static' color='inherit' className={styles.appBar}>
+        <AppBar position={page === 'HOME' ? 'static' : 'sticky'} color='inherit' className={styles.appBar}>
             <Toolbar>
                 <Typography sx={{ flexGrow: 1, color: '#0017ea' }}>
                     Smart Portfolio.
@@ -93,18 +99,19 @@ const Header: React.FC<Props> = ({ page, openTopupModal, openUpdateModal }) => {
                 {page === 'DASHBOARD' &&
                     <>
                         <SearchForm onSubmit={handleSearch}>
-                            <StyledIconBtn
-                                size="large"
-                                aria-label="search stock"
-                            >
-                                <SearchIcon />
-                            </StyledIconBtn>
                             <StyledSearchBar
                                 type='text'
                                 placeholder='search...'
                                 value={searchTerm}
                                 onChange={handleSearchTerm}
                             />
+                            <StyledIconBtn
+                                size="large"
+                                aria-label="search stock"
+                                type='submit'
+                            >
+                                <SearchIcon />
+                            </StyledIconBtn>
                             {filteredData.length !== 0 &&
                                 (<div className={styles.searchDropdown}>
                                     <div className={styles.searchTitle}>

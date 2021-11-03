@@ -5,6 +5,8 @@ import { IconButton, Button } from '@mui/material';
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     appBar: {
         fontFamily: 'Arial',
+        height: '80px',
+        justifyContent: 'center',
         '& p': {
             fontSize: '25pt',
             fontWeight: '600',
@@ -16,11 +18,11 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         }
     },
     searchDropdown: {
-        width: '300px',
+        width: '450px',
         height: '200px',
         position: 'absolute',
         top: '56px',
-        right: '10px',
+        left: '10px',
         backgroundColor: 'white',
         boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
         borderRadius: '3px',
@@ -37,7 +39,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     searchItem: {
         cursor: 'pointer',
         '& p': {
-            fontSize: '10pt',
+            fontSize: '13pt',
             margin: '0 10px',
             padding: '13px 0',
             display: 'inline-block',
@@ -54,7 +56,8 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     searchTitle: {
         '& h3': {
             padding: '10px',
-            margin: '0'
+            margin: '0',
+            fontSize: '16pt',
         }
     }
 }));
@@ -65,13 +68,14 @@ export const StyledIconBtn = styled(IconButton)({
 
 export const StyledSearchBar = styled('input')({
     height: '30px',
-    width: '300px',
+    width: '450px',
     borderRadius: '5px',
     border: '0',
     backgroundColor: '#f3f6f9',
     padding: '5px 10px',
+    fontSize: '16pt',
     '&::-webkit-input-placeholder': {
-        fontSize: '12pt',
+        fontSize: '16pt',
         padding: '0 5px',
     }
 });
