@@ -3,20 +3,6 @@ import Portfolio from '../models/portfolioModel';
 import dotenv from 'dotenv';
 dotenv.config();
 
-// enum Direction {
-//     Sell= "SELL",
-//     Buy= "BUY",
-// }
-
-// enum OrderBody {
-//     direction = "direction",
-//     units = "units",
-//     name = "name",
-//     ticker = "ticker",
-//     setPrice = "setPrice",
-//     portfolio = "portfolio"
-// }
-
 enum StockBody {
     name = "name",
     ticker = "ticker",

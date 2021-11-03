@@ -27,32 +27,40 @@ export default class OrderController {
                 portfolio: portfolio?.id,
                 ticker: req.body.ticker
             });
+
             if (!existingStock) {
+
                 const stock = new Stock({
                     portfolio: portfolio?.id,
                     ticker: req.body.ticker,
                     name: req.body.name,
                     averagePrice: marketPrice,
-                    numUnits: units
-                });
+                    numUnits: units });
+
                 if (!stock) {
                     throw new Error('Could not make stock');
                 }
                 req.user.balance = (req.user.balance - totalCost).toFixed(2);
                 req.user.availableBalance =
                     (req.user.availableBalance - totalCost).toFixed(2);
+
                 await stock.save();
                 await req.user.save();
             } else {
+
                 const avg = (
                     existingStock.numUnits * existingStock.averagePrice +
                     units * marketPrice) /
                     (existingStock.numUnits + units);
+
                 existingStock.numUnits += units;
                 existingStock.averagePrice = avg;
-                req.user.balance = (req.user.balance - totalCost).toFixed(2);
+
+                req.user.balance = 
+                    (req.user.balance - totalCost).toFixed(2);
                 req.user.availableBalance =
                     (req.user.availableBalance - totalCost).toFixed(2);
+
                 await existingStock.save();
                 await req.user.save();
             }
@@ -74,10 +82,10 @@ export default class OrderController {
                 user: req.user.id,
                 name: req.body.portfolio
             });
+
             const existingStock = await Stock.findOne({
                 portfolio: portfolio?.id,
-                ticker: req.body.ticker
-            });
+                ticker: req.body.ticker });
             if (!existingStock) {
                 throw new Error('This stock doesnt exist');
             }
@@ -87,11 +95,11 @@ export default class OrderController {
             const units = parseInt(req.body.units, 10);
             const totalCost = response.data.c * units;
             const marketPrice = response.data.c;
+
             const avg =
                 (existingStock.numUnits * existingStock.averagePrice -
                     units * marketPrice) /
                 (existingStock.numUnits - units);
-
 
             req.user.balance = (req.user.balance + totalCost).toFixed(2);
             req.user.availableBalance = (
@@ -99,12 +107,14 @@ export default class OrderController {
 
             existingStock.numUnits -= units;
             existingStock.averagePrice = avg;
+
             if (existingStock.numUnits == 0) {
                 existingStock.delete();
             } else {
                 await existingStock.save();
             }
             await req.user.save();
+            
             res.status(200).json({ response: 'Successful' });
         } catch (e) {
             res.status(400).json({ error: 'Bad Request' });
