@@ -23,12 +23,13 @@ const StockChart: React.FC<Props> = ({ ticker }) => {
     const dispatch = useDispatch();
     const { setToast } = bindActionCreators(actionCreators, dispatch);
     const [data, SetData] = useState<DataItem[][]>([]);
+    const exchangeType = ticker.includes('BTC') || ticker.includes('ETH') ? 'crypto' : 'stock';
 
     const fetchPrices = async (): Promise<void> => {
         try {
             if (ticker !== '') {
                 const response = await fetch(
-                    `https://finnhub.io/api/v1/stock/candle?symbol=${ticker}&resolution=D&from=${Math.floor(Date.now() / 1000 - 5184000)}&to=${Math.floor(Date.now() / 1000)}&token=c5vln0iad3ibtqnna830`
+                    `https://finnhub.io/api/v1/${exchangeType}/candle?symbol=${ticker}&resolution=D&from=${Math.floor(Date.now() / 1000 - 5184000)}&to=${Math.floor(Date.now() / 1000)}&token=c5vln0iad3ibtqnna830`
                     , {
                         method: 'GET'
                     });
