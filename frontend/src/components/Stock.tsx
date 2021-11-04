@@ -50,6 +50,7 @@ const Stock: React.FC<Props> = ({
             if (response.status === 200) {
                 const stockData = await response.json();
                 setPrice(stockData.c);
+                setPriceColor('normal');
             } else {
                 throw new Error('Failed to fetch the price');
             }
@@ -82,12 +83,8 @@ const Stock: React.FC<Props> = ({
             wsCurrent.onmessage = (e): void => {
                 const response = JSON.parse(e.data);
                 if (response.data) {
-                    // setPrice(response.data[0].p);
                     const newPrice = response.data[0].p;
                     setPrice(prev => {
-                        console.log('prev: ', prev);
-                        console.log(newPrice);
-
                         if (prev === newPrice) {
                             setPriceColor('normal');
                         } else if (prev < newPrice) {
