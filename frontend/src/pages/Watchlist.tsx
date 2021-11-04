@@ -113,7 +113,7 @@ const Watchlist: React.FC<Props> = ({
             });
             if (response.status === 200) {
                 const data = await response.json();
-                const newData = data.map((val: StockInterface, idx: number) => {
+                const newData: StockInterface[] = data.map((val: StockInterface, idx: number) => {
                     if (idx === 0 && !searchTicker) {
                         val.selected = true;
                     } else {
@@ -127,7 +127,7 @@ const Watchlist: React.FC<Props> = ({
                     setCurrentTicker(searchTicker);
                     setCurrentStockName(searchStockName);
                     setTab('SUMMARY');
-                    if (tickers.find(val => val.ticker === searchTicker)) {
+                    if (newData.find(val => val.ticker === searchTicker)) {
                         setInWatchlist(true);
                     } else {
                         setInWatchlist(false);
