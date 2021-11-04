@@ -110,23 +110,6 @@ const Stock: React.FC<Props> = ({
     // eslint-disable-next-line
     }, [ticker]);
 
-    // useEffect(() => {
-    //     if (ticker === 'BINANCE:BTCUSDT' || ticker === 'BINANCE:ETHUSDT') {
-    //         if (!socket.current) return;
-
-    //         socket.current.onmessage = (e): void => {
-    //             const response = JSON.parse(e.data);
-    //             if (response.data) {
-    //                 console.log(response.data);
-    //                 setPrice(response.data[0].p);
-    //             }
-    //         };
-    //     } else {
-    //         fetchPrice();
-    //     }
-
-    // }, [ticker]);
-
     return (
         <Main>
             <Title>
