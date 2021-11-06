@@ -228,6 +228,10 @@ export default class UserController {
         res: Response
     ): Promise<void> => {
         try {
+            if (Object.keys(req.body).length) {
+                throw new Error('Inputs are given but not needed.');
+            }
+
             await User.findOneAndDelete({ _id: req.user._id });
             await Watchlist.findOneAndDelete({ user: req.user.id });
             await Order.remove({ user: req.user.id });
