@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Main, Title, Banner, useStyles, BuyBtn, ButtonGroup } from '../styles/stock.style';
 import StockChart from './StockChart';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
@@ -43,41 +43,41 @@ const Stock: React.FC<Props> = ({
         }
     };
 
-    const fetchPrice = async (): Promise<void> => {
-        try {
-            const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=c5vln0iad3ibtqnna830`, {
-                method: 'GET',
-            });
+    const fetchPrice = useCallback(async (): Promise<void> => {
+        if (ticker !== 'BINANCE:BTCUSDT' && ticker !== 'BINANCE:ETHUSDT') {
+            try {
+                if (ticker) {
+                    const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=c5vln0iad3ibtqnna830`, {
+                        method: 'GET',
+                    });
 
-            if (response.status === 200) {
-                const stockData = await response.json();
-                setPrice(stockData.c);
-                setPriceColor('normal');
-            } else {
-                throw new Error('Failed to fetch the price');
+                    if (response.status === 200) {
+                        const stockData = await response.json();
+                        setPrice(stockData.c);
+                        setPriceColor('normal');
+                    } else {
+                        throw new Error('Failed to fetch the price');
+                    }
+                }
+
+            } catch (e) {
+                setToast({ type: 'error', message: `${e}` });
             }
-
-        } catch (e) {
-            setToast({ type: 'error', message: `${e}` });
         }
-    };
+        // eslint-disable-next-line
+    }, [ticker]);
+
 
     useEffect(() => {
-
+        setPrice(0);
         if (ticker === 'BINANCE:BTCUSDT' || ticker === 'BINANCE:ETHUSDT') {
             socket.current = new WebSocket('wss://ws.finnhub.io?token=c5vln0iad3ibtqnna830');
 
             // Connection opened -> Subscribe
             socket.current.onopen = function (event): void {
                 if (!socket.current) return;
-                console.log('Connection is open!');
                 socket.current.send(JSON.stringify({ 'type': 'subscribe', 'symbol': ticker }));
 
-            };
-
-            // close connection
-            socket.current.onclose = function (event): void {
-                console.log('The connection is closed');
             };
 
             const wsCurrent = socket.current;
@@ -99,13 +99,13 @@ const Stock: React.FC<Props> = ({
                 }
             };
             return (): void => {
+                // close connection
                 wsCurrent.close();
             };
         } else {
             fetchPrice();
         }
-    // eslint-disable-next-line
-    }, [ticker]);
+    }, [ticker, fetchPrice]);
 
     return (
         <Main>
