@@ -34,15 +34,15 @@ PortfolioSchema.pre('deleteOne', { document: true }, async function (next): Prom
             
             const stocks = await Stock.find({ portfolio: this._id });
 
-            for (var i = 0; i < stocks.length; i++) {
-                var stock = stocks[i];
+            for (let i = 0; i < stocks.length; i++) {
+                let stock = stocks[i];
                 stock.merge(defaultPortfolio._id, stock.numUnits);
             }
         }
+        next();
     } catch (e) {
-        console.log('Failed in post remove portfolio function');
+        throw new Error('Failed in post remove portfolio function');
     }
-    next();
 });
 
 PortfolioSchema.index({ user: 1, name: 1 }, { "unique": true } );
