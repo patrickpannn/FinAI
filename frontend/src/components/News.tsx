@@ -60,9 +60,9 @@ const News: React.FC<Props> = ({ name }) => {
                                     target="_blank"
                                     rel="noreferrer"
                                 >
-                                <h2>
-                                    {main}
-                                </h2>
+                                    <h2>
+                                        {main}
+                                    </h2>
                                 </a>
                                 <p className={styles.cardBody}>
                                     {abstract}

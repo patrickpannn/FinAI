@@ -114,7 +114,6 @@ const Watchlist: React.FC<Props> = ({
             });
             if (response.status === 200) {
                 const data = await response.json();
-                console.log(data);
                 const newData = data.map((val: StockInterface, idx: number) => {
                     if (idx === 0 && !searchTicker) {
                         val.selected = true;
