@@ -74,7 +74,8 @@ OrderSchema.methods.getObject = function (): {} {
         ticker: this.ticker,
         name: this.name,
         executed: this.executed,
-        direction: this.direction
+        direction: this.direction,
+        portfolio: this.portfolio
     };
     return orderObj;
 };
