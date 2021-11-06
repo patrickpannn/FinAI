@@ -24,6 +24,7 @@ export default class UserRoute implements Route {
         this.router.put(`${this.path}/resetPassword`, VerifyUser.verifyResetToken, UserController.resetPassword);
         this.router.put(`${this.path}/updateProfile`, UserAuthentication.auth, UserController.updateProfile);
         this.router.get(`${this.path}/profile`, UserAuthentication.auth, UserController.getProfile);
+        this.router.delete(`${this.path}/delete_account`, UserAuthentication.auth, UserController.delete);
     }
 
     public getRouter(): Router {

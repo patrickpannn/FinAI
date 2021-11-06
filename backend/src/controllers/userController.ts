@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import User from '../models/userModel';
 import Portfolio from '../models/portfolioModel';
+import Order from '../models/OrderModel';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import EmailService from '../services/emailService';
@@ -217,6 +218,37 @@ export default class UserController {
             await req.user.save();
             res.status(200).json({ response: "Balance updated!" });
 
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request.' });
+        }
+    };
+
+    public static delete = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            await User.findOneAndDelete({ _id: req.user._id });
+            await Watchlist.findOneAndDelete({ user: req.user.id });
+            await Order.remove({ user: req.user.id });
+            
+            const portfolios = await Portfolio.find({ 
+                user: req.user.id, name: { $ne: "Default" } });
+
+            for (let i = 0; i < portfolios.length; i++) {
+                portfolios[i].deleteOne();
+            }
+
+            const defaultPortfolio = await Portfolio.findOne({ 
+                user: req.user.id, name: "Default" });
+
+            if (!defaultPortfolio) {
+                throw new Error('Could not delete portfolio');
+            }
+
+            await defaultPortfolio.deleteOne();
+
+            res.status(200).json( "User was deleted" );
         } catch (e) {
             res.status(400).json({ error: 'Bad Request.' });
         }
