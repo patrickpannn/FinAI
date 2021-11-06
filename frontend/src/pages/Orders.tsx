@@ -46,67 +46,65 @@ const Orders: React.FC = () => {
     fetchOrders();
 
     return (
-        <>
-            <div className={styles.tableSpace}>
-                <Typography variant="h4">Order History</Typography>
-                <TableContainer component={Paper} >
-                    <Table className={styles.tableSize} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
+        <div className={styles.tableSpace}>
+            <Typography variant="h4">Order History</Typography>
+            <TableContainer component={Paper} >
+                <Table className={styles.tableSize} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableCell>
+                                Symbol
+                            </StyledTableCell>
+                            <StyledTableCell>
+                                Stock Name
+                            </StyledTableCell>
+                            <StyledTableCell>
+                                Quantity
+                            </StyledTableCell>
+                            <StyledTableCell>
+                                Stock Price Each
+                            </StyledTableCell>
+                            <StyledTableCell>
+                                Total Price
+                            </StyledTableCell>
+                            <StyledTableCell>
+                                Direction
+                            </StyledTableCell>
+                            <StyledTableCell>
+                                Portfolio
+                            </StyledTableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {orders && orders.map(order => (
+                            <StyledTableRow key= {order.ticker}>
                                 <StyledTableCell>
-                                    Symbol
+                                    {order.ticker}
                                 </StyledTableCell>
                                 <StyledTableCell>
-                                    Stock Name
+                                    {order.name}
                                 </StyledTableCell>
                                 <StyledTableCell>
-                                    Quantity
+                                    {order.numUnits}
                                 </StyledTableCell>
                                 <StyledTableCell>
-                                    Stock Price Each
+                                    {order.executePrice}
                                 </StyledTableCell>
                                 <StyledTableCell>
-                                    Total Price
+                                    {order.numUnits * order.executePrice}
                                 </StyledTableCell>
                                 <StyledTableCell>
-                                    Direction
+                                    {order.direction}
                                 </StyledTableCell>
                                 <StyledTableCell>
-                                    Portfolio
+                                    {order.portfolio}
                                 </StyledTableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {orders && orders.map(order => (
-                                <StyledTableRow key= {order.ticker}>
-                                    <StyledTableCell>
-                                        {order.ticker}
-                                    </StyledTableCell>
-                                    <StyledTableCell>
-                                        {order.name}
-                                    </StyledTableCell>
-                                    <StyledTableCell>
-                                        {order.numUnits}
-                                    </StyledTableCell>
-                                    <StyledTableCell>
-                                        {order.executePrice}
-                                    </StyledTableCell>
-                                    <StyledTableCell>
-                                        {order.numUnits * order.executePrice}
-                                    </StyledTableCell>
-                                    <StyledTableCell>
-                                        {order.direction}
-                                    </StyledTableCell>
-                                    <StyledTableCell>
-                                        {order.portfolio}
-                                    </StyledTableCell>
-                                </StyledTableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </div>
-        </>
+                            </StyledTableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </div>
     );
 };
 export default Orders;  
