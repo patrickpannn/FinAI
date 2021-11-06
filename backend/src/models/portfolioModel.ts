@@ -1,6 +1,7 @@
 import { Schema, model, Document } from 'mongoose';
 import Stock from './stockModel';
 import Portfolio from './portfolioModel';
+import Order from './orderModel';
 
 interface PortfolioInterface extends Document {
     user: Schema.Types.ObjectId,
@@ -38,6 +39,9 @@ PortfolioSchema.pre('deleteOne', { document: true }, async function (next): Prom
                 let stock = stocks[i];
                 stock.merge(defaultPortfolio._id, stock.numUnits);
             }
+
+            await Order.updateMany({ portfolio: this._id},
+                                   { portfolio: defaultPortfolio._id });
         }
         next();
     } catch (e) {
