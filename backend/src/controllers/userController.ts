@@ -222,4 +222,20 @@ export default class UserController {
         }
     };
 
+    public static getBalance = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            if (Object.keys(req.body).length) {
+                throw new Error('Inputs are given but not needed.');
+            }
+
+            res.status(200).json(req.user.balance);
+
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request.' });
+        }
+    };
+
 }
