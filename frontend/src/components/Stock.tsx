@@ -67,6 +67,7 @@ const Stock: React.FC<Props> = ({
 
 
     useEffect(() => {
+        setPrice(0);
         if (ticker === 'BINANCE:BTCUSDT' || ticker === 'BINANCE:ETHUSDT') {
             socket.current = new WebSocket('wss://ws.finnhub.io?token=c5vln0iad3ibtqnna830');
 

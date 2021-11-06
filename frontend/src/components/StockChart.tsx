@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
@@ -23,11 +23,11 @@ const StockChart: React.FC<Props> = ({ ticker }) => {
     const dispatch = useDispatch();
     const { setToast } = bindActionCreators(actionCreators, dispatch);
     const [data, SetData] = useState<DataItem[][]>([]);
-    const exchangeType = ticker.includes('BTC') || ticker.includes('ETH') ? 'crypto' : 'stock';
-
-    const fetchPrices = async (): Promise<void> => {
+    
+    const fetchPrices = useCallback(async (): Promise<void> => {
         try {
             if (ticker !== '') {
+                const exchangeType = ticker.includes('BTC') || ticker.includes('ETH') ? 'crypto' : 'stock';
                 const response = await fetch(
                     `https://finnhub.io/api/v1/${exchangeType}/candle?symbol=${ticker}&resolution=D&from=${Math.floor(Date.now() / 1000 - 5184000)}&to=${Math.floor(Date.now() / 1000)}&token=c5vln0iad3ibtqnna830`
                     , {
@@ -56,13 +56,13 @@ const StockChart: React.FC<Props> = ({ ticker }) => {
         } catch (e) {
             setToast({ type: 'error', message: `${e}` });
         }
-    };
+    // eslint-disable-next-line
+    }, [ticker]);
 
     useEffect(() => {
         SetData([]);
         fetchPrices();
-        // eslint-disable-next-line
-    }, [ticker]);
+    }, [fetchPrices]);
 
     return (
         <PriceChart>
