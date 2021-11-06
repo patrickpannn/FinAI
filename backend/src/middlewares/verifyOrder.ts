@@ -3,12 +3,12 @@ import Portfolio from '../models/portfolioModel';
 import dotenv from 'dotenv';
 dotenv.config();
 
-enum StockBody {
-    name = "name",
-    ticker = "ticker",
-    portfolio = "portfolio",
-    units = "units"
-}
+const stockBody = [
+    'name',
+    'ticker',
+    'portfolio',
+    'units'
+];
 
 class VerifyOrder {
 
@@ -20,15 +20,15 @@ class VerifyOrder {
         try {
             if(Object.keys(req.body).length !== 4)
             {
-                //console.log(Object.keys(req.body).length);
                 throw new Error('Invalid input');
             } 
-            for(var parameter in StockBody)
-            {
-                if(!Object.keys(req.body).includes(parameter)){
+
+            for (let key in req.body) {
+                if (!stockBody.includes(key)) {
                     throw new Error('Bad Request');
                 }
             }
+
             if(req.body.units <= 0)
             {
                 throw new Error('Must specify a positive order of stocks');
