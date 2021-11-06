@@ -27,8 +27,7 @@ export default class OrderController {
                     ticker: orders[i].ticker,
                     name: orders[i].name,
                     executed: orders[i].executed,
-                    direction: orders[i].direction,
-                    portfolio: orders[i].portfolio
+                    direction: orders[i].direction
                 };
                 list.push(orderObj);
             }
