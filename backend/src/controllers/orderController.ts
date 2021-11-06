@@ -36,6 +36,15 @@ export default class OrderController {
         res: Response
     ): Promise<void> => {
         try {
+            const portfolio = await Portfolio.findOne({
+                user: req.user.id,
+                name: req.body.portfolio
+            });
+            if(!portfolio)
+            {
+                throw new Error('Could not find portfolio');
+            }
+
             const response = await axios.get(
                 `https://finnhub.io/api/v1/quote?symbol=${req.body.ticker}&token=c5vln0iad3ibtqnna830`);
             const units = parseInt(req.body.units, 10);
@@ -44,10 +53,6 @@ export default class OrderController {
             if (req.user.availableBalance - totalCost < 0) {
                 throw new Error('Available Balance too low to purchase stocks');
             }
-            const portfolio = await Portfolio.findOne({
-                user: req.user.id,
-                name: req.body.portfolio
-            });
             const existingStock = await Stock.findOne({
                 portfolio: portfolio?.id,
                 ticker: req.body.ticker
@@ -72,11 +77,9 @@ export default class OrderController {
                 await stock.save();
                 await req.user.save();
             } else {
-
-                const avg = (
-                    existingStock.numUnits * existingStock.averagePrice +
-                    units * marketPrice) /
-                    (existingStock.numUnits + units);
+                const avg = 
+                    (existingStock.numUnits * existingStock.averagePrice +
+                    units * marketPrice) / (existingStock.numUnits + units);
 
                 existingStock.numUnits += units;
                 existingStock.averagePrice = avg;
@@ -92,7 +95,7 @@ export default class OrderController {
 
             const order = new Order({
                 user: req.user.id,
-                portfolio: req.body.portfolio,
+                portfolio: portfolio.id,
                 numUnits: units,
                 executePrice: marketPrice,
                 ticker: req.body.ticker,
@@ -107,7 +110,6 @@ export default class OrderController {
 
             res.status(200).json({ response: 'Successful' });
         } catch (e) {
-            console.log(e);
             res.status(400).json({ error: 'Bad Request' });
         }
     };
@@ -122,6 +124,10 @@ export default class OrderController {
                 user: req.user.id,
                 name: req.body.portfolio
             });
+            if(!portfolio)
+            {
+                throw new Error('Could not find portfolio');
+            }
 
             const existingStock = await Stock.findOne({
                 portfolio: portfolio?.id,
@@ -138,8 +144,7 @@ export default class OrderController {
 
             const avg =
                 (existingStock.numUnits * existingStock.averagePrice -
-                    units * marketPrice) /
-                (existingStock.numUnits - units);
+                units * marketPrice) / (existingStock.numUnits - units);
 
             req.user.balance = (req.user.balance + totalCost).toFixed(2);
             req.user.availableBalance = (
@@ -156,7 +161,7 @@ export default class OrderController {
 
             const order = new Order({
                 user: req.user.id,
-                portfolio: req.body.portfolio,
+                portfolio: portfolio.id,
                 numUnits: units,
                 executePrice: marketPrice,
                 ticker: req.body.ticker,
