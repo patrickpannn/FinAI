@@ -15,6 +15,15 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     sellBtn: {
         color: '#0017ea',
         borderColor: '#0017ea',
+    },
+    normal: {
+        color: 'black',
+    },
+    up: {
+        color: 'green',
+    },
+    down: {
+        color: 'red',
     }
 }));
 
