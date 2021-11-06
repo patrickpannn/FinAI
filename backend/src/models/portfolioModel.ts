@@ -40,7 +40,7 @@ PortfolioSchema.pre('deleteOne', { document: true }, async function (next): Prom
                 stock.merge(defaultPortfolio._id, stock.numUnits);
             }
 
-            await Order.updateMany({ portfolio: this._id, executed: false },
+            await Order.updateMany({ portfolio: this._id },
                                    { portfolio: defaultPortfolio._id });
         }
         next();
