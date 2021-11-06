@@ -240,7 +240,7 @@ export default class UserController {
                 user: req.user.id, name: { $ne: "Default" } });
 
             for (let i = 0; i < portfolios.length; i++) {
-                portfolios[i].deleteOne();
+                await portfolios[i].deleteOne();
             }
 
             const defaultPortfolio = await Portfolio.findOne({ 
@@ -252,7 +252,7 @@ export default class UserController {
 
             await defaultPortfolio.deleteOne();
 
-            res.status(200).json( "User was deleted" );
+            res.status(200).json({ response: "User Deleted" });
         } catch (e) {
             res.status(400).json({ error: 'Bad Request.' });
         }
