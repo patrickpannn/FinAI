@@ -1,4 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
+import Portfolio from './portfolioModel';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -67,17 +68,29 @@ const OrderSchema = new Schema<OrderInterface>({
     }
 }, { timestamps: true });
 
-OrderSchema.methods.getObject = function (): {} {
-    let orderObj = {
-        numUnits: this.numUnits,
-        executePrice: this.executePrice,
-        ticker: this.ticker,
-        name: this.name,
-        executed: this.executed,
-        direction: this.direction,
-        portfolio: this.portfolio
-    };
-    return orderObj;
+OrderSchema.methods.getObject = async function (): Promise<{}> {
+
+    try {
+        const orderPortfolio = await Portfolio.findOne({ id: this.portfolio });
+
+        if (!orderPortfolio) {
+            throw new Error('Could not find portfolio associated with order');
+        }
+
+        let orderObj = {
+            numUnits: this.numUnits,
+            executePrice: this.executePrice,
+            ticker: this.ticker,
+            name: this.name,
+            executed: this.executed,
+            direction: this.direction,
+            portfolio: orderPortfolio.name
+        };
+
+        return orderObj;
+    } catch (e) {
+        throw new Error('Could not return order object');
+    }
 };
 
 export default model<OrderInterface>('order', OrderSchema);

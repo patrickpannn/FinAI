@@ -21,7 +21,8 @@ export default class OrderController {
             let list = [];
 
             for (let i = 0; i < orders.length; i++) {
-                list.push(orders[i].getObject());
+                let orderObj = await orders[i].getObject();
+                list.push(orderObj);
             }
 
             res.status(200).json(list);
