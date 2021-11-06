@@ -25,6 +25,13 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         [theme.breakpoints.down("sm")]: {
         fontSize: "0.5em",
         },
+    },
+    newsContainer: {
+        maxWidth: '1200px',
+    },
+    progressBar: {
+        width: '100%', 
+        marginTop: '30px',
     }
 }));
 
@@ -78,10 +85,10 @@ export const TabContainer = styled('div')({
 });
 
 export const StyledTabs = styled('div')({
-    width: '76.9%',
+    width: '100%',
     height: '60px',
     display: 'flex',
-    position: 'fixed',
+    position: 'absolute',
     bottom: 0,
 });
 

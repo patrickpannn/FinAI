@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent } from '@mui/material';
+import { Card, CardContent, Box } from '@mui/material';
+import LinearProgress from '@mui/material/LinearProgress';
 import { useStyles } from '../styles/watchlist.style';
+
 export interface Item {
     itemName: string;
 }
@@ -30,7 +32,13 @@ const News: React.FC<Props> = ({ name }) => {
 
     return (
         
-        <div style={{ maxWidth: '1200px' }}>
+        <div className={styles.newsContainer}>
+            {articles.length === 0 
+            && <Box className={styles.progressBar}>
+                    <LinearProgress />
+                </Box>
+            }
+            
             {articles.map((article)=> {
                 const {
                     _id,
