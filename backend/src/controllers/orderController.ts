@@ -21,15 +21,7 @@ export default class OrderController {
             let list = [];
 
             for (let i = 0; i < orders.length; i++) {
-                let orderObj = {
-                    numUnits: orders[i].numUnits,
-                    executePrice: orders[i].executePrice,
-                    ticker: orders[i].ticker,
-                    name: orders[i].name,
-                    executed: orders[i].executed,
-                    direction: orders[i].direction,
-                    portfolio: orders[i].portfolio
-                };
+                let orderObj = await orders[i].getObject();
                 list.push(orderObj);
             }
 
