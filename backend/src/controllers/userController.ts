@@ -223,7 +223,7 @@ export default class UserController {
         }
     };
 
-    public static delete = async (
+    public static deleteAccount = async (
         req: Request,
         res: Response
     ): Promise<void> => {
