@@ -77,12 +77,13 @@ export default class OrderController {
                 await stock.save();
                 await req.user.save();
             } else {
-                const avg = 
+                const avg = (
                     (existingStock.numUnits * existingStock.averagePrice +
-                    units * marketPrice) / (existingStock.numUnits + units);
+                    units * marketPrice) / (existingStock.numUnits + units)
+                                                                ).toFixed(2);
 
                 existingStock.numUnits += units;
-                existingStock.averagePrice = avg;
+                existingStock.averagePrice = parseFloat(avg);
 
                 req.user.balance = 
                     (req.user.balance - totalCost).toFixed(2);
@@ -142,16 +143,17 @@ export default class OrderController {
             const totalCost = response.data.c * units;
             const marketPrice = response.data.c;
 
-            const avg =
+            const avg = (
                 (existingStock.numUnits * existingStock.averagePrice -
-                units * marketPrice) / (existingStock.numUnits - units);
+                units * marketPrice) / (existingStock.numUnits - units)
+                                                            ).toFixed(2);
 
             req.user.balance = (req.user.balance + totalCost).toFixed(2);
             req.user.availableBalance = (
                 req.user.availableBalance + totalCost).toFixed(2);
 
             existingStock.numUnits -= units;
-            existingStock.averagePrice = avg;
+            existingStock.averagePrice = parseFloat(avg);
 
             if (existingStock.numUnits == 0) {
                 existingStock.delete();
