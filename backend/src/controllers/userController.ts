@@ -231,7 +231,10 @@ export default class UserController {
                 throw new Error('Inputs are given but not needed.');
             }
 
-            res.status(200).json(req.user.balance);
+            res.status(200).json({
+                balance: req.user.balance,
+                availableBalance: req.user.availableBalance
+            });
 
         } catch (e) {
             res.status(400).json({ error: 'Bad Request.' });
