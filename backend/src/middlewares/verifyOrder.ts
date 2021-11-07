@@ -1,7 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import Portfolio from '../models/portfolioModel';
-import dotenv from 'dotenv';
-dotenv.config();
 
 const stockBody = [
     'name',
