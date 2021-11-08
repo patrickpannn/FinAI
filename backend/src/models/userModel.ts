@@ -40,6 +40,15 @@ const UserSchema = new Schema<UserInterface>({
             }
         }
     },
+    availableBalance: {
+        type: Number,
+        default: 0,
+        validate(value: number): void {
+            if( value < 0) {
+                throw new Error('The available balance must be greater than 0');
+            }
+        }
+    },
     tokens: [{
         token: {
             type: String,
@@ -63,12 +72,16 @@ UserSchema.pre('save', async function (next): Promise<void> {
 
 //This is a clas method to change the users balance
 UserSchema.methods.changeBalance = function (value: number): boolean {
-    const newBalance = this.balance + value;
-    if(newBalance < 0)
+    if(this.balance + value < 0)
     {
-        throw new Error('The cash balance should be greater than 0.');
+        throw new Error('Your balance is too low to make this request');
     }
-    this.balance = newBalance;
+    if(this.availableBalance + value < 0)
+    {
+        throw new Error('Your available balance is too low to make this request');
+    }
+    this.balance = this.balance + value;
+    this.availableBalance = this.availableBalance + value; 
     return true;
 };
 
