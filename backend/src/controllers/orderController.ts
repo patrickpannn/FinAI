@@ -4,6 +4,10 @@ import Order from '../models/orderModel';
 import Stock from '../models/stockModel';
 import axios from 'axios';
 
+enum direction {
+    Sell = "SELL",
+    Buy = "BUY",
+}
 
 export default class OrderController {
     public static list = async (
@@ -28,6 +32,192 @@ export default class OrderController {
             res.status(200).json(list);
         } catch (e) {
             res.status(400).json({ error: 'List of Orders Bad Request' });
+        }
+    };
+
+    public static buyLimitOrder = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            if(!req.body.direction || req.body.direction !== direction.Buy)
+            {
+                throw new Error('Direction given is not correct for this route');
+            }
+            if(req.user.availableBalance - req.body.units * req.body.setPrice < 0)
+            {
+                throw new Error('Available Balance is too low to make this order');
+            }
+
+            const portfolio = await Portfolio.findOne({
+                user: req.user.id,
+                name: req.body.portfolio
+            });
+            if(!portfolio)
+            {
+                throw new Error('Could not find portfolio');
+            }
+
+            const existingOrder = await Order.findOne({ 
+                user: req.user.id, 
+                portfolio: portfolio.id,
+                ticker: req.body.ticker,
+                executePrice: req.body.setPrice,
+                direction: req.body.direction
+            });
+
+            if(existingOrder)
+            {
+                existingOrder.numUnits += req.body.units;
+                await existingOrder.save();
+            } else
+            {
+                const order = new Order({ 
+                    user: req.user.id, 
+                    portfolio: portfolio.id,
+                    numUnits: req.body.units, 
+                    executePrice : req.body.setPrice,
+                    ticker: req.body.ticker, 
+                    name: req.body.name, 
+                    direction: req.body.direction });
+                if(!order)
+                {
+                    throw new Error('Order cannot be made');
+                }
+                order.save();
+
+            }
+            req.user.availableBalance = req.user.availableBalance - req.body.setPrice * req.body.units;
+            await req.user.save();
+
+            res.status(201).json({ response: 'Successful' });
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request' });
+        }
+    };
+
+    public static sellLimitOrder = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            if(!req.body.direction || req.body.direction !== direction.Sell)
+            {
+                throw new Error('Direction given is not correct for this route');
+            }
+            const portfolio = await Portfolio.findOne({
+                user: req.user.id,
+                name: req.body.portfolio
+            });
+            if(!portfolio)
+            {
+                throw new Error('Could not find portfolio');
+            }
+            
+            const stock = await Stock.findOne({ 
+                portfolio: portfolio?.id, 
+                ticker : req.body.ticker});
+            if(!stock)
+            {
+                throw new Error('Stock does not exist in portfolio');
+            }
+            if(stock.numUnits - req.body.units < 0){
+                throw new Error('Cannot sell more shares than you own');
+            }
+
+            const existingOrder = await Order.findOne({ 
+                user: req.user.id, 
+                portfolio: portfolio.id,
+                ticker: req.body.ticker,
+                executePrice: req.body.setPrice,
+                direction: req.body.direction
+            });
+            if(existingOrder)
+            {
+                existingOrder.numUnits += req.body.units;
+                await existingOrder.save();
+            } else
+            {
+                const order = new Order({ 
+                    user: req.user.id,
+                    numUnits: portfolio.id, 
+                    executePrice: req.body.setPrice,
+                    ticker: req.body.ticker, 
+                    name: req.body.name, 
+                    direction: req.body.direction, 
+                    portfolio: req.body.portfolio });
+                if(!order)
+                {
+                    throw new Error('Order cannot be made');
+                }
+                await order.save();
+            }
+
+            stock.numUnits -= req.body.units;
+            await stock.save();
+
+            res.status(201).json({ response: 'Successful' });
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request' });
+        }
+    };
+
+    public static cancelOrder = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            const portfolio = await Portfolio.findOne({
+                user: req.user.id,
+                name: req.body.portfolio
+            });
+            if(!portfolio)
+            {
+                throw new Error('Could not find portfolio');
+            }
+
+            const order = await Order.findOne({ 
+                user: req.user.id, 
+                portfolio: portfolio.id,
+                ticker: req.body.ticker,
+                executePrice: req.body.setPrice,
+                units: req.body.units
+            });
+            if(!order)
+            {
+                throw new Error("This order doesn't exist");
+            }
+
+            if(req.body.direction !== direction.Buy && req.body.direction !== direction.Sell)
+            {
+                throw new Error('Bad Request');
+            }
+
+            if(req.body.direction === direction.Buy)
+            {
+                req.user.availableBalance += req.body.setPrice * req.body.units;
+                req.user.save();
+                order.delete();
+            } else
+            {
+
+                const stock = await Stock.findOne({ 
+                    portfolio: portfolio.id,
+                    ticker: req.body.ticker
+                })
+                if(!stock)
+                {
+                    throw new Error("Cant access a stock that doesnt exist");
+                }
+
+                stock.numUnits += req.body.units;
+                stock.save();
+                order.delete();
+            }
+
+            res.status(200).json({ response: 'Successful' });
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request' });
         }
     };
 
@@ -181,6 +371,42 @@ export default class OrderController {
             res.status(200).json({ response: 'Successful' });
         } catch (e) {
             res.status(400).json({ error: 'Bad Request' });
+        }
+    };
+
+    public static test = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            const portfolio = await Portfolio.findOne({
+                user: req.user.id,
+                name: req.body.portfolio
+            });
+            if(!portfolio)
+            {
+                throw new Error('Could not find portfolio');
+            }
+
+
+            const existingOrder = await Order.findOne({ 
+                user: req.user.id, 
+                portfolio: portfolio.id,
+                ticker: req.body.ticker,
+                executePrice: req.body.setPrice,
+                direction: req.body.direction
+            });
+            if(!existingOrder)
+            {
+                throw new Error('nonono');
+            }
+            existingOrder.executed = true;
+            existingOrder.save();
+            res.status(200).json({ response: 'Successful'});
+        }
+        catch (e)
+        {
+            res.status(400).json({ error: 'Bad Request'});
         }
     };
 

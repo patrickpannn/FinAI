@@ -1,7 +1,7 @@
 import { Schema, model, Document } from 'mongoose';
 import Portfolio from './portfolioModel';
-import dotenv from 'dotenv';
-dotenv.config();
+import Stock from './stockModel';
+import User from './userModel';
 
 // Document interface
 interface OrderInterface extends Document {
@@ -93,5 +93,63 @@ OrderSchema.methods.getObject = async function (): Promise<{}> {
         throw new Error('Could not return order object');
     }
 };
+
+OrderSchema.pre('save', { document : true }, async function (next): Promise<void> {
+    if(this.executed === true)
+    {
+        console.log('bababaooi');
+        const user = await User.findOne({
+            user: this.user});
+        if(!user)
+        {
+            throw new Error('Could not find user');
+        }
+        const stock = await Stock.findOne({
+            user: this.user,
+            portfolio: this.portfolio,
+            ticker: this.ticker
+        });
+        if(this.direction === "SELL") // selling an existing stock
+        {
+            if(!stock)
+            {
+                throw new Error('Could not find stock!');
+            }
+            if(stock.numUnits === 0)
+            {
+                stock.delete();
+            }
+            user.balance += parseFloat((this.executePrice * this.numUnits).toFixed(2));
+        } else // purchasing a stock which may or may not already exist in the specified portfolio
+        {
+            if(stock)
+            {
+                const avg = (
+                    (stock.numUnits * stock.averagePrice +
+                    this.numUnits * this.executePrice) / (stock.numUnits + this.numUnits)
+                                                                            ).toFixed(2);
+                stock.numUnits += this.numUnits;
+                stock.averagePrice = parseFloat(avg);
+                stock.save();
+            } else
+            {
+                const stock = new Stock({
+                    portfolio: this.portfolio,
+                    ticker: this.ticker,
+                    name: this.name,
+                    averagePrice: this.executePrice, // TO BE CONFIRMED
+                    numUnits: this.numUnits
+                });
+                if(!stock)
+                {
+                    throw new Error('Could not create stock');
+                }
+                stock.save();
+            }
+            user.balance -= parseFloat((this.executePrice * this.numUnits).toFixed(2));
+            user.save();
+        }
+    }
+});
 
 export default model<OrderInterface>('order', OrderSchema);
