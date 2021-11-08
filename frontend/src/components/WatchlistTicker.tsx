@@ -1,5 +1,5 @@
 import React from 'react';
-import { TickerItem, Symbol, useStyles } from '../styles/watchlist.style';
+import { TickerItem, Symbol, useStyles, StockName } from '../styles/watchlist.style';
 
 interface Props {
     symbol: string,
@@ -21,7 +21,7 @@ const WatchlistTicker: React.FC<Props> = ({
             onClick={selectTicker}
         >
             <Symbol>{symbol}</Symbol>
-            <p>{stockName}</p>
+            <StockName>{stockName}</StockName>
         </TickerItem>
     );
 };
