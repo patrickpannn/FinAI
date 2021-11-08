@@ -4,6 +4,7 @@ import StockChart from './StockChart';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import StarIcon from '@mui/icons-material/Star';
 import { IconButton } from '@mui/material';
+import OrderModal from './OrderModal';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
@@ -27,6 +28,7 @@ const Stock: React.FC<Props> = ({
     addToWatchlist
 }) => {
     const styles = useStyles();
+    const [buyOpen, setBuyOpen] = useState(false);
     const dispatch = useDispatch();
     const { setToast } = bindActionCreators(actionCreators, dispatch);
     const [price, setPrice] = useState(0);
@@ -130,11 +132,18 @@ const Stock: React.FC<Props> = ({
                 <BuyBtn
                     variant="contained"
                     type='button'
+                    onClick={(): void => setBuyOpen(true)}
                 >
                     Buy Shares
                 </BuyBtn>
             </ButtonGroup>
             <StockChart ticker={ticker} />
+            <OrderModal
+                ticker={ticker}
+                stockName={stockName}
+                open={buyOpen}
+                onClose={(): void => setBuyOpen(false)}
+            />
         </Main>
     );
 };
