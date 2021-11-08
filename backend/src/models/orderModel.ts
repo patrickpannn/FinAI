@@ -13,6 +13,7 @@ interface OrderInterface extends Document {
     name: string,
     executed: boolean,
     direction: string,
+    //createdAt: Date,
     getObject: () => {};
 }
 
@@ -67,9 +68,13 @@ const OrderSchema = new Schema<OrderInterface>({
         type: String,
         required: true,
     }
+    //createdAt: {
+        //type: Date,
+        //expires: '10s'
+    //}
 }, { timestamps: true });
 
-OrderSchema.index({ createdAt: 1 }, { expireAfterSeconds: 604800 }); // expires after 1 week ( 604800 seconds )
+OrderSchema.index( { createdAt: 1 }, { expireAfterSeconds: 1800 }); // expires after 1 week ( 604800 seconds )
 
 OrderSchema.methods.getObject = async function (): Promise<{}> {
 
