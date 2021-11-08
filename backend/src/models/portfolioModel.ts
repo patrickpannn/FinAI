@@ -1,9 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
-
-interface PortfolioInterface extends Document {
-    user: Schema.Types.ObjectId,
-    name: string
-};
+import { PortfolioInterface } from '../interfaces/requestPortfolio';
 
 const PortfolioSchema = new Schema<PortfolioInterface>({
     user: {

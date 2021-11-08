@@ -49,18 +49,9 @@ export default class OrderController {
                 throw new Error('Available Balance is too low to make this order');
             }
 
-            const portfolio = await Portfolio.findOne({
-                user: req.user.id,
-                name: req.body.portfolio
-            });
-            if(!portfolio)
-            {
-                throw new Error('Could not find portfolio');
-            }
-
             const existingOrder = await Order.findOne({ 
                 user: req.user.id, 
-                portfolio: portfolio.id,
+                portfolio: req.portfolio.id,
                 ticker: req.body.ticker,
                 executePrice: req.body.setPrice,
                 direction: req.body.direction
@@ -74,7 +65,7 @@ export default class OrderController {
             {
                 const order = new Order({ 
                     user: req.user.id, 
-                    portfolio: portfolio.id,
+                    portfolio: req.portfolio.id,
                     numUnits: req.body.units, 
                     executePrice : req.body.setPrice,
                     ticker: req.body.ticker, 
@@ -105,17 +96,9 @@ export default class OrderController {
             {
                 throw new Error('Direction given is not correct for this route');
             }
-            const portfolio = await Portfolio.findOne({
-                user: req.user.id,
-                name: req.body.portfolio
-            });
-            if(!portfolio)
-            {
-                throw new Error('Could not find portfolio');
-            }
             
             const stock = await Stock.findOne({ 
-                portfolio: portfolio?.id, 
+                portfolio: req.portfolio.id, 
                 ticker : req.body.ticker});
             if(!stock)
             {
@@ -127,7 +110,7 @@ export default class OrderController {
 
             const existingOrder = await Order.findOne({ 
                 user: req.user.id, 
-                portfolio: portfolio.id,
+                portfolio: req.portfolio.id,
                 ticker: req.body.ticker,
                 executePrice: req.body.setPrice,
                 direction: req.body.direction
@@ -140,12 +123,12 @@ export default class OrderController {
             {
                 const order = new Order({ 
                     user: req.user.id,
-                    numUnits: portfolio.id, 
+                    numUnits: req.body.units, 
                     executePrice: req.body.setPrice,
                     ticker: req.body.ticker, 
                     name: req.body.name, 
                     direction: req.body.direction, 
-                    portfolio: req.body.portfolio });
+                    portfolio: req.portfolio.id });
                 if(!order)
                 {
                     throw new Error('Order cannot be made');
@@ -167,18 +150,10 @@ export default class OrderController {
         res: Response
     ): Promise<void> => {
         try {
-            const portfolio = await Portfolio.findOne({
-                user: req.user.id,
-                name: req.body.portfolio
-            });
-            if(!portfolio)
-            {
-                throw new Error('Could not find portfolio');
-            }
 
             const order = await Order.findOne({ 
                 user: req.user.id, 
-                portfolio: portfolio.id,
+                portfolio: req.portfolio.id,
                 ticker: req.body.ticker,
                 executePrice: req.body.setPrice,
                 units: req.body.units
@@ -202,7 +177,7 @@ export default class OrderController {
             {
 
                 const stock = await Stock.findOne({ 
-                    portfolio: portfolio.id,
+                    portfolio: req.portfolio.id,
                     ticker: req.body.ticker
                 })
                 if(!stock)
@@ -226,14 +201,6 @@ export default class OrderController {
         res: Response
     ): Promise<void> => {
         try {
-            const portfolio = await Portfolio.findOne({
-                user: req.user.id,
-                name: req.body.portfolio
-            });
-            if(!portfolio)
-            {
-                throw new Error('Could not find portfolio');
-            }
 
             const response = await axios.get(
                 `https://finnhub.io/api/v1/quote?symbol=${req.body.ticker}&token=c5vln0iad3ibtqnna830`);
@@ -244,14 +211,14 @@ export default class OrderController {
                 throw new Error('Available Balance too low to purchase stocks');
             }
             const existingStock = await Stock.findOne({
-                portfolio: portfolio?.id,
+                portfolio: req.portfolio.id,
                 ticker: req.body.ticker
             });
 
             if (!existingStock) {
 
                 const stock = new Stock({
-                    portfolio: portfolio?.id,
+                    portfolio: req.portfolio.id,
                     ticker: req.body.ticker,
                     name: req.body.name,
                     averagePrice: marketPrice,
@@ -286,7 +253,7 @@ export default class OrderController {
 
             const order = new Order({
                 user: req.user.id,
-                portfolio: portfolio.id,
+                portfolio: req.portfolio.id,
                 numUnits: units,
                 executePrice: marketPrice,
                 ticker: req.body.ticker,
@@ -311,17 +278,8 @@ export default class OrderController {
     ): Promise<void> => {
         try {
 
-            const portfolio = await Portfolio.findOne({
-                user: req.user.id,
-                name: req.body.portfolio
-            });
-            if(!portfolio)
-            {
-                throw new Error('Could not find portfolio');
-            }
-
             const existingStock = await Stock.findOne({
-                portfolio: portfolio?.id,
+                portfolio: req.portfolio.id,
                 ticker: req.body.ticker });
             if (!existingStock) {
                 throw new Error('This stock doesnt exist');
@@ -353,7 +311,7 @@ export default class OrderController {
 
             const order = new Order({
                 user: req.user.id,
-                portfolio: portfolio.id,
+                portfolio: req.portfolio.id,
                 numUnits: units,
                 executePrice: marketPrice,
                 ticker: req.body.ticker,
@@ -379,19 +337,10 @@ export default class OrderController {
         res: Response
     ): Promise<void> => {
         try {
-            const portfolio = await Portfolio.findOne({
-                user: req.user.id,
-                name: req.body.portfolio
-            });
-            if(!portfolio)
-            {
-                throw new Error('Could not find portfolio');
-            }
-
 
             const existingOrder = await Order.findOne({ 
                 user: req.user.id, 
-                portfolio: portfolio.id,
+                portfolio: req.portfolio.id,
                 ticker: req.body.ticker,
                 executePrice: req.body.setPrice,
                 direction: req.body.direction
