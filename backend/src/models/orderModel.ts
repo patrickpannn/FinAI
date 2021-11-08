@@ -13,7 +13,6 @@ interface OrderInterface extends Document {
     name: string,
     executed: boolean,
     direction: string,
-    //createdAt: Date,
     getObject: () => {};
 }
 
@@ -68,13 +67,7 @@ const OrderSchema = new Schema<OrderInterface>({
         type: String,
         required: true,
     }
-    //createdAt: {
-        //type: Date,
-        //expires: '10s'
-    //}
 }, { timestamps: true });
-
-OrderSchema.index( { createdAt: 1 }, { expireAfterSeconds: 1800 }); // expires after 1 week ( 604800 seconds )
 
 OrderSchema.methods.getObject = async function (): Promise<{}> {
 
@@ -101,7 +94,7 @@ OrderSchema.methods.getObject = async function (): Promise<{}> {
     }
 };
 
-OrderSchema.pre('save', { document : true }, async function (next): Promise<void> {
+OrderSchema.post('save', { document : true }, async function (next): Promise<void> {
     if(this.executed === true)
     {
         console.log('bababaooi');
@@ -157,18 +150,6 @@ OrderSchema.pre('save', { document : true }, async function (next): Promise<void
             user.save();
         }
     }
-});
-
-OrderSchema.post('delete', { document : true }, async function (next): Promise<void> {
-    console.log('I deleted');
-});
-
-OrderSchema.post('deleteOne', { document : true }, async function (next): Promise<void> {
-    console.log('I deleted one');
-});
-
-OrderSchema.post('deleteMany', { document : true }, async function (next): Promise<void> {
-    console.log('I deleted many');
 });
 
 export default model<OrderInterface>('order', OrderSchema);
