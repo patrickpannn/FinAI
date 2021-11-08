@@ -1,6 +1,4 @@
 import { Schema, model, Document } from 'mongoose';
-import Stock from './stockModel';
-import Portfolio from './portfolioModel';
 
 interface PortfolioInterface extends Document {
     user: Schema.Types.ObjectId,

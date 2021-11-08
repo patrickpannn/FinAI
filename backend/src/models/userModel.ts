@@ -36,13 +36,18 @@ const UserSchema = new Schema<UserInterface>({
         default: 0,
         validate(value: number): void {
             if (value < 0) {
-                throw new Error('The cash balance should be greater than 0.');
+                throw new Error('The cash balance must be greater than 0');
             }
         }
     },
     availableBalance: {
         type: Number,
         default: 0,
+        validate(value: number): void {
+            if( value < 0) {
+                throw new Error('The available balance must be greater than 0');
+            }
+        }
     },
     tokens: [{
         token: {
