@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Main, LeftBar, RightContent, WatchlistTitle, TabContainer, useStyles, StyledTabs, StyledTab } from '../styles/watchlist.style';
 import WatchlistTicker from '../components/WatchlistTicker';
-import Stock from '../components/Stock';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
