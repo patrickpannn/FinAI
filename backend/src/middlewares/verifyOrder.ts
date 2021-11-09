@@ -10,7 +10,7 @@ const stockBody = [
 
 class VerifyOrder {
 
-    public static async verifyStock(
+    public static async verifyMarketOrder(
             req: Request,
             res: Response,
             next: NextFunction
