@@ -4,6 +4,8 @@ import Topup from '../components/Topup';
 import UpdateProfile from '../components/UpdateProfile';
 import Watchlist from './Watchlist';
 import { Route } from 'react-router-dom';
+import Portfolios from '../components/Portfolios';
+import Orders from '../components/Orders';
 
 const Dashboard: React.FC = () => {
     const [topupOpen, setTopupOpen] = useState(false);
@@ -15,7 +17,7 @@ const Dashboard: React.FC = () => {
         setSearchTicker(ticker);
         setSearchStockName(stockName);
     };
- 
+
     return (
         <main>
             <Header
@@ -29,6 +31,12 @@ const Dashboard: React.FC = () => {
                     searchTicker={searchTicker}
                     searchStockName={searchStockName}
                 />
+            </Route>
+            <Route exact path="/dashboard/portfolios">
+                <Portfolios />
+            </Route>
+            <Route exact path="/dashboard/orderhistory">
+                <Orders />
             </Route>
             <Topup open={topupOpen} onClose={(): void => setTopupOpen(false)} />
             <UpdateProfile
