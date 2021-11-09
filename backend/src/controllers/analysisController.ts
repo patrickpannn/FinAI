@@ -33,7 +33,7 @@ function getFuture() {
 }
 
 function getHealth() {
-    return 0.4;
+    return 0.8;
 }
 
 function getDividend() {
