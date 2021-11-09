@@ -54,14 +54,14 @@ export default class OrderController {
                 throw new Error('Available Balance too low to purchase stocks');
             }
             const existingStock = await Stock.findOne({
-                portfolio: portfolio?.id,
+                portfolio: portfolio.id,
                 ticker: req.body.ticker
             });
 
             if (!existingStock) {
 
                 const stock = new Stock({
-                    portfolio: portfolio?.id,
+                    portfolio: portfolio.id,
                     ticker: req.body.ticker,
                     name: req.body.name,
                     averagePrice: marketPrice,
@@ -131,7 +131,7 @@ export default class OrderController {
             }
 
             const existingStock = await Stock.findOne({
-                portfolio: portfolio?.id,
+                portfolio: portfolio.id,
                 ticker: req.body.ticker });
             if (!existingStock) {
                 throw new Error('This stock doesnt exist');
