@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-export default class WatchListController {
+export default class AnalysisController {
     public static snowflake = async (
         req: Request,
         res: Response
