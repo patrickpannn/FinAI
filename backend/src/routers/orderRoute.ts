@@ -16,12 +16,12 @@ export default class OrderRoute implements Route {
 
     private initializeRoutes(): void {
         this.router.get(`${this.path}`, UserAuthentication.auth, OrderController.list);
-        this.router.post(`${this.path}/buyMarketOrder`, UserAuthentication.auth, VerifyOrder.verifyStock, OrderController.buyMarketOrder);
-        this.router.post(`${this.path}/sellMarketOrder`, UserAuthentication.auth, VerifyOrder.verifyStock, OrderController.sellMarketOrder);
-        this.router.post(`${this.path}/buyOrder`, UserAuthentication.auth, VerifyOrder.verifyOrder, OrderController.buyLimitOrder);
-        this.router.post(`${this.path}/sellOrder`, UserAuthentication.auth, VerifyOrder.verifyOrder, OrderController.sellLimitOrder);
-        this.router.delete(`${this.path}/cancelOrder`, UserAuthentication.auth, VerifyOrder.verifyOrder, OrderController.cancelOrder);
-        this.router.post(`${this.path}/test`, UserAuthentication.auth, VerifyOrder.verifyOrder, OrderController.test);
+        this.router.post(`${this.path}/buyMarketOrder`, UserAuthentication.auth, VerifyOrder.verifyMarketOrder, OrderController.buyMarketOrder);
+        this.router.post(`${this.path}/sellMarketOrder`, UserAuthentication.auth, VerifyOrder.verifyMarketOrder, OrderController.sellMarketOrder);
+        this.router.post(`${this.path}/buyOrder`, UserAuthentication.auth, VerifyOrder.verifyLimitOrder, OrderController.buyLimitOrder);
+        this.router.post(`${this.path}/sellOrder`, UserAuthentication.auth, VerifyOrder.verifyLimitOrder, OrderController.sellLimitOrder);
+        this.router.delete(`${this.path}/cancelOrder`, UserAuthentication.auth, VerifyOrder.verifyLimitOrder, OrderController.cancelOrder);
+        this.router.post(`${this.path}/test`, UserAuthentication.auth, VerifyOrder.verifyLimitOrder, OrderController.test);
     }
 
     public getRouter(): Router {

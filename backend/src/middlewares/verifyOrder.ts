@@ -24,7 +24,7 @@ enum possibleOrders {
 
 class VerifyOrder {
 
-    public static async verifyOrder(
+    public static async verifyLimitOrder(
         req: Request,
         res: Response,
         next: NextFunction
@@ -63,7 +63,7 @@ class VerifyOrder {
         };
     };
 
-    public static async verifyStock(
+    public static async verifyMarketOrder(
             req: Request,
             res: Response,
             next: NextFunction
