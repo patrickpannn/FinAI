@@ -6,6 +6,11 @@ export default class AnalysisController {
         res: Response
     ): Promise<void> => {
         try {
+
+            if (Object.keys(req.body).length !== 1 || !req.body.ticker) {
+                throw new Error('Incorrect inputs given');
+            }
+
             const snowflake = {
                 value: getValue(),
                 past: getPast(),
