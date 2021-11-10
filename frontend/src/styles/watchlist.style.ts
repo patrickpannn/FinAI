@@ -31,7 +31,6 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     progressBar: {
         width: '100%', 
-        marginTop: '30px',
         height: 'calc(100vh - 80px)',
     }
 }));
