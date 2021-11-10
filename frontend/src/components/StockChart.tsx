@@ -70,7 +70,7 @@ const StockChart: React.FC<Props> = ({ ticker }) => {
                 ? <CircularProgress />
                 : <Chart
                     width='100%'
-                    height={600}
+                    height={500}
                     chartType="CandlestickChart"
                     loader={<div>Loading Chart</div>}
                     data={[['date', 'low', 'open', 'close', 'high'], ...data]}

@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
 import CircularProgress from '@mui/material/CircularProgress';
+import StockInfo from './StockInfo';
 
 interface Props {
     ticker: string,
@@ -137,6 +138,7 @@ const Stock: React.FC<Props> = ({
                     Buy Shares
                 </BuyBtn>
             </ButtonGroup>
+            <StockInfo ticker={ticker} />
             <StockChart ticker={ticker} />
             <OrderModal
                 ticker={ticker}
