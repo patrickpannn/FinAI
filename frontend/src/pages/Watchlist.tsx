@@ -190,6 +190,9 @@ const Watchlist: React.FC<Props> = ({
                                 removeFromWatchlist={removeFromWatchlist}
                                 addToWatchlist={addToWatchlist}
                             />}
+                            {tab === 'NEWS' && <News
+                                name={currentStockName}
+                            />}
                             <StyledTabs
                                 aria-label="tabs"
                             >
