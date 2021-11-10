@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Main, LeftBar, RightContent, WatchlistTitle, TabContainer, useStyles, StyledTabs, StyledTab } from '../styles/watchlist.style';
 import WatchlistTicker from '../components/WatchlistTicker';
 import Stock from '../components/Stock';
@@ -103,7 +103,7 @@ const Watchlist: React.FC<Props> = ({
         }
     };
 
-    const fetchTickers = async (): Promise<void> => {
+    const fetchTickers = useCallback(async (): Promise<void> => {
         try {
             const response = await fetch(`${url}/user/watchlist`, {
                 method: 'GET',
@@ -114,7 +114,10 @@ const Watchlist: React.FC<Props> = ({
             });
             if (response.status === 200) {
                 const data = await response.json();
-                const newData = data.map((val: StockInterface, idx: number) => {
+                const newData: StockInterface[] = data.map((
+                    val: StockInterface,
+                    idx: number
+                ) => {
                     if (idx === 0 && !searchTicker) {
                         val.selected = true;
                     } else {
@@ -123,12 +126,11 @@ const Watchlist: React.FC<Props> = ({
                     return val;
                 });
 
-                setTickers(newData);
                 if (searchTicker && searchStockName) {
                     setCurrentTicker(searchTicker);
                     setCurrentStockName(searchStockName);
                     setTab('SUMMARY');
-                    if (tickers.find(val => val.ticker === searchTicker)) {
+                    if (newData.find(val => val.ticker === searchTicker)) {
                         setInWatchlist(true);
                     } else {
                         setInWatchlist(false);
@@ -138,6 +140,7 @@ const Watchlist: React.FC<Props> = ({
                     setCurrentStockName(newData[0].stockName);
                     setInWatchlist(true);
                 }
+                setTickers(newData);
             } else {
                 throw new Error('Failed to fetch watchlist');
             }
@@ -145,12 +148,12 @@ const Watchlist: React.FC<Props> = ({
             setToast({ type: 'error', message: `${e}` });
 
         }
-    };
+        // eslint-disable-next-line
+    }, [searchTicker, searchStockName]);
 
     useEffect(() => {
         fetchTickers();
-        // eslint-disable-next-line
-    }, [searchTicker, searchStockName]);
+    }, [fetchTickers]);
 
     return (
         <Main>
@@ -179,17 +182,14 @@ const Watchlist: React.FC<Props> = ({
                         </h1>
                     </div>
                     : <>
-                        {tab === 'SUMMARY' && <Stock
-                            ticker={currentTicker}
-                            stockName={currentStockName}
-                            inWatchlist={inWatchlist}
-                            removeFromWatchlist={removeFromWatchlist}
-                            addToWatchlist={addToWatchlist}
-                        />}
-                        {tab === 'NEWS' && <News 
-                             name={currentStockName}
-                        />}
                         <TabContainer>
+                            {tab === 'SUMMARY' && <Stock
+                                ticker={currentTicker}
+                                stockName={currentStockName}
+                                inWatchlist={inWatchlist}
+                                removeFromWatchlist={removeFromWatchlist}
+                                addToWatchlist={addToWatchlist}
+                            />}
                             <StyledTabs
                                 aria-label="tabs"
                             >

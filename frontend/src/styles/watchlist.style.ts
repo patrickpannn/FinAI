@@ -42,17 +42,18 @@ export const Main = styled('div')({
 });
 
 export const LeftBar = styled('div')({
-    flex: 1.5,
+    flex: 2,
     overflow: 'auto',
     borderRight: '1px solid #edece8',
-    '&::-webkit-scrollbar': {
-        display: 'none',
-    },
+    position: 'relative',
 });
 
 export const WatchlistTitle = styled('div')({
     textAlign: 'center',
     borderBottom: '1px solid #edece8',
+    position: 'sticky',
+    backgroundColor: 'white',
+    top: 0,
 });
 
 export const TickerItem = styled('div')({
@@ -60,7 +61,7 @@ export const TickerItem = styled('div')({
     height: '80px',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    textAlign: 'center',
     cursor: 'pointer',
     '& p': {
         margin: 0,
@@ -71,8 +72,17 @@ export const TickerItem = styled('div')({
     },
 });
 
-export const Symbol = styled('h2')({
+export const Symbol = styled('h3')({
     margin: 0,
+    flex: 1,
+    fontSize: '14pt',
+});
+
+export const StockName = styled('p')({
+    flex: 1,
+    '&:first-letter': {
+        textTransform: 'capitalize'
+    }
 });
 
 export const RightContent = styled('div')({
@@ -82,13 +92,15 @@ export const RightContent = styled('div')({
 
 export const TabContainer = styled('div')({
     width: '100%',
+    height: '100%',
 });
 
 export const StyledTabs = styled('div')({
     width: '100%',
     height: '60px',
     display: 'flex',
-    position: 'absolute',
+    position: 'sticky',
+    backgroundColor: 'white',
     bottom: 0,
 });
 
