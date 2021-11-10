@@ -33,3 +33,22 @@ Week6
 -- create forgot password routes/controller/model/middleware
 -- create yml file to do linting check in github 
 -- discuss with Ella, bingyu about the high-fidelity page in figma
+
+Week7
+-- Refactored codes for frontend header and sidebar
+-- Re-designed and coded the UI page for header and sidebar to make the color contrast sensible
+-- finished the get watchlist backend
+-- finished the routes for remove tickers to watchlist and refactored the original codes
+-- get started on watchlist frontend page
+
+Week 8
+-- finished watchlist frontend, add/delete a stock from a watchlist
+-- finished search bar feature with dropdown box to select a ticker
+-- finished the real time price tracker for crypto
+-- finished the candlestick chart for stock/crypto
+-- implemented the buy market order functionality
+
+Week 9
+-- implemented stock indicators feature in frontend
+-- implemented sentiment analysis in python
+
