@@ -30,6 +30,7 @@ const url = process.env.REACT_APP_URL || 'http://localhost:5000';
 interface Props {
     open: boolean,
     onClose: () => void,
+    openWallet? : () => void,
     openTopupModal?: () => void,
     openUpdateModal?: () => void,
 }
@@ -37,6 +38,7 @@ interface Props {
 const Sidebar: React.FC<Props> = ({
     open,
     onClose,
+    openWallet,
     openTopupModal,
     openUpdateModal
 }) => {
@@ -133,7 +135,7 @@ const Sidebar: React.FC<Props> = ({
                         />
                         <SidebarBtn
                             text='Wallet'
-                            onClick={(): void => console.log('wallet')}
+                            onClick={(): void => history.push('/dashboard/balance')}
                             childNode={
                                 <AccountBalanceWalletIcon
                                     className={styles.btnColor}

@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 import ForgotPassword from './pages/ForgotPassword';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Dashboard from './pages/Dashboard';
+import Wallet from './pages/Wallet';
 
 interface Props { }
 
@@ -31,6 +32,9 @@ const App: React.FC<Props> = () => {
                     <Route path='/forgotpassword'>
                         <ForgotPassword />
                     </Route>
+                    <Route path='/userbalance'>
+                         <Wallet />
+                     </Route>
                 </Switch>
 
             </Router>
