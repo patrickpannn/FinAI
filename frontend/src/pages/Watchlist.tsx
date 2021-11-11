@@ -48,6 +48,7 @@ const Watchlist: React.FC<Props> = ({
             }
             return val;
         });
+        setTab('SUMMARY');
         setTickers(newTickers);
     };
 
