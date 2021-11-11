@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, Box } from '@mui/material';
 import LinearProgress from '@mui/material/LinearProgress';
 import { useStyles } from '../styles/watchlist.style';
@@ -12,23 +12,31 @@ interface Props {
 }
 
 const News: React.FC<Props> = ({ name }) => {
-
     const styles = useStyles();
     const [articles, setArticles] = useState([]);
+    
+    const fetchArticles = useCallback(async () : Promise<() => void> => {
+        let mounted = true;
+        try { 
+            const res = await fetch(
+                `https://api.nytimes.com/svc/search/v2/articlesearch.json?q=${name}&api-key=znXpYECdWv26apkWSTwsYGCASnnu6bDu`
+            );
+            const data = await res.json();
+            if (mounted) {
+                setArticles(data.response.docs);
+            }    
+        } catch (error) {
+            console.error(error);
+        }
+        return (): void => {
+            mounted = false;
+        };
+    }, [name]);
 
     useEffect(() => {
-        const fetchArticles = async () : Promise<void> => {
-            try { 
-                const res = await fetch(
-                    `https://api.nytimes.com/svc/search/v2/articlesearch.json?q=${name}&api-key=znXpYECdWv26apkWSTwsYGCASnnu6bDu`
-                );     
-                setArticles((await res.json()).response.docs);
-            } catch (error) {
-                console.error(error);
-            }
-        };
+        setArticles([]);
         fetchArticles();
-    },[name]);
+    },[fetchArticles]);
 
     return (
         
