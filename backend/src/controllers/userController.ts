@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import User from '../models/userModel';
 import Portfolio from '../models/portfolioModel';
-import Order from '../models/OrderModel';
+import Order from '../models/orderModel';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import EmailService from '../services/emailService';
