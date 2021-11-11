@@ -253,8 +253,8 @@ export default class UserController {
 
             await User.findOneAndDelete({ _id: req.user._id });
             await Watchlist.findOneAndDelete({ user: req.user.id });
-            await Order.remove({ user: req.user.id });
-            
+            await Order.deleteMany({ user: req.user.id });
+
             const portfolios = await Portfolio.find({ 
                 user: req.user.id, name: { $ne: "Default" } });
 
