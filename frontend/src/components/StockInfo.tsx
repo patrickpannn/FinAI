@@ -19,7 +19,8 @@ const StockInfo: React.FC<Props> = ({ ticker }) => {
     const [roe, setRoe] = useState<number>();
     const [isCrypto, setIsCrypto] = useState(false);
 
-    const fetchStockInfo = useCallback(async (): Promise<void> => {
+    const fetchStockInfo = useCallback(async (): Promise<() => void> => {
+        let mounted = true;
         try {
             setPe(undefined);
             setProfitMargin(undefined);
@@ -44,28 +45,31 @@ const StockInfo: React.FC<Props> = ({ ticker }) => {
 
             if (response !== null && response.status === 200) {
                 const data = await response.json();
-                if (ticker.includes('BINANCE')) {
-                    setLow(data[0].low_24h);
-                    setHigh(data[0].high_24h);
-                    setMarketCap(
-                        parseInt((data[0].market_cap / 1000000).toFixed())
-                    );
-                } else {
-                    setLow(data.metric['52WeekLow']);
-                    setHigh(data.metric['52WeekHigh']);
-                    setMarketCap(data.metric.marketCapitalization);
-                    setPe(data.metric.peBasicExclExtraTTM !== null
-                        ? data.metric.peBasicExclExtraTTM
-                        : -1
-                    );
-                    setRoe(data.metric.roeTTM !== null
-                        ? data.metric.roeTTM
-                        : -1
-                    );
-                    setProfitMargin(!Object.keys(data.series).length
-                        ? -1
-                        : data.series.annual.netMargin[0].v * 100
-                    );
+                if (mounted) {
+
+                    if (ticker.includes('BINANCE')) {
+                        setLow(data[0].low_24h);
+                        setHigh(data[0].high_24h);
+                        setMarketCap(
+                            parseInt((data[0].market_cap / 1000000).toFixed())
+                        );
+                    } else {
+                        setLow(data.metric['52WeekLow']);
+                        setHigh(data.metric['52WeekHigh']);
+                        setMarketCap(data.metric.marketCapitalization);
+                        setPe(data.metric.peBasicExclExtraTTM !== null
+                            ? data.metric.peBasicExclExtraTTM
+                            : -1
+                        );
+                        setRoe(data.metric.roeTTM !== null
+                            ? data.metric.roeTTM
+                            : -1
+                        );
+                        setProfitMargin(!Object.keys(data.series).length
+                            ? -1
+                            : data.series.annual.netMargin[0].v * 100
+                        );
+                    }
                 }
             } else {
                 throw new Error("Cannot fetch!!");
@@ -73,6 +77,9 @@ const StockInfo: React.FC<Props> = ({ ticker }) => {
         } catch (e) {
             setToast({ type: "error", message: `${e}` });
         }
+        return (): void => {
+            mounted = false;
+        };
         // eslint-disable-next-line
     }, [ticker]);
 

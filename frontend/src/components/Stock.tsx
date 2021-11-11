@@ -44,7 +44,8 @@ const Stock: React.FC<Props> = ({
         }
     };
 
-    const fetchPrice = useCallback(async (): Promise<void> => {
+    const fetchPrice = useCallback(async (): Promise<() => void> => {
+        let mounted = true;
         if (ticker !== 'BINANCE:BTCUSDT' && ticker !== 'BINANCE:ETHUSDT') {
             try {
                 if (ticker) {
@@ -54,8 +55,10 @@ const Stock: React.FC<Props> = ({
 
                     if (response.status === 200) {
                         const stockData = await response.json();
-                        setPrice(stockData.c);
-                        setPriceColor('normal');
+                        if (mounted) {
+                            setPrice(stockData.c);
+                            setPriceColor('normal');
+                        }
                     } else {
                         throw new Error('Failed to fetch the price');
                     }
@@ -65,6 +68,10 @@ const Stock: React.FC<Props> = ({
                 setToast({ type: 'error', message: `${e}` });
             }
         }
+
+        return (): void => {
+            mounted = false;
+        };
         // eslint-disable-next-line
     }, [ticker]);
 
@@ -75,7 +82,7 @@ const Stock: React.FC<Props> = ({
             socket.current = new WebSocket('wss://ws.finnhub.io?token=c5vln0iad3ibtqnna830');
 
             // Connection opened -> Subscribe
-            socket.current.onopen = function (event): void {
+            socket.current.onopen = function (): void {
                 if (!socket.current) return;
                 socket.current.send(JSON.stringify({ 'type': 'subscribe', 'symbol': ticker }));
 

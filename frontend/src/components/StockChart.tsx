@@ -23,8 +23,9 @@ const StockChart: React.FC<Props> = ({ ticker }) => {
     const dispatch = useDispatch();
     const { setToast } = bindActionCreators(actionCreators, dispatch);
     const [data, SetData] = useState<DataItem[][]>([]);
-    
-    const fetchPrices = useCallback(async (): Promise<void> => {
+
+    const fetchPrices = useCallback(async (): Promise<() => void> => {
+        let mounted = true;
         try {
             if (ticker !== '') {
                 const exchangeType = ticker.includes('BTC') || ticker.includes('ETH') ? 'crypto' : 'stock';
@@ -37,18 +38,21 @@ const StockChart: React.FC<Props> = ({ ticker }) => {
                     const stockData = await response.json();
                     const length = stockData.c.length;
                     let newData: DataItem[][] = [];
+                    
+                    if (mounted) {
+                        for (let i = 0; i < length; ++i) {
+                            const date = new Date(stockData.t[i] * 1000);
+                            newData.push([
+                                `${date.getMonth() + 1}-${date.getDate()}`,
+                                stockData.l[i],
+                                stockData.o[i],
+                                stockData.c[i],
+                                stockData.h[i]
+                            ]);
+                        }
+                        SetData(newData);
 
-                    for (let i = 0; i < length; ++i) {
-                        const date = new Date(stockData.t[i] * 1000);
-                        newData.push([
-                            `${date.getMonth() + 1}-${date.getDate()}`,
-                            stockData.l[i],
-                            stockData.o[i],
-                            stockData.c[i],
-                            stockData.h[i]
-                        ]);
                     }
-                    SetData(newData);
                 } else {
                     throw new Error('Failed to fetch the chart');
                 }
@@ -56,6 +60,9 @@ const StockChart: React.FC<Props> = ({ ticker }) => {
         } catch (e) {
             setToast({ type: 'error', message: `${e}` });
         }
+        return (): void => {
+            mounted = false;
+        };
     // eslint-disable-next-line
     }, [ticker]);
 
