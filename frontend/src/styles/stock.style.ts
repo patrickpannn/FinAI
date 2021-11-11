@@ -55,7 +55,6 @@ export const PriceChart = styled('div')({
 export const Banner = styled('div')({
     width: '100%',
     height: '60px',
-    marginTop: '20px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -83,9 +82,9 @@ export const ButtonGroup = styled('div')({
 export const StockInfoBox = styled('div')({
     width: '100%',
     height: '100px',
-    marginTop: '20px',
-    border: '2px solid lightgrey',
+    margin: '20px 0',
     borderRadius: '5px',
+    boxShadow: 'rgba(0, 0, 0, 0.25) 0px 5px 10px',
     display: 'grid',
     gridTemplateColumns: 'auto auto auto',
     '& div': {

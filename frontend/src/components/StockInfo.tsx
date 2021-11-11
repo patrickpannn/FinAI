@@ -44,7 +44,6 @@ const StockInfo: React.FC<Props> = ({ ticker }) => {
 
             if (response !== null && response.status === 200) {
                 const data = await response.json();
-                console.log(data);
                 if (ticker.includes('BINANCE')) {
                     setLow(data[0].low_24h);
                     setHigh(data[0].high_24h);
@@ -55,17 +54,17 @@ const StockInfo: React.FC<Props> = ({ ticker }) => {
                     setLow(data.metric['52WeekLow']);
                     setHigh(data.metric['52WeekHigh']);
                     setMarketCap(data.metric.marketCapitalization);
-                    setPe(data.metric.peBasicExclExtraTTM === null
-                        ? -1
-                        : data.metric.peBasicExclExtraTTM
-                    );
-                    setProfitMargin(data.series === undefined
-                        ? data.series.annual.netMargin[0].v * 100
+                    setPe(data.metric.peBasicExclExtraTTM !== null
+                        ? data.metric.peBasicExclExtraTTM
                         : -1
                     );
                     setRoe(data.metric.roeTTM !== null
                         ? data.metric.roeTTM
                         : -1
+                    );
+                    setProfitMargin(!Object.keys(data.series).length
+                        ? -1
+                        : data.series.annual.netMargin[0].v * 100
                     );
                 }
             } else {
