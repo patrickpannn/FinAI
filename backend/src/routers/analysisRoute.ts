@@ -3,7 +3,7 @@ import Route from '../interfaces/routeInterface';
 import AnalysisController from '../controllers/analysisController';
 import UserAuthentication from '../middlewares/authentication';
 
-export default class OrderRoute implements Route {
+export default class AnalysisRoute implements Route {
 
     private path: string = '/analysis';
 
