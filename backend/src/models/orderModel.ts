@@ -97,7 +97,6 @@ OrderSchema.methods.getObject = async function (): Promise<{}> {
 OrderSchema.post('save', { document : true }, async function (next): Promise<void> {
     if(this.executed === true)
     {
-        console.log('bababaooi');
         const user = await User.findOne({
             user: this.user});
         if(!user)

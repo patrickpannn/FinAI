@@ -58,7 +58,6 @@ class VerifyOrder {
 
             next();
         } catch (e) {
-            console.log(e);
             res.status(401).json({ error: 'Order is incorrect' });
         };
     };
@@ -97,7 +96,7 @@ class VerifyOrder {
 
             next();
         } catch (e) {
-                res.status(400).json({ error: 'Order is incorrect' });
+            res.status(400).json({ error: 'Order is incorrect' });
         };
     };
 }
