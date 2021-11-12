@@ -43,6 +43,7 @@ export default class OrderController {
             {
                 throw new Error('Direction given is not correct for this route');
             }
+
             if(req.user.availableBalance - 
                 req.body.units * req.body.setPrice < 0)
             {
@@ -71,13 +72,14 @@ export default class OrderController {
                     ticker: req.body.ticker, 
                     name: req.body.name, 
                     direction: req.body.direction });
+
                 if(!order)
                 {
                     throw new Error('Order cannot be made');
                 }
                 order.save();
-
             }
+
             req.user.availableBalance = 
                 req.user.availableBalance - req.body.setPrice * req.body.units;
             await req.user.save();
@@ -101,10 +103,12 @@ export default class OrderController {
             const stock = await Stock.findOne({ 
                 portfolio: req.portfolio.id, 
                 ticker : req.body.ticker });
+
             if(!stock)
             {
                 throw new Error('Stock does not exist in portfolio');
             }
+
             if(stock.numUnits - req.body.units < 0){
                 throw new Error('Cannot sell more shares than you own');
             }
@@ -116,6 +120,7 @@ export default class OrderController {
                 executePrice: req.body.setPrice,
                 direction: req.body.direction
             });
+
             if(existingOrder)
             {
                 existingOrder.numUnits += req.body.units;
@@ -130,11 +135,12 @@ export default class OrderController {
                     name: req.body.name, 
                     direction: req.body.direction, 
                     portfolio: req.portfolio.id });
+
                 if(!order)
                 {
                     throw new Error('Order cannot be made');
                 }
-                await order.save();
+                await order.save(); 
             }
 
             stock.numUnits -= req.body.units;
@@ -178,11 +184,11 @@ export default class OrderController {
                 order.delete();
             } else
             {
-
                 const stock = await Stock.findOne({ 
                     portfolio: req.portfolio.id,
                     ticker: req.body.ticker
                 });
+
                 if(!stock)
                 {
                     throw new Error("Cant access a stock that doesnt exist");
