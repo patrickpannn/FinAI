@@ -17,7 +17,7 @@ const orderBody = [
     'portfolio'
 ];
 
-enum possibleOrders {
+enum PossibleOrders {
     bitcoin = "BINANCE:BTCUSDT",
     etherium = "BINANCE:ETHUSDT"
 };
@@ -41,7 +41,8 @@ class VerifyOrder {
                 }
             }
 
-            if(req.body.ticker !== possibleOrders.bitcoin && req.body.ticker !== possibleOrders.etherium)
+            if(req.body.ticker !== PossibleOrders.bitcoin 
+                && req.body.ticker !== PossibleOrders.etherium)
             {
                 throw new Error('Bad Request');
             }

@@ -1,4 +1,4 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { PortfolioInterface } from '../interfaces/requestPortfolio';
 
 const PortfolioSchema = new Schema<PortfolioInterface>({

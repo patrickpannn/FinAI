@@ -98,54 +98,56 @@ OrderSchema.post('save', { document : true }, async function (next): Promise<voi
     if(this.executed === true)
     {
         const user = await User.findOne({
-            user: this.user});
+            user: this.user });
         if(!user)
         {
             throw new Error('Could not find user');
         }
-        const stock = await Stock.findOne({
+        const existingStock = await Stock.findOne({
             user: this.user,
             portfolio: this.portfolio,
             ticker: this.ticker
         });
         if(this.direction === "SELL") // selling an existing stock
         {
-            if(!stock)
+            if(!existingStock)
             {
                 throw new Error('Could not find stock!');
             }
-            if(stock.numUnits === 0)
+            if(existingStock.numUnits === 0)
             {
-                stock.delete();
+                existingStock.delete();
             }
-            user.balance += parseFloat((this.executePrice * this.numUnits).toFixed(2));
+            user.balance += 
+                parseFloat((this.executePrice * this.numUnits).toFixed(2));
         } else // purchasing a stock which may or may not already exist in the specified portfolio
         {
-            if(stock)
+            if(existingStock)
             {
                 const avg = (
-                    (stock.numUnits * stock.averagePrice +
-                    this.numUnits * this.executePrice) / (stock.numUnits + this.numUnits)
-                                                                            ).toFixed(2);
-                stock.numUnits += this.numUnits;
-                stock.averagePrice = parseFloat(avg);
-                stock.save();
+                    (existingStock.numUnits * existingStock.averagePrice +
+                    this.numUnits * this.executePrice) / 
+                    (existingStock.numUnits + this.numUnits)).toFixed(2);
+                existingStock.numUnits += this.numUnits;
+                existingStock.averagePrice = parseFloat(avg);
+                existingStock.save();
             } else
             {
-                const stock = new Stock({
+                const newStock = new Stock({
                     portfolio: this.portfolio,
                     ticker: this.ticker,
                     name: this.name,
                     averagePrice: this.executePrice, // TO BE CONFIRMED
                     numUnits: this.numUnits
                 });
-                if(!stock)
+                if(!newStock)
                 {
                     throw new Error('Could not create stock');
                 }
-                stock.save();
+                newStock.save();
             }
-            user.balance -= parseFloat((this.executePrice * this.numUnits).toFixed(2));
+            user.balance -= 
+                parseFloat((this.executePrice * this.numUnits).toFixed(2));
             user.save();
         }
     }

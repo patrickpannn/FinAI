@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
-import Portfolio from '../models/portfolioModel';
 import Order from '../models/orderModel';
 import Stock from '../models/stockModel';
 import axios from 'axios';
 
-enum direction {
+enum Direction {
     Sell = "SELL",
     Buy = "BUY",
 }
@@ -40,11 +39,12 @@ export default class OrderController {
         res: Response
     ): Promise<void> => {
         try {
-            if(!req.body.direction || req.body.direction !== direction.Buy)
+            if(!req.body.direction || req.body.direction !== Direction.Buy)
             {
                 throw new Error('Direction given is not correct for this route');
             }
-            if(req.user.availableBalance - req.body.units * req.body.setPrice < 0)
+            if(req.user.availableBalance - 
+                req.body.units * req.body.setPrice < 0)
             {
                 throw new Error('Available Balance is too low to make this order');
             }
@@ -78,7 +78,8 @@ export default class OrderController {
                 order.save();
 
             }
-            req.user.availableBalance = req.user.availableBalance - req.body.setPrice * req.body.units;
+            req.user.availableBalance = 
+                req.user.availableBalance - req.body.setPrice * req.body.units;
             await req.user.save();
 
             res.status(201).json({ response: 'Successful' });
@@ -92,14 +93,14 @@ export default class OrderController {
         res: Response
     ): Promise<void> => {
         try {
-            if(!req.body.direction || req.body.direction !== direction.Sell)
+            if(!req.body.direction || req.body.direction !== Direction.Sell)
             {
                 throw new Error('Direction given is not correct for this route');
             }
             
             const stock = await Stock.findOne({ 
                 portfolio: req.portfolio.id, 
-                ticker : req.body.ticker});
+                ticker : req.body.ticker });
             if(!stock)
             {
                 throw new Error('Stock does not exist in portfolio');
@@ -158,17 +159,19 @@ export default class OrderController {
                 executePrice: req.body.setPrice,
                 units: req.body.units
             });
+
             if(!order)
             {
                 throw new Error("This order doesn't exist");
             }
 
-            if(req.body.direction !== direction.Buy && req.body.direction !== direction.Sell)
+            if(req.body.direction !== Direction.Buy 
+                && req.body.direction !== Direction.Sell)
             {
                 throw new Error('Bad Request');
             }
 
-            if(req.body.direction === direction.Buy)
+            if(req.body.direction === Direction.Buy)
             {
                 req.user.availableBalance += req.body.setPrice * req.body.units;
                 req.user.save();
@@ -179,7 +182,7 @@ export default class OrderController {
                 const stock = await Stock.findOne({ 
                     portfolio: req.portfolio.id,
                     ticker: req.body.ticker
-                })
+                });
                 if(!stock)
                 {
                     throw new Error("Cant access a stock that doesnt exist");
@@ -331,32 +334,4 @@ export default class OrderController {
             res.status(400).json({ error: 'Bad Request' });
         }
     };
-
-    public static test = async (
-        req: Request,
-        res: Response
-    ): Promise<void> => {
-        try {
-
-            const existingOrder = await Order.findOne({ 
-                user: req.user.id, 
-                portfolio: req.portfolio.id,
-                ticker: req.body.ticker,
-                executePrice: req.body.setPrice,
-                direction: req.body.direction
-            });
-            if(!existingOrder)
-            {
-                throw new Error('nonono');
-            }
-            existingOrder.executed = true;
-            existingOrder.save();
-            res.status(200).json({ response: 'Successful'});
-        }
-        catch (e)
-        {
-            res.status(400).json({ error: 'Bad Request'});
-        }
-    };
-
 }
