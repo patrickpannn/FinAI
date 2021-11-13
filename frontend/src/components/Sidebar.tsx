@@ -45,7 +45,8 @@ const Sidebar: React.FC<Props> = ({
     const styles = useStyles();
     const dispatch = useDispatch();
     const { setToast } = bindActionCreators(actionCreators, dispatch);
-
+    const [name, setName] = React.useState('');
+    const [nameFirstLetter, setNameFirstLetter] = React.useState('');
 
     const handleLogout = async (): Promise<void> => {
         try {
@@ -90,7 +91,32 @@ const Sidebar: React.FC<Props> = ({
             setToast({ type: 'error', message: `${error}` });
         }
     };
-
+    React.useEffect(() => {
+        const handleProfile = async (): Promise<void> => {
+            try {
+                const response = await fetch(`${url}/user/profile`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
+                    },
+                });
+                if (response.status === 200) {
+                    const data = await response.json();
+                    setName(data.username);
+                    setNameFirstLetter(data.username[0]);
+                    console.log(name);
+                    console.log(nameFirstLetter);
+                } else {
+                    throw new Error('Failed to fetch user name');
+                }
+            } catch (e) {
+                setToast({ type: 'error', message: `${e}` });
+            }
+        };
+        handleProfile();
+    },[]);
+    
     return (
         <>
             <Drawer anchor={'right'} open={open} onClose={onClose}>
@@ -101,8 +127,12 @@ const Sidebar: React.FC<Props> = ({
                     onKeyDown={onClose}
                 >
                     <div className={styles.userInfo}>
-                        <Avatar sx={{ width: 32, height: 32 }}>J</Avatar>
-                        <h1 className={styles.username}>John</h1>
+                        <Avatar className={styles.avatar}>
+                            {nameFirstLetter}
+                        </Avatar>
+                        <h1 className={styles.username}>
+                            {name}
+                        </h1>
                     </div>
                     <Stack className={styles.topup} direction="row">
                         <LargeButton

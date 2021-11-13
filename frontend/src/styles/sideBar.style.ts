@@ -11,7 +11,6 @@ export const LargeButton = styled(Button)({
     width: '240px',
     backgroundColor: '#0017ea'
 });
-
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     sideBar: {
         background: '#f5f5f5',
@@ -44,5 +43,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         alignItems: 'center',
         justifyContent: 'center',
         margin: '30px 0',
+    },
+    avatar: {
+        width: 32, 
+        height: 32, 
+        backgroundColor: '#0017ea',
     }
 }));
