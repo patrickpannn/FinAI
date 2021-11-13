@@ -91,32 +91,34 @@ const Sidebar: React.FC<Props> = ({
             setToast({ type: 'error', message: `${error}` });
         }
     };
-    React.useEffect(() => {
-        const handleProfile = async (): Promise<void> => {
-            try {
-                const response = await fetch(`${url}/user/profile`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
-                    },
-                });
-                if (response.status === 200) {
-                    const data = await response.json();
-                    setName(data.username);
-                    setNameFirstLetter(data.username[0]);
-                    console.log(name);
-                    console.log(nameFirstLetter);
-                } else {
-                    throw new Error('Failed to fetch user name');
-                }
-            } catch (e) {
-                setToast({ type: 'error', message: `${e}` });
+    const handleProfile = async (): Promise<void> => {
+        try {
+            const response = await fetch(`${url}/user/profile`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
+                },
+            });
+            if (response.status === 200) {
+                const data = await response.json();
+                setName(data.username);
+                setNameFirstLetter(data.username[0]);
+                // console.log(name);
+                // console.log(nameFirstLetter);
+            } else {
+                
+                throw new Error('Failed to fetch user name');
+                
             }
-        };
-        handleProfile();
-    },[]);
+        } catch (e) {
+            setToast({ type: 'error', message: `${e}` });
+        }
+    };
     
+    if (sessionStorage.getItem('access_token') !== '') {
+        handleProfile();
+    }
     return (
         <>
             <Drawer anchor={'right'} open={open} onClose={onClose}>
@@ -126,7 +128,9 @@ const Sidebar: React.FC<Props> = ({
                     onClick={onClose}
                     onKeyDown={onClose}
                 >
+                    {/* <Profile open={open} onClose={onClose}/> */}
                     <div className={styles.userInfo}>
+                        
                         <Avatar className={styles.avatar}>
                             {nameFirstLetter}
                         </Avatar>
