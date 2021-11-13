@@ -27,7 +27,6 @@ async function getRisk(ticker: String): Promise<number> {
 
         if (!stockResponse.data.metric.freeCashFlowPerShareTTM || 
             !compareResponse.data.metric.freeCashFlowPerShareTTM) {
-                console.log("Risk")
                 throw new Error("Unable to determine dividend yield");
         }
 
