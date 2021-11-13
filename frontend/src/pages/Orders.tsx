@@ -3,8 +3,8 @@ import { useStyles } from '../styles/orders.style';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
 import { useDispatch } from 'react-redux';
-import { Typography, Table, TableContainer , TableHead, TableRow, TableBody } from '@mui/material';
-import { StyledTableRow, StyledTableCell } from '../styles/orders.style';
+import { Table, TableContainer , TableHead, TableRow, TableBody } from '@mui/material';
+import { StyledTableRow, StyledTableCell, OrderTitle } from '../styles/orders.style';
 import Paper from '@mui/material/Paper';
 
 const url = process.env.REACT_APP_URL || 'http://localhost:5000';
@@ -47,7 +47,10 @@ const Orders: React.FC = () => {
 
     return (
         <div className={styles.tableSpace}>
-            <Typography variant="h4">Order History</Typography>
+            <OrderTitle>
+                <h2>My Orders</h2>
+            </OrderTitle>
+            {/* <Typography variant="h4">Order History</Typography> */}
             <TableContainer component={Paper} >
                 <Table className={styles.tableSize} aria-label="simple table">
                     <TableHead>

@@ -7,7 +7,6 @@ import HomePage from './pages/HomePage';
 import ForgotPassword from './pages/ForgotPassword';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Dashboard from './pages/Dashboard';
-import Order from './pages/Orders';
 
 interface Props { }
 
@@ -31,9 +30,6 @@ const App: React.FC<Props> = () => {
                     </Route>
                     <Route path='/forgotpassword'>
                         <ForgotPassword />
-                    </Route>
-                    <Route path='/userorder'>
-                        <Order />
                     </Route>
                 </Switch>
 
