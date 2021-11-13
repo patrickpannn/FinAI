@@ -116,6 +116,7 @@ export default class AnalysisController {
                 risk: await getRisk(req.body.ticker),
                 dividend: await getDividend(req.body.ticker)
             };
+
             res.status(200).json(snowflake);
         } catch (e) {
             res.status(400).json({ error: 'Bad Request' });
