@@ -21,29 +21,33 @@ function getHealth(): number {
 
 async function getDividend(ticker: String): Promise<number> {
 
-    const stockResponse = await axios.get(
-        `https://finnhub.io/api/v1/stock/metric?symbol=${ticker}&metric=all&token=c5vln0iad3ibtqnna830`);
-    const compareResponse = await axios.get(
-        `https://finnhub.io/api/v1/stock/metric?symbol=${dividendStock}&metric=all&token=c5vln0iad3ibtqnna830`);
+    try {
+        const stockResponse = await axios.get(
+            `https://finnhub.io/api/v1/stock/metric?symbol=${ticker}&metric=all&token=c5vln0iad3ibtqnna830`);
+        const compareResponse = await axios.get(
+            `https://finnhub.io/api/v1/stock/metric?symbol=${dividendStock}&metric=all&token=c5vln0iad3ibtqnna830`);
 
 
-    if (!stockResponse.data.metric.dividendYield5Y || 
-        !compareResponse.data.metric.dividendYield5Y) {
-            throw new Error("Unable to determine dividend yield");
+        if (!stockResponse.data.metric.dividendYield5Y || 
+            !compareResponse.data.metric.dividendYield5Y) {
+                throw new Error("Unable to determine dividend yield");
+        }
+
+        const stockYield = stockResponse.data.metric.dividendYield5Y;
+        const comparisonYield = compareResponse.data.metric.dividendYield5Y;
+        
+        let value = 0.8 + ((stockYield - comparisonYield) / comparisonYield);
+
+        if (value > 1) {
+            value = 1;
+        } else if (value < 0) {
+            value = 0;
+        }
+
+        return value;
+    } catch (e) {
+        return -1;
     }
-
-    const stockYield = stockResponse.data.metric.dividendYield5Y;
-    const comparisonYield = compareResponse.data.metric.dividendYield5Y;
-    
-    let value = 0.8 + ((stockYield - comparisonYield) / comparisonYield);
-
-    if (value > 1) {
-        value = 1;
-    } else if (value < 0) {
-        value = 0;
-    }
-
-    return value;
 }
 
 export default class AnalysisController {
