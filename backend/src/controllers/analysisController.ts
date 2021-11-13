@@ -10,7 +10,7 @@ async function getValue(ticker: String, cashFlow: number): Promise<number> {
             `https://finnhub.io/api/v1/quote?symbol=${ticker}&token=c5vln0iad3ibtqnna830`);
 
         if (!stockQuote.data.c) {
-            throw new Error("Unable to get the stock price")
+            throw new Error("Unable to get the stock price");
         }
 
         const stockValue = cashFlow;
@@ -33,7 +33,10 @@ function getFuture(): number {
     return 0.3;
 }
 
-async function getRisk(ticker: String, stockRiskYear1: number, stockRiskYear2: number): Promise<number> {
+async function getRisk(
+    stockRiskYear1: number,
+    stockRiskYear2: number
+): Promise<number> {
 
     try {        
         let value = 0.5 + ((stockRiskYear1 - stockRiskYear2) / stockRiskYear2);
@@ -50,7 +53,7 @@ async function getRisk(ticker: String, stockRiskYear1: number, stockRiskYear2: n
     }
 }
 
-async function getDividend(ticker: String, stockYield: number): Promise<number> {
+async function getDividend(stockYield: number): Promise<number> {
 
     try {
         const compareResponse = await axios.get(
@@ -96,7 +99,9 @@ export default class AnalysisController {
             if (!stockResponse.data.metric.freeCashFlowPerShareTTM) {
                 valueValue = -1;
             } else {
-                const cashFlow = stockResponse.data.metric.freeCashFlowPerShareTTM
+                const cashFlow = 
+                    stockResponse.data.metric.freeCashFlowPerShareTTM;
+
                 valueValue = await getValue(req.body.ticker, cashFlow);
             }
 
@@ -106,9 +111,13 @@ export default class AnalysisController {
                 !stockResponse.data.series.annual.currentRatio[1]) {
                     riskValue = -1;
             } else {
-                const stockRiskYear1 = stockResponse.data.series.annual.currentRatio[0].v;
-                const stockRiskYear2 = stockResponse.data.series.annual.currentRatio[1].v;
-                riskValue = await getRisk(req.body.ticker, stockRiskYear1, stockRiskYear2);
+                const stockRiskYear1 = 
+                    stockResponse.data.series.annual.currentRatio[0].v;
+
+                const stockRiskYear2 = 
+                    stockResponse.data.series.annual.currentRatio[1].v;
+
+                riskValue = await getRisk(stockRiskYear1, stockRiskYear2);
             }    
 
             let dividendValue = 0;
@@ -117,7 +126,7 @@ export default class AnalysisController {
                 dividendValue = -1;
             } else {
                 const stockYield = stockResponse.data.metric.dividendYield5Y;
-                dividendValue = await getDividend(req.body.ticker, stockYield);
+                dividendValue = await getDividend(stockYield);
             }
 
             const snowflake = {
