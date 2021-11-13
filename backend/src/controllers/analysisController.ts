@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import axios from 'axios';
 
 const dividendStock = "OMC";
-const riskStock = "AAPL";
 
 function getValue(): number {
     return 0.1;
@@ -21,20 +20,16 @@ async function getRisk(ticker: String): Promise<number> {
     try {
         const stockResponse = await axios.get(
             `https://finnhub.io/api/v1/stock/metric?symbol=${ticker}&metric=all&token=c5vln0iad3ibtqnna830`);
-        const compareResponse = await axios.get(
-            `https://finnhub.io/api/v1/stock/metric?symbol=${riskStock}&metric=all&token=c5vln0iad3ibtqnna830`);
 
-
-        if (!stockResponse.data.metric.freeCashFlowPerShareTTM || 
-            !compareResponse.data.metric.freeCashFlowPerShareTTM) {
-                console.log("Risk")
-                throw new Error("Unable to determine dividend yield");
+            if (!stockResponse.data.series.annual.currentRatio[0] || 
+                !stockResponse.data.series.annual.currentRatio[1]) {
+                throw new Error("Unable to determine risk");
         }
 
-        const stockRisk = stockResponse.data.metric.freeCashFlowPerShareTTM;
-        const comparisonRisk = compareResponse.data.metric.freeCashFlowPerShareTTM;
+        const stockRiskYear1 = stockResponse.data.series.annual.currentRatio[0].v;
+        const stockRiskYear2 = stockResponse.data.series.annual.currentRatio[1].v;
         
-        let value = 0.8 + ((stockRisk - comparisonRisk) / comparisonRisk);
+        let value = 0.5 + ((stockRiskYear1 - stockRiskYear2) / stockRiskYear2);
 
         if (value > 1) {
             value = 1;
