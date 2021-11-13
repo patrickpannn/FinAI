@@ -4,8 +4,32 @@ import axios from 'axios';
 const dividendStock = "OMC";
 const riskStock = "AAPL";
 
-function getValue(): number {
-    return 0.1;
+async function getValue(ticker: String): Promise<number> {
+
+    try {
+        const stockResponse = await axios.get(
+            `https://finnhub.io/api/v1/stock/metric?symbol=${ticker}&metric=all&token=c5vln0iad3ibtqnna830`);
+        const stockQuote = await axios.get(
+            `https://finnhub.io/api/v1/quote?symbol=${ticker}&token=c5vln0iad3ibtqnna830`);
+
+        if (!stockResponse.data.metric.freeCashFlowPerShareTTM) {
+            throw new Error("Unable to determine cash flow");
+        }
+
+        if (!stockQuote.data.c) {
+            throw new Error("Unable to get the stock price")
+        }
+
+        const stockValue = stockResponse.data.metric.freeCashFlowPerShareTTM;
+        const stockCost = stockQuote.data.c;
+
+        const value = (stockCost - stockValue) / stockCost;
+
+        return value;
+    } catch (e) {
+        return -1;
+    }
+
 }
 
 function getPast(): number {
@@ -90,7 +114,7 @@ export default class AnalysisController {
             }
 
             const snowflake = {
-                value: getValue(),
+                value: await getValue(req.body.ticker),
                 past: getPast(),
                 future: getFuture(),
                 risk: await getRisk(req.body.ticker),
