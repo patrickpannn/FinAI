@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
     Box,
     Drawer,
@@ -24,6 +24,7 @@ import { actionCreators } from '../state/index';
 import { useHistory } from 'react-router-dom';
 import { DialogContent, LargeButton, useStyles } from '../styles/sideBar.style';
 import SidebarBtn from './SidebarBtn';
+import { blue } from '@mui/material/colors';
 
 const url = process.env.REACT_APP_URL || 'http://localhost:5000';
 
@@ -91,7 +92,7 @@ const Sidebar: React.FC<Props> = ({
             setToast({ type: 'error', message: `${error}` });
         }
     };
-    const handleProfile = async (): Promise<void> => {
+    const handleProfile = useCallback(async (): Promise<void> => {
         try {
             const response = await fetch(`${url}/user/profile`, {
                 method: 'GET',
@@ -104,8 +105,6 @@ const Sidebar: React.FC<Props> = ({
                 const data = await response.json();
                 setName(data.username);
                 setNameFirstLetter(data.username[0]);
-                // console.log(name);
-                // console.log(nameFirstLetter);
             } else {
                 
                 throw new Error('Failed to fetch user name');
@@ -114,11 +113,13 @@ const Sidebar: React.FC<Props> = ({
         } catch (e) {
             setToast({ type: 'error', message: `${e}` });
         }
-    };
-    
-    if (sessionStorage.getItem('access_token') !== '') {
+         // eslint-disable-next-line
+    },[]);
+
+    useEffect(() => {
         handleProfile();
-    }
+    }, [handleProfile]);
+
     return (
         <>
             <Drawer anchor={'right'} open={open} onClose={onClose}>
@@ -128,10 +129,11 @@ const Sidebar: React.FC<Props> = ({
                     onClick={onClose}
                     onKeyDown={onClose}
                 >
-                    {/* <Profile open={open} onClose={onClose}/> */}
                     <div className={styles.userInfo}>
-                        
-                        <Avatar className={styles.avatar}>
+                        <Avatar 
+                            className={styles.avatar} 
+                            sx={{ bgcolor: blue[700] }}
+                        >
                             {nameFirstLetter}
                         </Avatar>
                         <h1 className={styles.username}>

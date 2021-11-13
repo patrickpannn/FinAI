@@ -47,6 +47,5 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     avatar: {
         width: 32, 
         height: 32, 
-        backgroundColor: '#0017ea',
     }
 }));
