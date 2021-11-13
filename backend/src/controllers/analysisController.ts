@@ -94,7 +94,7 @@ export default class AnalysisController {
                 value: getValue(),
                 past: getPast(),
                 future: getFuture(),
-                health: await getRisk(req.body.ticker),
+                risk: await getRisk(req.body.ticker),
                 dividend: await getDividend(req.body.ticker)
             };
             res.status(200).json(snowflake);
