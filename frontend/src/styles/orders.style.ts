@@ -10,7 +10,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     },
 }));
 
-export const StyledTableCell = styled(TableCell)(({ theme }) => ({
+export const Cell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.primary.main,
         color: theme.palette.common.white,
@@ -20,7 +20,7 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
     },
 }));
 
-export const StyledTableRow = styled(TableRow)(({ theme }) => ({
+export const Row = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
         backgroundColor: theme.palette.action.hover,
     },

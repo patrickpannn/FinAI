@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
 import { useDispatch } from 'react-redux';
 import { Table, TableContainer , TableHead, TableRow, TableBody } from '@mui/material';
-import { StyledTableRow, StyledTableCell, OrderTitle } from '../styles/orders.style';
+import { Row, Cell, OrderTitle } from '../styles/orders.style';
 import Paper from '@mui/material/Paper';
 
 const url = process.env.REACT_APP_URL || 'http://localhost:5000';
@@ -50,59 +50,34 @@ const Orders: React.FC = () => {
             <OrderTitle>
                 <h2>My Orders</h2>
             </OrderTitle>
-            {/* <Typography variant="h4">Order History</Typography> */}
             <TableContainer component={Paper} >
                 <Table className={styles.tableSize} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <StyledTableCell>
-                                Symbol
-                            </StyledTableCell>
-                            <StyledTableCell>
-                                Stock Name
-                            </StyledTableCell>
-                            <StyledTableCell>
-                                Quantity
-                            </StyledTableCell>
-                            <StyledTableCell>
-                                Stock Price Each
-                            </StyledTableCell>
-                            <StyledTableCell>
-                                Total Price
-                            </StyledTableCell>
-                            <StyledTableCell>
-                                Direction
-                            </StyledTableCell>
-                            <StyledTableCell>
-                                Portfolio
-                            </StyledTableCell>
+                            <Cell>Symbol</Cell>
+                            <Cell>Stock Name</Cell>
+                            <Cell>Quantity</Cell>
+                            <Cell>Stock Price Each</Cell>
+                            <Cell>Total Price</Cell>
+                            <Cell>Direction</Cell>
+                            <Cell>Portfolio</Cell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {orders && orders.map(order => (
-                            <StyledTableRow key= {order.ticker}>
-                                <StyledTableCell>
-                                    {order.ticker}
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                    {order.name}
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                    {order.numUnits}
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                    {order.executePrice}
-                                </StyledTableCell>
-                                <StyledTableCell>
+                            <Row key= {order.ticker}>
+                                <Cell>{order.ticker}</Cell>
+                                <Cell>{order.name}</Cell>
+                                <Cell>{order.numUnits}</Cell>
+                                <Cell>{order.executePrice}</Cell>
+                                <Cell>
                                     {order.numUnits * order.executePrice}
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                    {order.direction}
-                                </StyledTableCell>
-                                <StyledTableCell>
+                                </Cell>
+                                <Cell>{order.direction}</Cell>
+                                <Cell>
                                     {order.portfolio}
-                                </StyledTableCell>
-                            </StyledTableRow>
+                                </Cell>
+                            </Row>
                         ))}
                     </TableBody>
                 </Table>
