@@ -14,7 +14,7 @@ interface StockInterface extends Document {
 const StockSchema = new Schema<StockInterface>({
     portfolio: {
         type: Schema.Types.ObjectId,
-        required: true,
+        required: true, 
         ref: 'portfolio'
     },
     ticker: {
@@ -40,8 +40,8 @@ const StockSchema = new Schema<StockInterface>({
         type: Number,
         required: true,
         validate(value: number): void {
-            if (value <= 0) {
-                throw new Error('At least one unit should be owned.');
+            if (value < 0) {
+                throw new Error('Must specify a non-negative number of stocks');
             }
         }
     }

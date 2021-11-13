@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
@@ -24,11 +24,13 @@ const StockChart: React.FC<Props> = ({ ticker }) => {
     const { setToast } = bindActionCreators(actionCreators, dispatch);
     const [data, SetData] = useState<DataItem[][]>([]);
 
-    const fetchPrices = async (): Promise<void> => {
+    const fetchPrices = useCallback(async (): Promise<() => void> => {
+        let mounted = true;
         try {
             if (ticker !== '') {
+                const exchangeType = ticker.includes('BTC') || ticker.includes('ETH') ? 'crypto' : 'stock';
                 const response = await fetch(
-                    `https://finnhub.io/api/v1/stock/candle?symbol=${ticker}&resolution=D&from=${Math.floor(Date.now() / 1000 - 5184000)}&to=${Math.floor(Date.now() / 1000)}&token=c5vln0iad3ibtqnna830`
+                    `https://finnhub.io/api/v1/${exchangeType}/candle?symbol=${ticker}&resolution=D&from=${Math.floor(Date.now() / 1000 - 5184000)}&to=${Math.floor(Date.now() / 1000)}&token=c5vln0iad3ibtqnna830`
                     , {
                         method: 'GET'
                     });
@@ -36,18 +38,21 @@ const StockChart: React.FC<Props> = ({ ticker }) => {
                     const stockData = await response.json();
                     const length = stockData.c.length;
                     let newData: DataItem[][] = [];
+                    
+                    if (mounted) {
+                        for (let i = 0; i < length; ++i) {
+                            const date = new Date(stockData.t[i] * 1000);
+                            newData.push([
+                                `${date.getMonth() + 1}-${date.getDate()}`,
+                                stockData.l[i],
+                                stockData.o[i],
+                                stockData.c[i],
+                                stockData.h[i]
+                            ]);
+                        }
+                        SetData(newData);
 
-                    for (let i = 0; i < length; ++i) {
-                        const date = new Date(stockData.t[i] * 1000);
-                        newData.push([
-                            `${date.getMonth() + 1}-${date.getDate()}`,
-                            stockData.l[i],
-                            stockData.o[i],
-                            stockData.c[i],
-                            stockData.h[i]
-                        ]);
                     }
-                    SetData(newData);
                 } else {
                     throw new Error('Failed to fetch the chart');
                 }
@@ -55,13 +60,16 @@ const StockChart: React.FC<Props> = ({ ticker }) => {
         } catch (e) {
             setToast({ type: 'error', message: `${e}` });
         }
-    };
+        return (): void => {
+            mounted = false;
+        };
+    // eslint-disable-next-line
+    }, [ticker]);
 
     useEffect(() => {
         SetData([]);
         fetchPrices();
-    // eslint-disable-next-line
-    }, [ticker]);
+    }, [fetchPrices]);
 
     return (
         <PriceChart>
@@ -69,7 +77,7 @@ const StockChart: React.FC<Props> = ({ ticker }) => {
                 ? <CircularProgress />
                 : <Chart
                     width='100%'
-                    height={600}
+                    height={500}
                     chartType="CandlestickChart"
                     loader={<div>Loading Chart</div>}
                     data={[['date', 'low', 'open', 'close', 'high'], ...data]}

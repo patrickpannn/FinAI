@@ -1,5 +1,13 @@
 [
     {
+        "description": "BITCOIN",
+        "symbol": "BINANCE:BTCUSDT"
+    },
+    {
+        "description": "ETHEREUM",
+        "symbol": "BINANCE:ETHUSDT"
+    },
+    {
         "description": "HOMELAND SAFETY INTERNATIONA",
         "symbol": "HSFI"
     },
