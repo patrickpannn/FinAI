@@ -85,6 +85,7 @@ export default class AnalysisController {
         req: Request,
         res: Response
     ): Promise<void> => {
+        console.log(req.body);
         try {
 
             if (Object.keys(req.body).length !== 1 || !req.body.ticker) {

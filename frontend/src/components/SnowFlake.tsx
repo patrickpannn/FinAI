@@ -1,4 +1,3 @@
-// <block:setup:1>
 import React, { useCallback, useState, useEffect } from 'react';
 import { Radar } from 'react-chartjs-2';
 import { bindActionCreators } from 'redux';
@@ -9,13 +8,6 @@ import { useStyles } from '../styles/snowflake.style';
 const url = process.env.REACT_APP_URL || 'http://localhost:5000';
 interface Props { 
     ticker: string,
-}
-interface Values {
-    value: number,
-    past: number,
-    future: number,
-    health: number,
-    divident: number
 }
 
 const SnowFlake: React.FC<Props> = ({ ticker }) => {
@@ -28,9 +20,9 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
     const [risk, setRisk] = useState(0);
     const [divident, setDivident] = useState(0);
     console.log(ticker);
+
     const fetchSnowflake = useCallback(async (): Promise<void> => {
-        try {
-            
+        try { 
             const response = await fetch(`${url}/analysis/snowflake`, {
                 method: 'POST',
                 headers: {
@@ -41,6 +33,7 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
                     ticker
                 })
             });
+            console.log(response.status);
             if (response.status === 200) {
                 const data = await response.json();
                 console.log(data);
@@ -49,12 +42,12 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
                 setFuture(data.future);
                 setRisk(data.risk);
                 setDivident(data.divident);
-        } else {
-            throw new Error('Failed to data for snowflake');
+            } else {
+                throw new Error('Failed to data for snowflake');
+            }
+        } catch (e) {
+            setToast({ type: 'error', message: `${e}` });
         }
-      } catch (e) {
-          setToast({ type: 'error', message: `${e}` });
-      }
        // eslint-disable-next-line
     }, []);
 
@@ -85,10 +78,11 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
             }
         }
     };
+
     return (
-    <div className={styles.chartContainer}>  
-        <Radar data={data} options={options} />   
-    </div>
+        <div className={styles.chartContainer}>  
+            <Radar data={data} options={options} />   
+        </div>
     );
 };
 export default SnowFlake;
