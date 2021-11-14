@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import Order from '../models/orderModel';
 import Stock from '../models/stockModel';
 import axios from 'axios';
+import { userInfo } from 'os';
 
 enum Direction {
     Sell = "SELL",
@@ -39,6 +40,8 @@ export default class OrderController {
         res: Response
     ): Promise<void> => {
         try {
+            req.user.numOrders ++;
+
             if(!req.body.direction || req.body.direction !== Direction.Buy)
             {
                 throw new Error('Direction given is not correct for this route');
@@ -95,6 +98,8 @@ export default class OrderController {
         res: Response
     ): Promise<void> => {
         try {
+            req.user.numOrders ++;
+
             if(!req.body.direction || req.body.direction !== Direction.Sell)
             {
                 throw new Error('Direction given is not correct for this route');
@@ -146,6 +151,8 @@ export default class OrderController {
             stock.numUnits -= req.body.units;
             await stock.save();
 
+            await req.user.save();
+
             res.status(201).json({ response: 'Successful' });
         } catch (e) {
             res.status(400).json({ error: 'Bad Request' });
@@ -157,6 +164,7 @@ export default class OrderController {
         res: Response
     ): Promise<void> => {
         try {
+            req.user.numOrders --;
 
             const order = await Order.findOne({ 
                 user: req.user.id, 
@@ -180,7 +188,6 @@ export default class OrderController {
             if(req.body.direction === Direction.Buy)
             {
                 req.user.availableBalance += req.body.setPrice * req.body.units;
-                req.user.save();
                 order.delete();
             } else
             {
@@ -199,8 +206,11 @@ export default class OrderController {
                 order.delete();
             }
 
+            await req.user.save();
+
             res.status(200).json({ response: 'Successful' });
         } catch (e) {
+            console.log(e);
             res.status(400).json({ error: 'Bad Request' });
         }
     };

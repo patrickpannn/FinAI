@@ -66,7 +66,7 @@ const OrderSchema = new Schema<OrderInterface>({
     direction: {
         type: String,
         required: true,
-    }
+    },
 }, { timestamps: true });
 
 OrderSchema.methods.getObject = async function (): Promise<{}> {

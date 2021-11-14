@@ -30,6 +30,7 @@ class VerifyOrder {
         next: NextFunction
     ): Promise<void> {
         try {
+
             if(Object.keys(req.body).length !== 6)
             {
                 throw new Error('Invalid input');
