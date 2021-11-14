@@ -66,9 +66,7 @@ const Portfolios: React.FC<Props> = () => {
         },
       });
 
-      if (response.status === 400) {
-        throw new Error('Error');
-      } else {
+      if (response.status === 200) {
         const res = await response.json();
         setPortfoliosList(res);
         let tickerList: string[] = [];
@@ -78,6 +76,8 @@ const Portfolios: React.FC<Props> = () => {
           });
         });
         fetchTickerInfo([...new Set(tickerList)]);
+      } else {
+        throw new Error('Error');
       }
 
     } catch (error) {
@@ -94,9 +94,7 @@ const Portfolios: React.FC<Props> = () => {
         },
       });
 
-      if (response.status === 400) {
-        throw new Error('Error');
-      } else {
+      if (response.status === 200) {
         const res = await response.json();
         if (res.status && res.status === 'error') {
           setToast({ type: 'error', message: `${res.message}` });
@@ -142,6 +140,8 @@ const Portfolios: React.FC<Props> = () => {
           }
           return prev.slice();
         });
+      } else {
+        throw new Error('Error');
       }
 
     } catch (error) {
@@ -179,9 +179,7 @@ const Portfolios: React.FC<Props> = () => {
         })
       });
 
-      if (response.status === 400) {
-        throw new Error('Error');
-      } else {
+      if (response.status === 200) {
         setToast({ type: 'success', message: `Move successfully` });
         setAmount(1);
         setAmountDialog(false);
@@ -191,6 +189,8 @@ const Portfolios: React.FC<Props> = () => {
           ticker: '',
         });
         fetchPortfoliosList();
+      } else {
+        throw new Error('Error');
       }
 
     } catch (error) {
@@ -211,11 +211,11 @@ const Portfolios: React.FC<Props> = () => {
         })
       });
 
-      if (response.status === 400) {
-        throw new Error('Error');
-      } else {
+      if (response.status === 200) {
         setToast({ type: 'success', message: `A New Portfolio Built` });
         fetchPortfoliosList();
+      } else {
+        throw new Error('Error');
       }
 
     } catch (error) {
@@ -236,11 +236,11 @@ const Portfolios: React.FC<Props> = () => {
         })
       });
 
-      if (response.status === 400) {
-        throw new Error('Error');
-      } else {
+      if (response.status === 200) {
         setToast({ type: 'success', message: `Delete a Portfolio successfully` });
         fetchPortfoliosList();
+      } else {
+        throw new Error('Error');
       }
 
     } catch (error) {
@@ -265,12 +265,12 @@ const Portfolios: React.FC<Props> = () => {
           })
         });
 
-        if (response.status === 400) {
-          throw new Error('Error');
-        } else {
+        if (response.status === 200) {
           setToast({ type: 'success', message: `Trade successfully` });
           callback();
           fetchPortfoliosList();
+        } else {
+          throw new Error('Error');
         }
 
       } catch (error) {
