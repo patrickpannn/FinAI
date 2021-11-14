@@ -14,7 +14,7 @@ export default class AnalysisRoute implements Route {
     }
 
     private initializeRoutes(): void {
-        this.router.get(`${this.path}/:companyName`, UserAuthentication.auth, AnalysisController.getSentimentScore);
+        this.router.get(`${this.path}/sentiment/:companyName`, UserAuthentication.auth, AnalysisController.getSentimentScore);
     }
 
     public getRouter(): Router {
