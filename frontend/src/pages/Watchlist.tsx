@@ -3,6 +3,7 @@ import { Main, LeftBar, RightContent, WatchlistTitle, TabContainer, useStyles, S
 import WatchlistTicker from '../components/WatchlistTicker';
 import Stock from '../components/Stock';
 import News from '../components/News';
+import SnowFlake from '../components/SnowFlake';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
@@ -194,6 +195,10 @@ const Watchlist: React.FC<Props> = ({
                             {tab === 'NEWS' && <News
                                 name={currentStockName}
                             />}
+                            {tab === 'ANALYSIS' && <SnowFlake
+                                name={currentTicker}
+                            >
+                            }
                             <StyledTabs
                                 aria-label="tabs"
                             >
