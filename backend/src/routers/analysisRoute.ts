@@ -14,7 +14,7 @@ export default class AnalysisRoute implements Route {
     }
 
     private initializeRoutes(): void {
-        this.router.get(`${this.path}/snowflake`, UserAuthentication.auth, AnalysisController.snowflake);
+        this.router.post(`${this.path}/snowflake`, UserAuthentication.auth, AnalysisController.snowflake);
     }
 
     public getRouter(): Router {

@@ -196,8 +196,8 @@ const Watchlist: React.FC<Props> = ({
                                 name={currentStockName}
                             />}
                             {tab === 'ANALYSIS' && <SnowFlake
-                                name={currentTicker}
-                            >
+                                ticker={currentTicker}
+                            />
                             }
                             <StyledTabs
                                 aria-label="tabs"

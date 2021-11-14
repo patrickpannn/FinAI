@@ -7,7 +7,9 @@ import { useDispatch } from 'react-redux';
 import { useStyles } from '../styles/snowflake.style';
 
 const url = process.env.REACT_APP_URL || 'http://localhost:5000';
-interface Props { }
+interface Props { 
+    ticker: string,
+}
 interface Values {
     value: number,
     past: number,
@@ -16,18 +18,16 @@ interface Values {
     divident: number
 }
 
-const SnowFlake: React.FC<Props> = () => {
+const SnowFlake: React.FC<Props> = ({ ticker }) => {
     const styles = useStyles();
     const dispatch = useDispatch();
     const { setToast } = bindActionCreators(actionCreators, dispatch);
-    const [values, setValues] = useState<Values[]>([]);
     const [value, setValue] = useState(0);
     const [past, setPast] = useState(0);
     const [future, setFuture] = useState(0);
     const [risk, setRisk] = useState(0);
     const [divident, setDivident] = useState(0);
-    const [ticker, setTicker] = useState('AAPL');
-
+    console.log(ticker);
     const fetchSnowflake = useCallback(async (): Promise<void> => {
         try {
             
@@ -40,12 +40,10 @@ const SnowFlake: React.FC<Props> = () => {
                 body: JSON.stringify({
                     ticker
                 })
-
             });
             if (response.status === 200) {
                 const data = await response.json();
                 console.log(data);
-                // setValues(data);
                 setValue(data.value);
                 setPast(data.past);
                 setFuture(data.future);
