@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Main, LeftBar, RightContent, WatchlistTitle, TabContainer, useStyles, StyledTabs, StyledTab } from '../styles/watchlist.style';
 import WatchlistTicker from '../components/WatchlistTicker';
 import Stock from '../components/Stock';
+import News from '../components/News';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
@@ -47,6 +48,7 @@ const Watchlist: React.FC<Props> = ({
             }
             return val;
         });
+        setTab('SUMMARY');
         setTickers(newTickers);
     };
 
@@ -188,6 +190,9 @@ const Watchlist: React.FC<Props> = ({
                                 inWatchlist={inWatchlist}
                                 removeFromWatchlist={removeFromWatchlist}
                                 addToWatchlist={addToWatchlist}
+                            />}
+                            {tab === 'NEWS' && <News
+                                name={currentStockName}
                             />}
                             <StyledTabs
                                 aria-label="tabs"
