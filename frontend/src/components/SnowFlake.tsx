@@ -62,7 +62,7 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
     useEffect(() => {
         fetchSnowflake();
     }, [fetchSnowflake]);
-    
+
     const data = {
         labels: ['Value', 'Future', 'Past', 'Risk', 'Divident'],
         datasets: [
@@ -89,12 +89,13 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
 
     return (
         <div>
-        {display && !hasData && <h1><CircularProgress /></h1>}
-        {display && hasData &&
-            <div className={styles.chartContainer}>  
-                <Radar data={data} options={options} />   
-            </div>
-        }
+            {display && !hasData && <h1><CircularProgress /></h1>}
+
+            {display && hasData &&
+                <div className={styles.chartContainer}>  
+                    <Radar data={data} options={options} />   
+                </div>
+            }
         </div>
     );
 };
