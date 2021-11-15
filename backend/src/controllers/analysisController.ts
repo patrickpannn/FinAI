@@ -3,6 +3,12 @@ import axios from 'axios';
 
 const dividendStock = "OMC";
 
+const stockName = "AAPL";
+
+const SMP500 = "SPX";
+const NASDAQ = "IXIC";
+const DOWJONES = "DJI"
+
 async function getValue(ticker: String, cashFlow: number): Promise<number> {
 
     try {
@@ -25,8 +31,19 @@ async function getValue(ticker: String, cashFlow: number): Promise<number> {
 
 }
 
-function getPast(): number {
-    return 0.2;
+async function getPast(): Promise<number> {
+    try{
+        const response = await axios.get(
+            `https://api.twelvedata.com/time_series?symbol=${NASDAQ}&interval=1month&outputsize=36&apikey=614acd00d55849d19a5fca8f5f6ca17a`);
+
+        const data = response.data;
+        console.log(response.data);
+        return 0.2;
+
+    } catch(e)
+    {
+        return -1;
+    }
 }
 
 function getFuture(): number {
