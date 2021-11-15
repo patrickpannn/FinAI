@@ -195,7 +195,9 @@ const Watchlist: React.FC<Props> = ({
                             {tab === 'NEWS' && <News
                                 name={currentStockName}
                             />}
-                            {tab === 'ANALYSIS' && <Analysis />}
+                            {tab === 'ANALYSIS' && <Analysis
+                                ticker={currentTicker}
+                                stockName={currentStockName} />}
                             <StyledTabs
                                 aria-label="tabs"
                             >

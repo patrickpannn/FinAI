@@ -1,8 +1,6 @@
 import { Button } from '@mui/material';
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-// import { styled } from '@mui/material/styles';
 import styled from 'styled-components';
-
 
 interface StockInfoProps {
     $isloading: boolean,

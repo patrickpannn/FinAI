@@ -1,10 +1,16 @@
 import React from 'react';
+import { Main } from '../styles/analysis.style';
 
-const Analysis: React.FC = () => {
+interface Props {
+    ticker: string,
+    stockName: string,
+}
+
+const Analysis: React.FC<Props> = ({ ticker, stockName }) => {
     return (
-        <div>
-            123
-        </div>
+        <Main>
+            Sentiment Score
+        </Main>
     );
 };
 
