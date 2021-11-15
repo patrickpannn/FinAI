@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
@@ -20,7 +20,7 @@ const Wallet: React.FC<Props> = () => {
     const [balanceColor, setBalanceColor] = useState<Color>('up');
     const [availableBalanceColor, setAvailableBalanceColor] = useState<Color>('up');
 
-    const fetchBalance = async (): Promise<void> => {
+    const fetchBalance = useCallback(async (): Promise<void> => {
         try {
             const response = await fetch(`${url}/user/balance`, {
                 method: 'GET',
@@ -50,8 +50,13 @@ const Wallet: React.FC<Props> = () => {
             setToast({ type: 'error', message: `${e}` });
 
         }
-    };
-    fetchBalance();
+        // eslint-disable-next-line
+    }, []);
+
+    useEffect(() => {
+        fetchBalance();
+    }, [fetchBalance]);
+    
     return (
         <Container>
                 <Box className={styles.container}>
