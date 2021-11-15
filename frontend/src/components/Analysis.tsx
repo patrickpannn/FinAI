@@ -10,7 +10,7 @@ interface Props {
 const Analysis: React.FC<Props> = ({ ticker, stockName }) => {
     return (
         <Main>
-            <SentimentAnalysis />
+            <SentimentAnalysis stockName={stockName} />
         </Main>
     );
 };

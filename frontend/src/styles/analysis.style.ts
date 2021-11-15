@@ -12,13 +12,11 @@ interface ArrowProps {
 }
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
-    drop: {
-        color: "#d12000",
-        position: "absolute",
-        left: '-2%',
-    },
     label: {
-        gridArea: 'label'
+        textAlign: 'center',
+    },
+    progressBar: {
+        marginTop: '60px',
     }
 }));
 
@@ -35,7 +33,6 @@ export const Indicator = styled('div')({
     flexDirection: 'column',
     width: '600px',
     height: '120px',
-    backgroundColor: 'yellow',
     position: 'relative',
 });
 
@@ -43,7 +40,6 @@ export const Step = styled('div')<StepProps>((
     props: StepProps
 ) => ({
     backgroundColor: props.color,
-    // width: '100px',
     flex: '1',
     height: '20px',
 }));
