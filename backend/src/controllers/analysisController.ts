@@ -1,84 +1,6 @@
 import { Request, Response } from 'express';
+import SnowflakeService from '../services/snowflakeService';
 import axios from 'axios';
-
-const dividendStock = "OMC";
-
-async function getValue(ticker: String, cashFlow: number): Promise<number> {
-
-    try {
-        const stockQuote = await axios.get(
-            `https://finnhub.io/api/v1/quote?symbol=${ticker}&token=c5vln0iad3ibtqnna830`);
-
-        if (!stockQuote.data.c) {
-            throw new Error("Unable to get the stock price");
-        }
-
-        const stockValue = cashFlow;
-        const stockCost = stockQuote.data.c;
-
-        const value = (stockCost - stockValue) / stockCost;
-
-        return value;
-    } catch (e) {
-        return -1;
-    }
-
-}
-
-function getPast(): number {
-    return 0.2;
-}
-
-function getFuture(): number {
-    return 0.3;
-}
-
-async function getRisk(
-    stockRiskYear1: number,
-    stockRiskYear2: number
-): Promise<number> {
-
-    try {        
-        let value = 0.5 + ((stockRiskYear1 - stockRiskYear2) / stockRiskYear2);
-
-        if (value > 1) {
-            value = 1;
-        } else if (value < 0) {
-            value = 0;
-        }
-
-        return value;
-    } catch (e) {
-        return -1;
-    }
-}
-
-async function getDividend(stockYield: number): Promise<number> {
-
-    try {
-        const compareResponse = await axios.get(
-            `https://finnhub.io/api/v1/stock/metric?symbol=${dividendStock}&metric=all&token=c5vln0iad3ibtqnna830`);
-
-
-        if (!compareResponse.data.metric.dividendYield5Y) {
-                throw new Error("Unable to determine dividend yield");
-        }
-
-        const comparisonYield = compareResponse.data.metric.dividendYield5Y;
-        
-        let value = 0.8 + ((stockYield - comparisonYield) / comparisonYield);
-
-        if (value > 1) {
-            value = 1;
-        } else if (value < 0) {
-            value = 0;
-        }
-
-        return value;
-    } catch (e) {
-        return -1;
-    }
-}
 
 export default class AnalysisController {
     public static snowflake = async (
@@ -87,12 +9,12 @@ export default class AnalysisController {
     ): Promise<void> => {
         try {
 
-            if (Object.keys(req.body).length !== 1 || !req.body.ticker) {
+            if (Object.keys(req.params).length !== 1 || !req.params.ticker) {
                 throw new Error('Incorrect inputs given');
             }
 
             const stockResponse = await axios.get(
-                `https://finnhub.io/api/v1/stock/metric?symbol=${req.body.ticker}&metric=all&token=c5vln0iad3ibtqnna830`);
+                `https://finnhub.io/api/v1/stock/metric?symbol=${req.params.ticker}&metric=all&token=c5vln0iad3ibtqnna830`);
             
             let valueValue = 0;
 
@@ -102,7 +24,8 @@ export default class AnalysisController {
                 const cashFlow = 
                     stockResponse.data.metric.freeCashFlowPerShareTTM;
 
-                valueValue = await getValue(req.body.ticker, cashFlow);
+                valueValue = await SnowflakeService.getValue(
+                                            req.params.ticker, cashFlow);
             }
 
             let riskValue = 0;
@@ -117,7 +40,8 @@ export default class AnalysisController {
                 const stockRiskYear2 = 
                     stockResponse.data.series.annual.currentRatio[1].v;
 
-                riskValue = await getRisk(stockRiskYear1, stockRiskYear2);
+                riskValue = await SnowflakeService.getRisk(
+                                        stockRiskYear1, stockRiskYear2);
             }    
 
             let dividendValue = 0;
@@ -126,13 +50,13 @@ export default class AnalysisController {
                 dividendValue = -1;
             } else {
                 const stockYield = stockResponse.data.metric.dividendYield5Y;
-                dividendValue = await getDividend(stockYield);
+                dividendValue = await SnowflakeService.getDividend(stockYield);
             }
 
             const snowflake = {
                 value: valueValue,
-                past: getPast(),
-                future: getFuture(),
+                past: await SnowflakeService.getPast(),
+                future: await SnowflakeService.getFuture(),
                 risk: riskValue,
                 dividend: dividendValue
             };
