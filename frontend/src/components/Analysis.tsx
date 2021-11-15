@@ -1,5 +1,6 @@
 import React from 'react';
 import { Main } from '../styles/analysis.style';
+import SentimentAnalysis from './SentimentAnalysis';
 
 interface Props {
     ticker: string,
@@ -9,7 +10,7 @@ interface Props {
 const Analysis: React.FC<Props> = ({ ticker, stockName }) => {
     return (
         <Main>
-            Sentiment Score
+            <SentimentAnalysis />
         </Main>
     );
 };
