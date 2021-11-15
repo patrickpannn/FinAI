@@ -6,7 +6,7 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 class SentimentAnalysis:
     end_date = dt.datetime.today().strftime('%Y%m%d')
-    begin_date = (dt.datetime.today() - dt.timedelta(7)).strftime("%Y%m%d")
+    begin_date = (dt.datetime.today() - dt.timedelta(14)).strftime("%Y%m%d")
 
     def __fetchNews(self):
         res = requests.get(
