@@ -22,7 +22,6 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
     const [risk, setRisk] = useState(0);
     const [divident, setDivident] = useState(0);
     const [display, setDisplay] = useState(false);
-    // console.log(ticker);
 
     const fetchSnowflake = useCallback(async (): Promise<void> => {
         try {
@@ -63,6 +62,7 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
     useEffect(() => {
         fetchSnowflake();
     }, [fetchSnowflake]);
+    
     const data = {
         labels: ['Value', 'Future', 'Past', 'Risk', 'Divident'],
         datasets: [
