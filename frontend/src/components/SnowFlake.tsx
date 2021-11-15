@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
 import { useDispatch } from 'react-redux';
 import { useStyles } from '../styles/snowflake.style';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const url = process.env.REACT_APP_URL || 'http://localhost:5000';
 interface Props { 
@@ -14,37 +15,45 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
     const styles = useStyles();
     const dispatch = useDispatch();
     const { setToast } = bindActionCreators(actionCreators, dispatch);
+    const [hasData, setHasData] = useState(false);
     const [value, setValue] = useState(0);
     const [past, setPast] = useState(0);
     const [future, setFuture] = useState(0);
     const [risk, setRisk] = useState(0);
     const [divident, setDivident] = useState(0);
-    console.log(ticker);
+    const [display, setDisplay] = useState(false);
+    // console.log(ticker);
 
     const fetchSnowflake = useCallback(async (): Promise<void> => {
-        try { 
-            const response = await fetch(`${url}/analysis/snowflake`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
-                },
-                body: JSON.stringify({
-                    ticker
-                })
-            });
-            console.log(response.status);
-            if (response.status === 200) {
-                const data = await response.json();
-                console.log(data);
-                setValue(data.value);
-                setPast(data.past);
-                setFuture(data.future);
-                setRisk(data.risk);
-                setDivident(data.divident);
+        try {
+            if (ticker === 'BINANCE:BTCUSDT' || ticker === 'BINANCE:ETHUSDT') {
+                setDisplay(false);
             } else {
-                throw new Error('Failed to data for snowflake');
+                setHasData(false);
+                const response = await fetch(`${url}/analysis/snowflake`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
+                    },
+                    body: JSON.stringify({
+                        ticker
+                    })
+                });
+                if (response.status === 200) {
+                    const data = await response.json();
+                    setHasData(true);
+                    setDisplay(true);
+                    setValue(data.value);
+                    setPast(data.past);
+                    setFuture(data.future);
+                    setRisk(data.risk);
+                    setDivident(data.divident);
+                } else {
+                    throw new Error('Failed to fetch data for snowflake');
+                }
             }
+            
         } catch (e) {
             setToast({ type: 'error', message: `${e}` });
         }
@@ -54,7 +63,6 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
     useEffect(() => {
         fetchSnowflake();
     }, [fetchSnowflake]);
-
     const data = {
         labels: ['Value', 'Future', 'Past', 'Risk', 'Divident'],
         datasets: [
@@ -80,8 +88,13 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
     };
 
     return (
-        <div className={styles.chartContainer}>  
-            <Radar data={data} options={options} />   
+        <div>
+        {display && !hasData && <h1><CircularProgress /></h1>}
+        {display && hasData &&
+            <div className={styles.chartContainer}>  
+                <Radar data={data} options={options} />   
+            </div>
+        }
         </div>
     );
 };

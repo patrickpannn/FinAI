@@ -65,7 +65,7 @@ async function getDividend(stockYield: number): Promise<number> {
         }
 
         const comparisonYield = compareResponse.data.metric.dividendYield5Y;
-        
+
         let value = 0.8 + ((stockYield - comparisonYield) / comparisonYield);
 
         if (value > 1) {
@@ -85,7 +85,6 @@ export default class AnalysisController {
         req: Request,
         res: Response
     ): Promise<void> => {
-        console.log(req.body);
         try {
 
             if (Object.keys(req.body).length !== 1 || !req.body.ticker) {
@@ -94,7 +93,7 @@ export default class AnalysisController {
 
             const stockResponse = await axios.get(
                 `https://finnhub.io/api/v1/stock/metric?symbol=${req.body.ticker}&metric=all&token=c5vln0iad3ibtqnna830`);
-            
+
             let valueValue = 0;
 
             if (!stockResponse.data.metric.freeCashFlowPerShareTTM) {
@@ -143,4 +142,4 @@ export default class AnalysisController {
             res.status(400).json({ error: 'Bad Request' });
         }
     };
-}
+} 
