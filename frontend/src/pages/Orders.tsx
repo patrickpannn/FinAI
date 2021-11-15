@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useStyles } from '../styles/orders.style';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
@@ -23,7 +23,7 @@ const Orders: React.FC = () => {
     const dispatch = useDispatch();
     const { setToast } = bindActionCreators(actionCreators, dispatch);
     const [orders, setOrders] = useState<OrderInterface[]>([]);
-    const fetchOrders = async (): Promise<void> => {
+    const fetchOrders = useCallback(async (): Promise<void> => {
         try {
             const response = await fetch(`${url}/user/order`, {
                 method: 'GET',
@@ -42,8 +42,12 @@ const Orders: React.FC = () => {
             setToast({ type: 'error', message: `${e}` });
 
         }
-    };
-    fetchOrders();
+        // eslint-disable-next-line
+    }, []);
+
+    useEffect(() => {
+        fetchOrders();
+    }, [fetchOrders]);
 
     return (
         <div className={styles.tableSpace}>
