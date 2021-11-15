@@ -36,27 +36,27 @@ export default class UserController {
             await portfolio.save();
 
             res.status(201).json({ token });
-            
+
         } catch (e) {
             console.log(e);
             res.status(400).json({ error: 'Bad Request.' });
         }
     };
-    
+
     public static logout = async (
         req: Request,
         res: Response
     ): Promise<void> => {
         try {
-            const token = req.token; 
-            const tokens = req.user.tokens; 
-            const stringTokens = tokens.map(String);       
+            const token = req.token;
+            const tokens = req.user.tokens;
+            const stringTokens = tokens.map(String);
             const index = stringTokens.indexOf(token);
             req.user.tokens.splice(index, 1);
             await req.user.save();
 
             res.status(200).json({ response: "Successfully logged out" });
-        } catch(e) {
+        } catch (e) {
             console.log(e);
             res.status(400).json({ error: 'Bad Request.' });
         }
@@ -145,7 +145,6 @@ export default class UserController {
             }
             const code = crypto.randomBytes(3).toString("hex");
             await ResetCode.findOneAndDelete({ user: req.user._id });
-
             const resetCode = new ResetCode({
                 user: req.user._id,
                 code: code
@@ -251,25 +250,27 @@ export default class UserController {
                 throw new Error('Inputs are given but not needed.');
             }
 
-            await User.findOneAndDelete({ _id: req.user._id });
-            await Watchlist.findOneAndDelete({ user: req.user.id });
-            await Order.deleteMany({ user: req.user.id });
-
-            const portfolios = await Portfolio.find({ 
-                user: req.user.id, name: { $ne: "Default" } });
+            const portfolios = await Portfolio.find({
+                user: req.user.id, name: { $ne: "Default" }
+            });
 
             for (let i = 0; i < portfolios.length; i++) {
                 await portfolios[i].deleteOne();
             }
 
-            const defaultPortfolio = await Portfolio.findOne({ 
-                user: req.user.id, name: "Default" });
+            const defaultPortfolio = await Portfolio.findOne({
+                user: req.user.id, name: "Default"
+            });
 
             if (!defaultPortfolio) {
                 throw new Error('Could not delete portfolio');
             }
 
             await defaultPortfolio.deleteOne();
+            await ResetCode.findOneAndDelete({ user: req.user._id });
+            await Watchlist.findOneAndDelete({ user: req.user._id });
+            await Order.deleteMany({ user: req.user._id });
+            await User.findByIdAndDelete(req.user._id);
 
             res.status(200).json({ response: "User Deleted" });
         } catch (e) {
