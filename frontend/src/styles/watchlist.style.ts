@@ -27,7 +27,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         },
     },
     newsContainer: {
-        maxWidth: '100%',
+        width: '100%',
     },
     progressBar: {
         width: '100%',
