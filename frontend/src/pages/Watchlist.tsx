@@ -6,6 +6,7 @@ import News from '../components/News';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
+import Analysis from '../components/Analysis';
 
 const url = process.env.REACT_APP_URL || 'http://localhost:5000';
 
@@ -194,6 +195,7 @@ const Watchlist: React.FC<Props> = ({
                             {tab === 'NEWS' && <News
                                 name={currentStockName}
                             />}
+                            {tab === 'ANALYSIS' && <Analysis />}
                             <StyledTabs
                                 aria-label="tabs"
                             >
