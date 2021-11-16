@@ -22,3 +22,20 @@ Week 5
 Week 6
 - Discussed High Modality Figma pages for sprint 2 and made a sample watch list page
 - Made the news feed functionality working(give a string and match news from New York Times API)
+
+Week 7
+- Made the left hand side list(a list stocks) working and able to add and/delete items from the frontend
+- Arranged a basic format of user history order page
+
+Week 8
+- Extended the watchlist page to be capable of taking other components such as Price component and Analysis component and styled the layout according to the feedback from scrum master
+- Finished the order page frontend
+
+Week 9
+- Fix the frontend order page and News styles according to the feedback from scrum master
+- Finished frontend wallet page
+- Researched the package for doing the frontend sentiment score component
+
+Week 10
+- Finished frontend profile, snowflake
+
