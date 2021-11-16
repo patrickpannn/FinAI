@@ -26,6 +26,7 @@ export const Main = styled('div')({
     height: 'calc(100% - 60px)',
     display: 'flex',
     justifyContent: 'center',
+    flexDirection: 'column',
 });
 
 export const Indicator = styled('div')({

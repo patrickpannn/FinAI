@@ -5,5 +5,12 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         position: "relative",
         height:'300px',
         width:'300px',
+        display: 'block',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+
+    },
+    label: {
+        textAlign: 'center',
     }
 }));

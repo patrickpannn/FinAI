@@ -89,9 +89,12 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
             {display && !hasData && <h1><CircularProgress /></h1>}
 
             {display && hasData &&
+                <>
+                <h2 className={styles.label}>Snowflake Analysis</h2>
                 <div className={styles.chartContainer}>  
                     <Radar data={data} options={options} />   
                 </div>
+                </>
             }
         </div>
     );
