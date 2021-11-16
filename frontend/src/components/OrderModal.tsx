@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
 import StyledDialogTitle from './StyledDialogTitle';
-import { TabContainer, StyledTabs, StyledTab } from '../styles/watchlist.style';
+import { TabContainer, StyledTabs, OrderTab } from '../styles/watchlist.style';
 
 const url = process.env.REACT_APP_URL || 'http://localhost:5000';
 
@@ -29,11 +29,8 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
     ): Promise<void> => {
         e.preventDefault();
         try {
-            if (!parseInt(units, 10)) {
-                console.log(units);
-                throw new Error('Please enter numbers');
-            } else if (+units <= 0) {
-                throw new Error('Units should be positive');
+            if (parseInt(units, 10) === 0 || !parseInt(units, 10)) {
+                throw new Error('Please enter postive number for units');
             }
 
             const response = await fetch(`${url}/user/order/buyMarketOrder`, {
@@ -67,12 +64,14 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
     ): Promise<void> => {
         e.preventDefault();
         try {
-            if (!parseInt(units, 10) || !parseInt(amount, 10)) {
-                console.log(units);
-                console.log(amount);
-                throw new Error('Please enter numbers');
-            } else if (+units <= 0) {
-                throw new Error('Units should be positive');
+            if (parseInt(units, 10) === 0 && parseInt(amount, 10) === 0) {
+                throw new Error('Please enter postive number for expected price and units');
+            } else if (parseInt(units, 10) === 0 && !parseInt(amount, 10)) {
+                throw new Error('Please enter positive number for units');
+            } else if (parseInt(amount, 10) === 0 && !parseInt(units, 10)) {
+                throw new Error('Please enter positive number for expected price');
+            } else if (!parseInt(units, 10) || !parseInt(amount, 10)) {
+                throw new Error('Please enter positive numbers');
             }
 
             const response = await fetch(`${url}/user/order/buyLimitOrder`, {
@@ -109,7 +108,7 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
         >
             { page === 'BUY NOW' && <>
             <StyledDialogTitle id="buy-title" onClose={onClose}>
-                Buy Now
+                Market Order
             </StyledDialogTitle>
             <DialogContent className={styles.container} dividers>
                 <form onSubmit={handleNormal} className={styles.form}>
@@ -136,15 +135,15 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
                 <StyledTabs
                     aria-label="tabs"
                 >
-                    <StyledTab
+                    <OrderTab
                         className = {`${page === 'BUY NOW' && styles.selected}`}
                         onClick={(): void => setPage('BUY NOW')} >
-                        BUY NOW
-                    </StyledTab>
-                    <StyledTab
+                        MARKET ORDER
+                    </OrderTab>
+                    <OrderTab
                         onClick={(): void => setPage('LIMIT ORDER')} >
-                        BUY LIMIT ORDER
-                    </StyledTab>
+                        LIMIT ORDER
+                    </OrderTab>
                 </StyledTabs>
             </TabContainer>
             </>
@@ -187,15 +186,15 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
                 <StyledTabs
                     aria-label="tabs"
                 >
-                    <StyledTab
+                    <OrderTab
                         onClick={(): void => setPage('BUY NOW')} >
-                        BUY NOW
-                    </StyledTab>
-                    <StyledTab
+                        MARKET ORDER
+                    </OrderTab>
+                    <OrderTab
                         className = {`${page === 'LIMIT ORDER' && styles.selected}`}
                         onClick={(): void => setPage('BUY LIMIT ORDER')} >
-                        BUY LIMIT ORDER
-                    </StyledTab>
+                        LIMIT ORDER
+                    </OrderTab>
                 </StyledTabs>
             </TabContainer>
             </>}
