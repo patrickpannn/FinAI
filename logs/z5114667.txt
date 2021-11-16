@@ -41,3 +41,34 @@ Week 6
             - Creating a portfolio
         - Modifying user details code was pushed into develop
         - Minor changes to creating a portfolio were required and were pushed to the branch awaiting final approval
+    - Started code for deleting a portfolio
+
+Week 7
+    - Significant changes to the delete portfolio function code for clarity and consistency
+    - Started code for change a stocks portfolio
+    - Made some efficiency changes around how input fields were checked for a few functions
+    - Created a merging function for when stocks move from portfolio to portfolio
+
+Week 8
+    - Made changes based on changes Andre made to the underlying data structure
+    - Created a list of portfolios function as well as a get balance function
+    - Made even more efficiency changes to error handling as well as code readability
+    - Assisted Andre with some basic functionalities as he was getting swamped with more complex tasks
+    - Began delete user code
+
+Week 9
+    - Finally pushed to get my older pull requested merged, in particular
+        - Delete portfolio
+        - Delete user
+    - Laid out the skeleton code for the snowflake analysis section
+
+Week 10
+    - Completed the value, risk, and dividend sectoin of the snowflake analysis
+    - Final report
+        - Created the final report template
+        - Completed and assistend with sections relating to
+            - Overview
+            - Implmentation Challenges
+            - References
+    - Presentation
+        - Created basic slide layout
