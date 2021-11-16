@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
@@ -20,43 +20,41 @@ const Wallet: React.FC<Props> = () => {
     const [balanceColor, setBalanceColor] = useState<Color>('up');
     const [availableBalanceColor, setAvailableBalanceColor] = useState<Color>('up');
 
-    const fetchBalance = useCallback(async (): Promise<void> => {
-        try {
-            const response = await fetch(`${url}/user/balance`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
-                },
-            });
-            if (response.status === 200) {
-                const data = await response.json();
-                if (data.balance > 0) {
-                    setBalanceColor('up');
-                } else {
-                    setBalanceColor('down');
-                };
-                if (data.availableBalance > 0) {
-                    setAvailableBalanceColor('up');
-                } else {
-                    setAvailableBalanceColor('down');
-                };
-                setBalance(data.balance);
-                setAvailableBalance(data.availableBalance);
-            } else {
-                throw new Error('Failed to fetch user balance');
-            }
-        } catch (e) {
-            setToast({ type: 'error', message: `${e}` });
-
-        }
-        // eslint-disable-next-line
-    }, []);
-
     useEffect(() => {
-        fetchBalance();
-    }, [fetchBalance]);
+        const fetchBalance = async (): Promise<void> => {
+            try {
+                const response = await fetch(`${url}/user/balance`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
+                    },
+                });
+                if (response.status === 200) {
+                    const data = await response.json();
+                    if (data.balance > 0) {
+                        setBalanceColor('up');
+                    } else {
+                        setBalanceColor('down');
+                    };
+                    if (data.availableBalance > 0) {
+                        setAvailableBalanceColor('up');
+                    } else {
+                        setAvailableBalanceColor('down');
+                    };
+                    setBalance(data.balance);
+                    setAvailableBalance(data.availableBalance);
+                } else {
+                    throw new Error('Failed to fetch user balance');
+                }
+            } catch (e) {
+                setToast({ type: 'error', message: `${e}` });
     
+            }
+        };
+        fetchBalance();
+    });
+ 
     return (
         <Container>
                 <Box className={styles.container}>
