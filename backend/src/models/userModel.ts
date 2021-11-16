@@ -36,7 +36,16 @@ const UserSchema = new Schema<UserInterface>({
         default: 0,
         validate(value: number): void {
             if (value < 0) {
-                throw new Error('The cash balance should be greater than 0.');
+                throw new Error('The cash balance must be greater than 0');
+            }
+        }
+    },
+    availableBalance: {
+        type: Number,
+        default: 0,
+        validate(value: number): void {
+            if( value < 0) {
+                throw new Error('The available balance must be greater than 0');
             }
         }
     },
@@ -45,7 +54,11 @@ const UserSchema = new Schema<UserInterface>({
             type: String,
             required: true,
         }
-    }]
+    }],
+    resetToken: {
+        type: String,
+        default: "",
+    }
 });
 
 // The function will be executed before saving the data to the DB
@@ -56,6 +69,21 @@ UserSchema.pre('save', async function (next): Promise<void> {
     }
     next();
 });
+
+//This is a clas method to change the users balance
+UserSchema.methods.changeBalance = function (value: number): boolean {
+    if(this.balance + value < 0)
+    {
+        throw new Error('Your balance is too low to make this request');
+    }
+    if(this.availableBalance + value < 0)
+    {
+        throw new Error('Your available balance is too low to make this request');
+    }
+    this.balance = this.balance + value;
+    this.availableBalance = this.availableBalance + value; 
+    return true;
+};
 
 // This is a class method to generate authentication token
 UserSchema.methods.generateAuth = function (): string {
