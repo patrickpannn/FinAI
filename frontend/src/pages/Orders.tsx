@@ -65,6 +65,7 @@ const Orders: React.FC = () => {
                             <Cell>Total Price</Cell>
                             <Cell>Direction</Cell>
                             <Cell>Portfolio</Cell>
+                            <Cell>Status</Cell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -78,9 +79,10 @@ const Orders: React.FC = () => {
                                     {order.numUnits * order.executePrice}
                                 </Cell>
                                 <Cell>{order.direction}</Cell>
-                                <Cell>
-                                    {order.portfolio}
-                                </Cell>
+                                <Cell>{order.portfolio}</Cell>
+                                {order.executed && 
+                                    <Cell>Executed</Cell>
+                                }
                             </Row>
                         ))}
                     </TableBody>
