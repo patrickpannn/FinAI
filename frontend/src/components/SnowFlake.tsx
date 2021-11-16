@@ -29,15 +29,12 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
                 setDisplay(false);
             } else {
                 setHasData(false);
-                const response = await fetch(`${url}/analysis/snowflake`, {
-                    method: 'POST',
+                const response = await fetch(`${url}/analysis/snowflake/${ticker}`, {
+                    method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
                     },
-                    body: JSON.stringify({
-                        ticker
-                    })
                 });
                 if (response.status === 200) {
                     const data = await response.json();
@@ -70,8 +67,8 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
             label: 'Value',
             data: [value, past, future, risk, divident],
             fill: true, 
-            backgroundColor: 'rgba(54, 162, 235, 1)',
-            borderColor: 'rgb(54, 162, 215)',
+            backgroundColor: '#0017ea',
+            borderColor: '#0017ea',
             borderWidth: 3,
             tension: 0.1,
           },
