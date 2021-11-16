@@ -81,11 +81,8 @@ async function getPast(
         const normalisedIndexValue = indexGrad / (indexPrices[0].close) *100;
 
         return +(1/(1+Math.exp(-(normalisedStockValue - normalisedIndexValue)))).toFixed(2);
- 
-
     } catch(e)
     {
-        console.log(e)
         return -1;
     }
 }
