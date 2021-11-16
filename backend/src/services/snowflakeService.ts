@@ -33,8 +33,19 @@ export default class SnowflakeService {
         return 0.2;
     }
 
-    public static async getFuture(): Promise<number> {
-        return 0.3;
+    public static async getFuture(
+        ticker: string
+    ): Promise<number>{
+        try{
+            const stockResponse = await axios.get(
+                `https://finnhub.io/api/v1/stock/metric?symbol=${ticker}&metric=all&token=c5vln0iad3ibtqnna830`);
+            const latestEBIT = Array(stockResponse.data.series.quarterly.ebitPerShare)[0][0];
+            const scaledEBIT = -0.5*latestEBIT.v;
+            return +(1/(1+Math.exp(-scaledEBIT))).toFixed(2)
+        } catch(e)
+        {
+            return -1;
+        }
     }
 
     public static async getRisk(

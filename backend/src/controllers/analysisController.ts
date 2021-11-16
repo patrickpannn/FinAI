@@ -53,10 +53,12 @@ export default class AnalysisController {
                 dividendValue = await SnowflakeService.getDividend(stockYield);
             }
 
+            const future = await SnowflakeService.getFuture(req.params.ticker);
+            
             const snowflake = {
                 value: valueValue,
                 past: await SnowflakeService.getPast(),
-                future: await SnowflakeService.getFuture(),
+                future: future,
                 risk: riskValue,
                 dividend: dividendValue
             };
