@@ -5,7 +5,6 @@ import dotenv from 'dotenv';
 import PortfolioRoute from './routers/portfolioRoute';
 import AnalysisRoute from './routers/analysisRoute';
 import OrderRoute from './routers/orderRoute';
-
 dotenv.config();
 
 async function main(): Promise<void> {
