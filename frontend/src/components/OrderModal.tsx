@@ -29,10 +29,11 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
     ): Promise<void> => {
         e.preventDefault();
         try {
-            if (parseInt(units, 10) === 0 || !parseInt(units, 10)) {
-                throw new Error('Please enter postive number for units');
+            if (isNaN(+(Number(units)))|| units === '0') {
+                throw new Error('Please enter postive integer for units');
+            } else if (!Number.isInteger(Number(units))) {
+                throw new Error('Please enter postive integer for units');
             }
-
             const response = await fetch(`${url}/user/order/buyMarketOrder`, {
                 method: 'POST',
                 headers: {
@@ -64,16 +65,15 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
     ): Promise<void> => {
         e.preventDefault();
         try {
-            if (parseInt(units, 10) === 0 && parseInt(amount, 10) === 0) {
-                throw new Error('Please enter postive number for expected price and units');
-            } else if (parseInt(units, 10) === 0 && !parseInt(amount, 10)) {
-                throw new Error('Please enter positive number for units');
-            } else if (parseInt(amount, 10) === 0 && !parseInt(units, 10)) {
-                throw new Error('Please enter positive number for expected price');
-            } else if (!parseInt(units, 10) || !parseInt(amount, 10)) {
-                throw new Error('Please enter positive numbers');
-            }
-
+            if (isNaN(+(Number(units))) && isNaN(+(Number(amount)))) {
+                throw new Error('Please enter integers for units and amount');
+            } else if (isNaN(+(Number(units))) || units === '0') {
+                throw new Error('Please enter postive integers');
+            } else if (isNaN(+(Number(amount))) || amount === '0') {
+                throw new Error('Please enter positive integers');
+            } else if (!Number.isInteger(Number(units))) {
+                throw new Error('Please enter postive integer for units');
+            } 
             const response = await fetch(`${url}/user/order/buyLimitOrder`, {
                 method: 'POST',
                 headers: {
