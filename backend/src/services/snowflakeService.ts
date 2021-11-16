@@ -39,8 +39,8 @@ export default class SnowflakeService {
         try{
             const stockResponse = await axios.get(
                 `https://finnhub.io/api/v1/stock/metric?symbol=${ticker}&metric=all&token=c5vln0iad3ibtqnna830`);
-            const latestEBIT = Array(stockResponse.data.series.quarterly.ebitPerShare)[0][0];
-            const scaledEBIT = -0.5*latestEBIT.v;
+            const latestEBIT = Array(stockResponse.data.series.quarterly.ebitPerShare)[0][0].v;
+            const scaledEBIT = 0.1*latestEBIT;
             return +(1/(1+Math.exp(-scaledEBIT))).toFixed(2)
         } catch(e)
         {
