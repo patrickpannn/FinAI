@@ -56,6 +56,12 @@ to check the linting style
 
 to format your codes
 
+### `cd backend/src/AI`
+### then run `pip3 install -r requirements.txt`
+### then run `python3 download.py`
+
+to install python dependencies
+
 
 
 

@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
-import AnalysisController from '../controllers/analysisController';
 import Route from '../interfaces/routeInterface';
+import AnalysisController from '../controllers/analysisController';
 import UserAuthentication from '../middlewares/authentication';
 
 export default class AnalysisRoute implements Route {
@@ -14,7 +14,7 @@ export default class AnalysisRoute implements Route {
     }
 
     private initializeRoutes(): void {
-        this.router.post(`${this.path}/snowflake`, UserAuthentication.auth, AnalysisController.snowflake);
+        this.router.get(`${this.path}/sentiment/:companyName`, UserAuthentication.auth, AnalysisController.getSentimentScore);
     }
 
     public getRouter(): Router {
