@@ -178,7 +178,6 @@ export default class OrderController {
 
             res.status(200).json({ response: 'Successful' });
         } catch (e) {
-            console.log(e);
             res.status(400).json({ error: 'Bad Request' });
         }
     };
