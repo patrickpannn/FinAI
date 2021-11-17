@@ -35,7 +35,7 @@ export default class AnalysisController {
             let valueValue = 0;
 
             if (!stockResponse.data.metric.freeCashFlowPerShareTTM) {
-                valueValue = -1;
+                valueValue = 0;
             } else {
                 const cashFlow = 
                     stockResponse.data.metric.freeCashFlowPerShareTTM;
@@ -48,7 +48,7 @@ export default class AnalysisController {
 
             if (!stockResponse.data.series.annual.currentRatio[0] || 
                 !stockResponse.data.series.annual.currentRatio[1]) {
-                    riskValue = -1;
+                    riskValue = 0;
             } else {
                 const stockRiskYear1 = 
                     stockResponse.data.series.annual.currentRatio[0].v;
@@ -63,7 +63,7 @@ export default class AnalysisController {
             let dividendValue = 0;
 
             if (!stockResponse.data.metric.dividendYield5Y) {
-                dividendValue = -1;
+                dividendValue = 0;
             } else {
                 const stockYield = stockResponse.data.metric.dividendYield5Y;
                 dividendValue = await SnowflakeService.getDividend(stockYield);

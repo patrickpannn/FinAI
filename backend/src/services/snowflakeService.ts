@@ -24,7 +24,7 @@ export default class SnowflakeService {
 
             return value;
         } catch (e) {
-            return -1;
+            return 0;
         }
 
     }
@@ -54,7 +54,7 @@ export default class SnowflakeService {
 
             return value;
         } catch (e) {
-            return -1;
+            return 0;
         }
     }
 
@@ -84,7 +84,7 @@ export default class SnowflakeService {
 
             return value;
         } catch (e) {
-            return -1;
+            return 0;
         }
     }
 }
