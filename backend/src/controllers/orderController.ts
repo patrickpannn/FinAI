@@ -144,6 +144,11 @@ export default class OrderController {
             if (!order) {
                 throw new Error("This order doesn't exist");
             }
+            
+            if(order.executed === true)
+            {
+                throw new Error("Cannot cancel an executed order");
+            }
 
             const units = order.numUnits;
             const price = order.executePrice;
