@@ -25,10 +25,6 @@ export default class AnalysisController {
     ): Promise<void> => {
         try {
 
-            if (Object.keys(req.params).length !== 1 || !req.params.ticker) {
-                throw new Error('Incorrect inputs given');
-            }
-
             const stockResponse = await axios.get(
                 `https://finnhub.io/api/v1/stock/metric?symbol=${req.params.ticker}&metric=all&token=c5vln0iad3ibtqnna830`);
             
