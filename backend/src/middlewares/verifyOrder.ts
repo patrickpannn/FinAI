@@ -75,9 +75,9 @@ class VerifyOrder {
     };
 
     public static async verifyCancelOrder(
-            req: Request,
-            res: Response,
-            next: NextFunction
+        req: Request,
+        res: Response,
+        next: NextFunction
     ): Promise<void> {
         try {
             if(Object.keys(req.body).length !== 1 || !req.body.id)
@@ -92,9 +92,9 @@ class VerifyOrder {
     };
 
     public static async verifyMarketOrder(
-            req: Request,
-            res: Response,
-            next: NextFunction
+        req: Request,
+        res: Response,
+        next: NextFunction
     ): Promise<void> {
         try {
             if(Object.keys(req.body).length !== 4)
