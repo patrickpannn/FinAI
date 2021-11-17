@@ -120,4 +120,18 @@ export const StyledTab = styled('div')({
         backgroundColor: '#d7eafd',
     }
 });
-
+export const OrderTab = styled('div')({
+    flex: 1,
+    borderTop: '1px solid #edece8',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    fontSize: '12pt',
+    fontWeight: 600,
+    color: '#0017ea',
+    fontFamily: 'Arial',
+    '&:hover': {
+        backgroundColor: '#d7eafd',
+    }
+});
