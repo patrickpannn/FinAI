@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import Portfolio from '../models/portfolioModel';
-import Order from '../models/orderModel';
 
 const stockBody = [
     'name',
@@ -75,7 +74,7 @@ class VerifyOrder {
         };
     };
 
-        public static async verifyCancelOrder(
+    public static async verifyCancelOrder(
             req: Request,
             res: Response,
             next: NextFunction
