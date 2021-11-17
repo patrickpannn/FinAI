@@ -11,7 +11,7 @@ class ExecuteOrder {
 
     private socket: Socket;
 
-    private ws: WebSocket = new WebSocket('wss://stream.binance.com:9443/ws/ethusdt@trade/btcusdt@trade');;
+    private ws: WebSocket = new WebSocket('wss://stream.binance.com:9443/ws/ethusdt@trade/btcusdt@trade');
 
     constructor(socket: Socket) {
         this.socket = socket;
