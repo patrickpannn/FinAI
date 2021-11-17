@@ -3,13 +3,14 @@ import { useStyles } from '../styles/orders.style';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
 import { useDispatch } from 'react-redux';
-import { Table, TableContainer , TableHead, TableRow, TableBody } from '@mui/material';
+import { Table, TableContainer , TableHead, TableRow, TableBody, Button } from '@mui/material';
 import { Row, Cell, OrderTitle } from '../styles/orders.style';
 import Paper from '@mui/material/Paper';
 
 const url = process.env.REACT_APP_URL || 'http://localhost:5000';
 
 interface OrderInterface {
+    id: string,
     numUnits: number, 
     executePrice: number,
     ticker: string,
@@ -23,6 +24,7 @@ const Orders: React.FC = () => {
     const dispatch = useDispatch();
     const { setToast } = bindActionCreators(actionCreators, dispatch);
     const [orders, setOrders] = useState<OrderInterface[]>([]);
+    const [id, setId] = useState('');
     const fetchOrders = useCallback(async (): Promise<void> => {
         try {
             const response = await fetch(`${url}/user/order`, {
@@ -34,6 +36,7 @@ const Orders: React.FC = () => {
             });
             if (response.status === 200) {
                 const data = await response.json();
+                console.log(data);
                 setOrders(data);
             } else {
                 throw new Error('Failed to fetch order history');
@@ -45,9 +48,34 @@ const Orders: React.FC = () => {
         // eslint-disable-next-line
     }, []);
 
+    const handleSubmit = async (
+        e: React.FormEvent<HTMLFormElement>
+    ): Promise<void> => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`${url}/user/order/cancelOrder`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id
+                })
+            });
+
+            if (response.status === 200) {
+                setToast({ type: 'success', message: 'Order cancelled' });
+            }
+        } catch (error) {
+            setToast({ type: 'error', message: `${error}` });
+        }
+
+    };
+
     useEffect(() => {
         fetchOrders();
     }, [fetchOrders]);
+
 
     return (
         <div className={styles.tableSpace}>
@@ -68,8 +96,11 @@ const Orders: React.FC = () => {
                             <Cell>Status</Cell>
                         </TableRow>
                     </TableHead>
+                    {/* <form onSubmit={(e): Promise<void> => handleSubmit(e)}> */}
                     <TableBody>
+                    
                         {orders && orders.map(order => (
+                            
                             <Row key= {order.ticker}>
                                 <Cell>{order.ticker}</Cell>
                                 <Cell>{order.name}</Cell>
@@ -83,9 +114,23 @@ const Orders: React.FC = () => {
                                 {order.executed && 
                                     <Cell>Executed</Cell>
                                 }
-                            </Row>
+                                {!order.executed && 
+                                    <>
+                                        <Button
+                                        type="submit"
+                                        variant="contained"
+                                        color="error"
+                                        onClick={(): void => setId(order.id)}
+                                    >
+                                        Cancel
+                                        </Button>
+                                    </>
+                                }
+                            </Row>                 
                         ))}
+                        
                     </TableBody>
+                    {/* </form> */}
                 </Table>
             </TableContainer>
         </div>
