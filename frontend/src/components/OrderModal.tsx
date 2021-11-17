@@ -29,10 +29,10 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
     ): Promise<void> => {
         e.preventDefault();
         try {
-            
-            if (isNaN(+(Number(units)))|| parseFloat(units) <= 0) {
+
+            if (isNaN(+(Number(units))) || parseFloat(units) <= 0) {
                 throw new Error('Please enter postive number for units');
-            } 
+            }
             const response = await fetch(`${url}/user/order/buyMarketOrder`, {
                 method: 'POST',
                 headers: {
@@ -68,7 +68,7 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
                 throw new Error('Please enter positive numbers');
             } else if (parseFloat(amount) <= 0 || parseFloat(units) <= 0) {
                 throw new Error('Please enter positive numbers');
-            } 
+            }
             const response = await fetch(`${url}/user/order/buyLimitOrder`, {
                 method: 'POST',
                 headers: {
@@ -78,9 +78,9 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
                 body: JSON.stringify({
                     name: stockName,
                     ticker: ticker,
-                    setPrice: amount, 
+                    setPrice: amount,
                     units: units,
-                    direction: 'BUY', 
+                    direction: 'BUY',
                     portfolio: 'Default',
                 }),
             });
@@ -102,101 +102,102 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
             aria-labelledby="buy order"
             open={open}
         >
-            { page === 'BUY NOW' && <>
-                <StyledDialogTitle id="buy-title" onClose={onClose}>
-                    Market Order
-                </StyledDialogTitle>
-                <DialogContent className={styles.container} dividers>
-                    <form onSubmit={handleNormal} className={styles.form}>
-                        <TextField
-                            id="outlined-number"
-                            label="Units"
-                            type="text"
-                            value={units}
-                            onChange={
-                                (e): void => setUnits(e.target.value)
-                            }
-                            required
-                            fullWidth
-                        />
-                        <DialogActions>
-                            <SubmitButton autoFocus type='submit' variant="contained">
-                                Place buy Order
-                            </SubmitButton>
-                        </DialogActions>
-                    </form>
-                </DialogContent>
-            {(ticker === 'BINANCE:BTCUSDT' || ticker === 'BINANCE:ETHUSDT') &&
+            {page === 'BUY NOW' &&
                 <>
+                    <StyledDialogTitle id="buy-title" onClose={onClose}>
+                        Market Order
+                    </StyledDialogTitle>
+                    <DialogContent className={styles.container} dividers>
+                        <form onSubmit={handleNormal} className={styles.form}>
+                            <TextField
+                                id="outlined-number"
+                                label="Units"
+                                type="text"
+                                value={units}
+                                onChange={
+                                    (e): void => setUnits(e.target.value)
+                                }
+                                required
+                                fullWidth
+                            />
+                            <DialogActions>
+                                <SubmitButton autoFocus type='submit' variant="contained">
+                                    Place buy Order
+                                </SubmitButton>
+                            </DialogActions>
+                        </form>
+                    </DialogContent>
+                    {(ticker === 'BINANCE:BTCUSDT' || ticker === 'BINANCE:ETHUSDT') &&
+                        <>
+                            <TabContainer>
+                                <StyledTabs
+                                    aria-label="tabs"
+                                >
+                                    <OrderTab
+                                        className={`${page === 'BUY NOW' && styles.selected}`}
+                                        onClick={(): void => setPage('BUY NOW')} >
+                                        MARKET ORDER
+                                    </OrderTab>
+                                    <OrderTab
+                                        onClick={(): void => setPage('LIMIT ORDER')} >
+                                        LIMIT ORDER
+                                    </OrderTab>
+                                </StyledTabs>
+                            </TabContainer>
+                        </>
+                    }
+                </>
+            }
+            {page === 'LIMIT ORDER' &&
+                <>
+                    <StyledDialogTitle id="buy-title" onClose={onClose}>
+                        Limit Order
+                    </StyledDialogTitle>
+                    <DialogContent className={styles.container} dividers>
+                        <form onSubmit={handleLimit} className={styles.form}>
+                            <TextField
+                                label="Price"
+                                type="text"
+                                value={amount}
+                                onChange={
+                                    (e): void => setAmount(e.target.value)
+                                }
+                                required
+                                fullWidth
+                            />
+                            <TextField
+                                label="Units"
+                                type="text"
+                                value={units}
+                                onChange={
+                                    (e): void => setUnits(e.target.value)
+                                }
+                                required
+                                fullWidth
+                            />
+                            <DialogActions>
+                                <SubmitButton autoFocus type='submit' variant="contained">
+                                    Place Limit Order
+                                </SubmitButton>
+                            </DialogActions>
+                        </form>
+                    </DialogContent>
                     <TabContainer>
                         <StyledTabs
                             aria-label="tabs"
                         >
                             <OrderTab
-                                className = {`${page === 'BUY NOW' && styles.selected}`}
                                 onClick={(): void => setPage('BUY NOW')} >
                                 MARKET ORDER
                             </OrderTab>
                             <OrderTab
-                                onClick={(): void => setPage('LIMIT ORDER')} >
+                                className={`${page === 'LIMIT ORDER' && styles.selected}`}
+                                onClick={(): void => setPage('BUY LIMIT ORDER')} >
                                 LIMIT ORDER
                             </OrderTab>
                         </StyledTabs>
                     </TabContainer>
-                </>
-            }
-            </>
-            }
-            { page === 'LIMIT ORDER' && 
-            <>
-            <StyledDialogTitle id="buy-title" onClose={onClose}>
-                Limit Order
-            </StyledDialogTitle>
-            <DialogContent className={styles.container} dividers>
-                <form onSubmit={handleLimit} className={styles.form}>
-                    <TextField
-                        label="Price"
-                        type="text"
-                        value={amount}
-                        onChange={
-                            (e): void => setAmount(e.target.value)
-                        }
-                        required
-                        fullWidth
-                    />
-                    <TextField
-                        label="Units"
-                        type="text"
-                        value={units}
-                        onChange={
-                            (e): void => setUnits(e.target.value)
-                        }
-                        required
-                        fullWidth
-                    />
-                    <DialogActions>
-                        <SubmitButton autoFocus type='submit' variant="contained">
-                            Place Limit Order
-                        </SubmitButton>
-                    </DialogActions>
-                </form>
-            </DialogContent>
-                <TabContainer>
-                <StyledTabs
-                    aria-label="tabs"
-                >
-                    <OrderTab
-                        onClick={(): void => setPage('BUY NOW')} >
-                        MARKET ORDER
-                    </OrderTab>
-                    <OrderTab
-                        className = {`${page === 'LIMIT ORDER' && styles.selected}`}
-                        onClick={(): void => setPage('BUY LIMIT ORDER')} >
-                        LIMIT ORDER
-                    </OrderTab>
-                </StyledTabs>
-            </TabContainer>
-            </>}
+                </>}
         </BootstrapDialog>
     );
 };
