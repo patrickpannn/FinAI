@@ -30,8 +30,8 @@ export default class AnalysisController {
     ): Promise<void> => {
         try {
 
-            if(req.body.ticker === SnowflakeAnalysisIgnore.bitcoin 
-                || req.body.ticker === SnowflakeAnalysisIgnore.ethereum) {
+            if(req.params.ticker === SnowflakeAnalysisIgnore.bitcoin 
+                || req.params.ticker === SnowflakeAnalysisIgnore.ethereum) {
                 throw new Error('Bad Request');
             }
 
