@@ -15,8 +15,9 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
-import PortfoliosContent from './PortfoliosContent';
 import { useStyles } from '../styles/portfolios.style';
+import PortfoliosContent from './PortfoliosContent';
+
 
 const url = process.env.REACT_APP_URL || 'http://localhost:5000';
 
@@ -118,7 +119,7 @@ const Portfolios: React.FC<Props> = () => {
               let total: number = 0;
               i.stocks.forEach((j: Stock) => {
                 j.close = Number(res.values[0].close);
-                j.profit_loss = j.close - j.averagePrice;
+                j.profit_loss = (j.close - j.averagePrice) * j.numUnits;
                 total += j.profit_loss;
               });
               i.total = total;
@@ -140,7 +141,7 @@ const Portfolios: React.FC<Props> = () => {
                 }
                 if (value.status === 'ok') {
                   j.close = value ? Number(value.values[0].close) : 0;
-                  j.profit_loss = j.close - j.averagePrice;
+                  j.profit_loss = (j.close - j.averagePrice) * j.numUnits;
                 } else {
                   j.close = 0;
                   j.profit_loss = 0;
