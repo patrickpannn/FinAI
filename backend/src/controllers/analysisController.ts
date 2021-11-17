@@ -3,6 +3,11 @@ import PythonService from '../services/pythonService';
 import SnowflakeService from '../services/snowflakeService';
 import axios from 'axios';
 
+enum SnowflakeAnalysisIgnore {
+    bitcoin = "BINANCE:BTCUSDT",
+    ethereum = "BINANCE:ETHUSDT"
+};
+
 export default class AnalysisController {
     // this is the controller to get sentiment score
     public static getSentimentScore = async (
@@ -25,8 +30,9 @@ export default class AnalysisController {
     ): Promise<void> => {
         try {
 
-            if (Object.keys(req.params).length !== 1 || !req.params.ticker) {
-                throw new Error('Incorrect inputs given');
+            if(req.params.ticker === SnowflakeAnalysisIgnore.bitcoin 
+                || req.params.ticker === SnowflakeAnalysisIgnore.ethereum) {
+                throw new Error('Bad Request');
             }
 
             const stockResponse = await axios.get(
@@ -35,10 +41,11 @@ export default class AnalysisController {
             let valueValue = 0;
 
             if (!stockResponse.data.metric.freeCashFlowPerShareTTM) {
-                valueValue = -1;
+                valueValue = 0;
             } else {
                 const cashFlow = 
-                    stockResponse.data.metric.freeCashFlowPerShareTTM;
+                    stockResponse.data.metric.freeCashFlowPerShareTTM /
+                    (1 - 0.05);
 
                 valueValue = await SnowflakeService.getValue(
                                             req.params.ticker, cashFlow);
@@ -48,7 +55,7 @@ export default class AnalysisController {
 
             if (!stockResponse.data.series.annual.currentRatio[0] || 
                 !stockResponse.data.series.annual.currentRatio[1]) {
-                    riskValue = -1;
+                    riskValue = 0;
             } else {
                 const stockRiskYear1 = 
                     stockResponse.data.series.annual.currentRatio[0].v;
@@ -63,7 +70,7 @@ export default class AnalysisController {
             let dividendValue = 0;
 
             if (!stockResponse.data.metric.dividendYield5Y) {
-                dividendValue = -1;
+                dividendValue = 0;
             } else {
                 const stockYield = stockResponse.data.metric.dividendYield5Y;
                 dividendValue = await SnowflakeService.getDividend(stockYield);
