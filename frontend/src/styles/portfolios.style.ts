@@ -13,9 +13,13 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
 		padding: '20px'
 	},
 	label: {
-		color: '#0017ea'
+		color: '#0017ea!important'
 	},
 	create_btn: {
 		backgroundColor: '#0017ea!important'
+	},
+	delete_btn: {
+		color: '#0017ea!important',
+		border: '1px solid #0017ea!important'
 	}
 }));

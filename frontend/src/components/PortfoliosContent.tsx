@@ -57,7 +57,7 @@ const PortfoliosContent: React.FC<Props> =
 		return <Stack ref={drop} className={styles.content} spacing={2}>
 			<Stack sx={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }} >
 				<span>{name}</span>
-				{name !== 'Default' && <Button className={styles.label} variant="outlined" onClick={(): void => onDelete(name)}>Delete</Button>}
+				{name !== 'Default' && <Button className={styles.delete_btn} variant="outlined" onClick={(): void => onDelete(name)}>Delete</Button>}
 			</Stack>
 			<TableContainer component={Paper}>
 				<Table sx={{ minWidth: 650 }} aria-label="simple table">
