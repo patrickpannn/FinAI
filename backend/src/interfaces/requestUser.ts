@@ -10,6 +10,7 @@ export interface UserInterface extends Document {
     availableBalance: number,
     tokens: Token[],
     resetToken: string,
+    numOrders: number,
     generateAuth: () => string,
     changeBalance: (value : number) => boolean;
 };
