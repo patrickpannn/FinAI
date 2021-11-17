@@ -32,7 +32,6 @@ const App: React.FC<Props> = () => {
                         <ForgotPassword />
                     </Route>
                 </Switch>
-
             </Router>
         </>
     );
