@@ -44,7 +44,8 @@ export default class AnalysisController {
                 valueValue = 0;
             } else {
                 const cashFlow = 
-                    stockResponse.data.metric.freeCashFlowPerShareTTM;
+                    stockResponse.data.metric.freeCashFlowPerShareTTM /
+                    (1 - 0.05);
 
                 valueValue = await SnowflakeService.getValue(
                                             req.params.ticker, cashFlow);
