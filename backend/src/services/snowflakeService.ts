@@ -43,17 +43,6 @@ export default class SnowflakeService {
         ticker: string
     ): Promise<number>{
         try{
-            /*
-            const indices = [
-                await axios.get(
-                    `https://api.twelvedata.com/time_series?symbol=${NASDAQ}&interval=1month&outputsize=12&apikey=614acd00d55849d19a5fca8f5f6ca17a`),
-                await axios.get(
-                    `https://api.twelvedata.com/time_series?symbol=${SMP500}&interval=1month&outputsize=12&apikey=614acd00d55849d19a5fca8f5f6ca17a`),
-                await axios.get(
-                    `https://api.twelvedata.com/time_series?symbol=${DOWJONES}&interval=1month&outputsize=12&apikey=614acd00d55849d19a5fca8f5f6ca17a`),
-                ] as const;
-            console.log(indices[0].data);
-            */
             const stockResponse = await axios.get(
               `https://finnhub.io/api/v1/stock/candle?symbol=${ticker}&resolution=M&from=${Math.floor(Date.now() / 1000 - 31536000)}&to=${Math.floor(Date.now() / 1000)}&token=c5vln0iad3ibtqnna830`);
     
@@ -78,17 +67,28 @@ export default class SnowflakeService {
             const indexPrices = index.data.values;
     
             let indexDiffSum: number = 0.0;
-            for(let currentX: number = indexPrices.length-1; currentX> 0; currentX--){
+            for(let currentX: number = indexPrices.length-1; 
+                                        currentX> 0; currentX--){
+
                 if(currentX !== indexPrices.length){
-                    indexDiffSum += indexPrices[currentX-1].close-indexPrices[currentX].close;
+                    indexDiffSum += 
+                        Number(indexPrices[currentX-1].close)-
+                        Number(indexPrices[currentX].close);
                 }
+
             }
             const indexGrad = indexDiffSum/(indexPrices.length-1);
     
-            const normalisedStockValue = stockGrad / (stockPrices[stockPrices.length-1]) * 100;
-            const normalisedIndexValue = indexGrad / (indexPrices[0].close) *100;
+            const normalisedStockValue = stockGrad / 
+                Number(stockPrices[stockPrices.length-1]) * 100;
+
+            const normalisedIndexValue = indexGrad / 
+                Number(indexPrices[0].close) * 100;
     
-            return +(1/(1+Math.exp(-(normalisedStockValue - normalisedIndexValue)))).toFixed(2);
+            return +(1/(1+
+                Math.exp(-(normalisedStockValue - normalisedIndexValue))))
+                .toFixed(2);
+
         } catch(e)
         {
             return -1;
@@ -101,9 +101,14 @@ export default class SnowflakeService {
         try{
             const stockResponse = await axios.get(
                 `https://finnhub.io/api/v1/stock/metric?symbol=${ticker}&metric=all&token=c5vln0iad3ibtqnna830`);
-            const latestEBIT = Array(stockResponse.data.series.quarterly.ebitPerShare)[0][0].v;
+
+            const latestEBIT = 
+                Array(stockResponse.data.series.quarterly.ebitPerShare)[0][0].v;
             const scaledEBIT = 0.1*latestEBIT;
-            return +(1/(1+Math.exp(-scaledEBIT))).toFixed(2)
+            
+            return +(1/(1+
+                Math.exp(-scaledEBIT))).toFixed(2);
+                
         } catch(e)
         {
             return -1;
