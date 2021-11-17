@@ -20,7 +20,7 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
     const [past, setPast] = useState(0);
     const [future, setFuture] = useState(0);
     const [risk, setRisk] = useState(0);
-    const [divident, setDivident] = useState(0);
+    const [dividend, setDividend] = useState(0);
     const [display, setDisplay] = useState(false);
 
     const fetchSnowflake = useCallback(async (): Promise<void> => {
@@ -44,7 +44,7 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
                     setPast(data.past);
                     setFuture(data.future);
                     setRisk(data.risk);
-                    setDivident(data.divident);
+                    setDividend(data.dividend);
                 } else {
                     throw new Error('Failed to fetch data for snowflake');
                 }
@@ -61,11 +61,11 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
     }, [fetchSnowflake]);
 
     const data = {
-        labels: ['Value', 'Future', 'Past', 'Risk', 'Divident'],
+        labels: ['Value', 'Future', 'Past', 'Risk', 'Dividend'],
         datasets: [
           {
             label: 'Value',
-            data: [value, past, future, risk, divident],
+            data: [value, past, future, risk, dividend],
             fill: true, 
             backgroundColor: '#0017ea',
             borderColor: '#0017ea',
