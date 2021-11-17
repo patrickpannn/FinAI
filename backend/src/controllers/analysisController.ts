@@ -3,6 +3,11 @@ import PythonService from '../services/pythonService';
 import SnowflakeService from '../services/snowflakeService';
 import axios from 'axios';
 
+enum SnowflakeAnalysisIgnore {
+    bitcoin = "BINANCE:BTCUSDT",
+    ethereum = "BINANCE:ETHUSDT"
+};
+
 export default class AnalysisController {
     // this is the controller to get sentiment score
     public static getSentimentScore = async (
@@ -24,6 +29,11 @@ export default class AnalysisController {
         res: Response
     ): Promise<void> => {
         try {
+
+            if(req.body.ticker === SnowflakeAnalysisIgnore.bitcoin 
+                || req.body.ticker === SnowflakeAnalysisIgnore.ethereum) {
+                throw new Error('Bad Request');
+            }
 
             const stockResponse = await axios.get(
                 `https://finnhub.io/api/v1/stock/metric?symbol=${req.params.ticker}&metric=all&token=c5vln0iad3ibtqnna830`);
