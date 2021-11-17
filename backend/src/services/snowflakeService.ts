@@ -20,7 +20,9 @@ export default class SnowflakeService {
             const stockValue = cashFlow;
             const stockCost = stockQuote.data.c;
 
-            let value = (stockCost - stockValue) / stockCost;
+            let x = (stockCost - stockValue) / stockCost;
+            
+            let value = let value = 1 / (1 + Math.exp(-x));
 
             if (value > 1) {
                 value = 1;
@@ -49,8 +51,9 @@ export default class SnowflakeService {
     ): Promise<number> {
 
         try {        
-            let value = 0.5 +
-                        ((stockRiskYear1 - stockRiskYear2) / stockRiskYear2);
+            let x = (stockRiskYear1 - stockRiskYear2) / stockRiskYear2;
+            
+            let value = 1 / (1 + Math.exp(x));
 
             if (value > 1) {
                 value = 1;
@@ -79,8 +82,10 @@ export default class SnowflakeService {
 
             const comparisonYield = compareResponse.data.metric.dividendYield5Y;
             
-            let value = 0.8 +
+            let x = 0.8 +
                         ((stockYield - comparisonYield) / comparisonYield);
+
+            let value = 1 / (1 + Math.exp(-x));
 
             if (value > 1) {
                 value = 1;
