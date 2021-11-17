@@ -45,3 +45,23 @@
 12/11/2021:
 - Working on data pre-processing for RNN's
 - Considering using "basic financials" api data from finnhub
+
+13/11/2021:
+- Working on past performance snowflake indicator
+- Working on finding api which has data for global indices -> finnhub does not provide
+- Selected and testing twelvedata api
+- found activation function to map results from 0 to 1
+
+14/11/2021:
+- Working on future performance snowflake indicator
+- Looked into another potential RNN implementation
+- Researching interpolating methods of future price prediction rather than Sentiment Analysis based
+   - Results are less than spectacular
+   - Work needs to be done to predict long-term stock price behaviour -> currently extremely volatile
+- Simpler implementation developed -> using EbitPerShare ratio
+   - good indicator of stock health and future potential (too high a ratio and the stock is overvalues, too low and the stock is undervalued)
+
+
+16/11/2021:
+- Refactored codebase for snowflake analysis past and future methods
+- looked into RNN method again, no headway made :(
