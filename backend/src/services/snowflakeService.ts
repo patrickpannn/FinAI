@@ -79,14 +79,14 @@ export default class SnowflakeService {
             }
             const indexGrad = indexDiffSum/(indexPrices.length-1);
     
-            const normalisedStockValue = stockGrad / 
+            const stockValueGrowth = stockGrad / 
                 Number(stockPrices[stockPrices.length-1]) * 100;
 
-            const normalisedIndexValue = indexGrad / 
+            const indexValueGrowth = indexGrad / 
                 Number(indexPrices[0].close) * 100;
     
             return +(1/(1+
-                Math.exp(-(normalisedStockValue - normalisedIndexValue))))
+                Math.exp(-(stockValueGrowth - indexValueGrowth))))
                 .toFixed(2);
 
         } catch(e)
