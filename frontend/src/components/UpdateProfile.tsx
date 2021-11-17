@@ -11,10 +11,11 @@ const url = process.env.REACT_APP_URL || 'http://localhost:5000';
 
 interface Props {
     open: boolean,
-    onClose: () => void;
+    onClose: () => void,
+    updateLogin: (val: boolean) => void,
 }
 
-const UpdateProfile: React.FC<Props> = ({ open, onClose }) => {
+const UpdateProfile: React.FC<Props> = ({ open, onClose, updateLogin }) => {
     const styles = useStyles();
     const history = useHistory();
     const dispatch = useDispatch();
@@ -56,7 +57,8 @@ const UpdateProfile: React.FC<Props> = ({ open, onClose }) => {
 
                 if (response.status === 200) {
                     if (password) {
-                        sessionStorage.setItem('access_token', '');
+                        sessionStorage.clear();
+                        updateLogin(false);
                         history.push('/');
                         setToast({ type: 'success', message: 'Password updated, please login again' });
                     } else {

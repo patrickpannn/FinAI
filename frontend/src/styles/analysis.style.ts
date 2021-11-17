@@ -17,15 +17,21 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     progressBar: {
         marginTop: '60px',
-    }
+    },
+    box: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: '40px 0',
+    },
 }));
 
 export const Main = styled('div')({
     width: '70%',
     margin: '0 auto',
     height: 'calc(100% - 60px)',
-    display: 'flex',
-    justifyContent: 'center',
 });
 
 export const Indicator = styled('div')({
@@ -41,7 +47,7 @@ export const Step = styled('div')<StepProps>((
 ) => ({
     backgroundColor: props.color,
     flex: '1',
-    height: '20px',
+    height: '30px',
 }));
 
 
