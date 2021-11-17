@@ -23,12 +23,13 @@ class ExecuteOrder {
 
     private setupConnection(): void {
         this.socket.on("join", ({ token }) => {
-            const userId = jwt.verify(token, accessKey);
-            this.checkPrice(userId);
+            this.checkPrice(token);
         });
     };
 
-    private checkPrice(userId: JwtPayload | string): void {
+    private async checkPrice(token: string): Promise<void> {
+
+        const userId = jwt.verify(token, accessKey) as JwtPayload;
         this.ws.onopen = (): void => {
             console.log("Binance socket open");
         };
@@ -41,13 +42,14 @@ class ExecuteOrder {
             const symbol = stockObj.s;
             try {
                 const orders = await Order.find({
-                    _id: userId,
+                    user: userId._id,
                     executed: false
                 });
                 for (const order of orders) {
                     const ticker = order.ticker.replace("BINANCE:", "");
                     if (ticker === symbol) {
                         if (order.direction === 'BUY' && order.executePrice >= marketPrice) {
+                            console.log("executed");
                             order.executed = true;
                             await order.save();
                             this.socket.emit('notification', 'Buy Order Executed!');
