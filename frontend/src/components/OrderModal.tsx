@@ -31,7 +31,7 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
         try {
             
             if (isNaN(+(Number(units)))|| parseFloat(units) <= 0) {
-                throw new Error('Please enter postive integer for units');
+                throw new Error('Please enter postive number for units');
             } 
             const response = await fetch(`${url}/user/order/buyMarketOrder`, {
                 method: 'POST',
@@ -65,11 +65,11 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
         e.preventDefault();
         try {
             if (isNaN(+(Number(units))) && isNaN(+(Number(amount)))) {
-                throw new Error('Please enter integers for units and amount');
+                throw new Error('Please enter numbers for units and amount');
             } else if (isNaN(+(Number(units))) || isNaN(+(Number(amount)))) {
-                throw new Error('Please enter postive integers');
+                throw new Error('Please enter postive numbers');
             } else if (parseFloat(amount) <= 0 || parseFloat(units) <= 0) {
-                throw new Error('Please enter positive integers');
+                throw new Error('Please enter positive numbers');
             } 
             const response = await fetch(`${url}/user/order/buyLimitOrder`, {
                 method: 'POST',
@@ -105,47 +105,47 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
             open={open}
         >
             { page === 'BUY NOW' && <>
-            <StyledDialogTitle id="buy-title" onClose={onClose}>
-                Market Order
-            </StyledDialogTitle>
-            <DialogContent className={styles.container} dividers>
-                <form onSubmit={handleNormal} className={styles.form}>
-                    <TextField
-                        id="outlined-number"
-                        label="Units"
-                        type="text"
-                        value={units}
-                        onChange={
-                            (e): void => setUnits(e.target.value)
-                        }
-                        required
-                        fullWidth
-                    />
-                    <DialogActions>
-                        <SubmitButton autoFocus type='submit' variant="contained">
-                            Place buy Order
-                        </SubmitButton>
-                    </DialogActions>
-                </form>
-            </DialogContent>
+                <StyledDialogTitle id="buy-title" onClose={onClose}>
+                    Market Order
+                </StyledDialogTitle>
+                <DialogContent className={styles.container} dividers>
+                    <form onSubmit={handleNormal} className={styles.form}>
+                        <TextField
+                            id="outlined-number"
+                            label="Units"
+                            type="text"
+                            value={units}
+                            onChange={
+                                (e): void => setUnits(e.target.value)
+                            }
+                            required
+                            fullWidth
+                        />
+                        <DialogActions>
+                            <SubmitButton autoFocus type='submit' variant="contained">
+                                Place buy Order
+                            </SubmitButton>
+                        </DialogActions>
+                    </form>
+                </DialogContent>
             {ticker === 'BINANCE:BTCUSDT' || ticker === 'BINANCE:ETHUSDT' &&
-            <>
-                <TabContainer>
-                    <StyledTabs
-                        aria-label="tabs"
-                    >
-                        <OrderTab
-                            className = {`${page === 'BUY NOW' && styles.selected}`}
-                            onClick={(): void => setPage('BUY NOW')} >
-                            MARKET ORDER
-                        </OrderTab>
-                        <OrderTab
-                            onClick={(): void => setPage('LIMIT ORDER')} >
-                            LIMIT ORDER
-                        </OrderTab>
-                    </StyledTabs>
-                </TabContainer>
-            </>
+                <>
+                    <TabContainer>
+                        <StyledTabs
+                            aria-label="tabs"
+                        >
+                            <OrderTab
+                                className = {`${page === 'BUY NOW' && styles.selected}`}
+                                onClick={(): void => setPage('BUY NOW')} >
+                                MARKET ORDER
+                            </OrderTab>
+                            <OrderTab
+                                onClick={(): void => setPage('LIMIT ORDER')} >
+                                LIMIT ORDER
+                            </OrderTab>
+                        </StyledTabs>
+                    </TabContainer>
+                </>
             }
             </>
             }
@@ -157,7 +157,7 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
             <DialogContent className={styles.container} dividers>
                 <form onSubmit={handleLimit} className={styles.form}>
                     <TextField
-                        label="Expected Price"
+                        label="Price"
                         type="text"
                         value={amount}
                         onChange={
