@@ -1,12 +1,10 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model } from 'mongoose';
+import { PortfolioInterface } from '../interfaces/requestPortfolio';
 import Stock from './stockModel';
 import Portfolio from './portfolioModel';
 import Order from './orderModel';
 
-interface PortfolioInterface extends Document {
-    user: Schema.Types.ObjectId,
-    name: string
-};
+
 
 const PortfolioSchema = new Schema<PortfolioInterface>({
     user: {
