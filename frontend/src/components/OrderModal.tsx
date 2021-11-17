@@ -30,7 +30,7 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
         e.preventDefault();
         try {
             
-            if (isNaN(+(Number(units)))|| parseFloat(units) === 0) {
+            if (isNaN(+(Number(units)))|| parseFloat(units) <= 0) {
                 throw new Error('Please enter postive integer for units');
             } 
             const response = await fetch(`${url}/user/order/buyMarketOrder`, {
@@ -66,9 +66,9 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
         try {
             if (isNaN(+(Number(units))) && isNaN(+(Number(amount)))) {
                 throw new Error('Please enter integers for units and amount');
-            } else if (isNaN(+(Number(units))) && parseFloat(units) === 0) {
+            } else if (isNaN(+(Number(units))) || isNaN(+(Number(amount)))) {
                 throw new Error('Please enter postive integers');
-            } else if (isNaN(+(Number(amount))) && parseFloat(amount) === 0) {
+            } else if (parseFloat(amount) <= 0 || parseFloat(units) <= 0) {
                 throw new Error('Please enter positive integers');
             } 
             const response = await fetch(`${url}/user/order/buyLimitOrder`, {
@@ -78,11 +78,12 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
                     Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
                 },
                 body: JSON.stringify({
-                    units: units,
-                    price: amount, 
-                    portfolio: 'Default',
+                    name: stockName,
                     ticker: ticker,
-                    name: stockName
+                    setPrice: amount, 
+                    units: units,
+                    direction: 'BUY', 
+                    portfolio: 'Default',
                 }),
             });
             if (response.status === 200) {
@@ -127,22 +128,25 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
                     </DialogActions>
                 </form>
             </DialogContent>
-
-            <TabContainer>
-                <StyledTabs
-                    aria-label="tabs"
-                >
-                    <OrderTab
-                        className = {`${page === 'BUY NOW' && styles.selected}`}
-                        onClick={(): void => setPage('BUY NOW')} >
-                        MARKET ORDER
-                    </OrderTab>
-                    <OrderTab
-                        onClick={(): void => setPage('LIMIT ORDER')} >
-                        LIMIT ORDER
-                    </OrderTab>
-                </StyledTabs>
-            </TabContainer>
+            {ticker === 'BINANCE:BTCUSDT' || ticker === 'BINANCE:ETHUSDT' &&
+            <>
+                <TabContainer>
+                    <StyledTabs
+                        aria-label="tabs"
+                    >
+                        <OrderTab
+                            className = {`${page === 'BUY NOW' && styles.selected}`}
+                            onClick={(): void => setPage('BUY NOW')} >
+                            MARKET ORDER
+                        </OrderTab>
+                        <OrderTab
+                            onClick={(): void => setPage('LIMIT ORDER')} >
+                            LIMIT ORDER
+                        </OrderTab>
+                    </StyledTabs>
+                </TabContainer>
+            </>
+            }
             </>
             }
             { page === 'LIMIT ORDER' && 
