@@ -22,7 +22,7 @@ export default class SnowflakeService {
 
             let x = (stockCost - stockValue) / stockCost;
             
-            let value = let value = 1 / (1 + Math.exp(-x));
+            let value = 1 / (1 + Math.exp(-x));
 
             if (value > 1) {
                 value = 1;
