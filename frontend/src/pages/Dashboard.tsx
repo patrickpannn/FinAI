@@ -8,6 +8,7 @@ import io, { Socket } from 'socket.io-client';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
+import Wallet from '../pages/Wallet';
 
 const Dashboard: React.FC = () => {
     const [topupOpen, setTopupOpen] = useState(false);
@@ -57,6 +58,9 @@ const Dashboard: React.FC = () => {
                     searchStockName={searchStockName}
                 />
             </Route>
+            <Route exact path="/dashboard/balance">
+                  <Wallet />
+             </Route>
             <Topup open={topupOpen} onClose={(): void => setTopupOpen(false)} />
             <UpdateProfile
                 open={updateProfileOpen}
