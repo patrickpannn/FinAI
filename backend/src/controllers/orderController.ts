@@ -138,9 +138,9 @@ export default class OrderController {
     ): Promise<void> => {
         try {
 
-            const order = await Order.findOne({
-                id: req.body.id
-            });
+            const order = await Order.findById(
+                req.body.id
+            );
             if (!order) {
                 throw new Error("This order doesn't exist");
             }
