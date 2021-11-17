@@ -64,10 +64,8 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
     ): Promise<void> => {
         e.preventDefault();
         try {
-            if (isNaN(+(Number(units))) && isNaN(+(Number(amount)))) {
-                throw new Error('Please enter numbers for units and amount');
-            } else if (isNaN(+(Number(units))) || isNaN(+(Number(amount)))) {
-                throw new Error('Please enter postive numbers');
+            if (isNaN(+(Number(units))) || isNaN(+(Number(amount)))) {
+                throw new Error('Please enter positive numbers');
             } else if (parseFloat(amount) <= 0 || parseFloat(units) <= 0) {
                 throw new Error('Please enter positive numbers');
             } 
@@ -87,7 +85,7 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
                 }),
             });
             if (response.status === 200) {
-                setToast({ type: 'success', message: `Order Executed!` });
+                setToast({ type: 'success', message: `Order placed` });
                 onClose();
             } else if (response.status === 401) {
                 throw new Error('Authentication Failed');
@@ -128,7 +126,7 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
                         </DialogActions>
                     </form>
                 </DialogContent>
-            {ticker === 'BINANCE:BTCUSDT' || ticker === 'BINANCE:ETHUSDT' &&
+            {(ticker === 'BINANCE:BTCUSDT' || ticker === 'BINANCE:ETHUSDT') &&
                 <>
                     <TabContainer>
                         <StyledTabs
