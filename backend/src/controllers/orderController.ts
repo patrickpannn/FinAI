@@ -1,9 +1,13 @@
 import { Request, Response } from 'express';
-import Portfolio from '../models/portfolioModel';
 import Order from '../models/orderModel';
+import Portfolio from '../models/portfolioModel';
 import Stock from '../models/stockModel';
 import axios from 'axios';
 
+enum Direction {
+    Sell = "SELL",
+    Buy = "BUY",
+}
 
 export default class OrderController {
     public static list = async (
@@ -31,41 +35,186 @@ export default class OrderController {
         }
     };
 
-    public static buyMarketOrder = async (
+    public static buyLimitOrder = async (
         req: Request,
         res: Response
     ): Promise<void> => {
         try {
-            const portfolio = await Portfolio.findOne({
+            if (req.user.numOrders + 1 > 10) {
+                throw new Error('Exceed maximum number of orders');
+            }
+
+            if (req.body.direction !== Direction.Buy) {
+                throw new Error('Direction given is not correct for this route');
+            }
+
+            const units = parseFloat(req.body.units);
+            const price = parseFloat(req.body.setPrice);
+
+            if (req.user.availableBalance -
+                units * price < 0) {
+                throw new Error('Available Balance is too low to make this order');
+            }
+
+            const order = new Order({
                 user: req.user.id,
-                name: req.body.portfolio
+                portfolio: req.portfolio.id,
+                numUnits: units,
+                executePrice: price,
+                ticker: req.body.ticker,
+                name: req.body.name,
+                direction: req.body.direction
+            });
+
+            await order.save();
+
+            req.user.availableBalance =
+                req.user.availableBalance - price * units;
+            req.user.numOrders++;
+            await req.user.save();
+
+            res.status(200).json({ response: 'Successful' });
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request' });
+        }
+    };
+
+    public static sellLimitOrder = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            if (req.user.numOrders + 1 > 10) {
+                throw new Error('Exceed maximum number of orders');
+            }
+
+            if (req.body.direction !== Direction.Sell) {
+                throw new Error('Direction given is not correct for this route');
+            }
+
+            const stock = await Stock.findOne({
+                portfolio: req.portfolio.id,
+                ticker: req.body.ticker
+            });
+
+            if (!stock) {
+                throw new Error('Stock does not exist in portfolio');
+            }
+
+            const units = parseFloat(req.body.units);
+            const price = parseFloat(req.body.setPrice);
+
+            if (stock.numUnits - units < 0) {
+                throw new Error('Cannot sell more shares than you own');
+            }
+
+            const order = new Order({
+                user: req.user.id,
+                numUnits: units,
+                executePrice: price,
+                ticker: req.body.ticker,
+                name: req.body.name,
+                direction: req.body.direction,
+                portfolio: req.portfolio.id
+            });
+
+            await order.save();
+
+            stock.numUnits -= units;
+            await stock.save();
+
+            req.user.numOrders++;
+            await req.user.save();
+
+            res.status(200).json({ response: 'Successful' });
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request' });
+        }
+    };
+
+    public static cancelOrder = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+
+            const order = await Order.findById(
+                req.body.id
+            );
+            if (!order) {
+                throw new Error("This order doesn't exist");
+            }
+            
+            if(order.executed === true)
+            {
+                throw new Error("Cannot cancel an executed order");
+            }
+
+            const units = order.numUnits;
+            const price = order.executePrice;
+
+            const portfolio = await Portfolio.findOne({
+                id: order.portfolio
             });
             if(!portfolio)
             {
                 throw new Error('Could not find portfolio');
             }
 
+            if (order.direction === Direction.Buy) {
+                req.user.availableBalance += price * units;
+            } else {
+                const stock = await Stock.findOne({
+                    portfolio: portfolio.id,
+                    ticker: order.ticker
+                });
+
+                if (!stock) {
+                    throw new Error("Cant access a stock that doesnt exist");
+                }
+
+                stock.numUnits += units;
+                await stock.save();
+            }
+            await order.delete();
+
+            req.user.numOrders--;
+            await req.user.save();
+
+            res.status(200).json({ response: 'Successful' });
+        } catch (e) {
+            res.status(400).json({ error: 'Bad Request' });
+        }
+    };
+
+    public static buyMarketOrder = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+
             const response = await axios.get(
                 `https://finnhub.io/api/v1/quote?symbol=${req.body.ticker}&token=c5vln0iad3ibtqnna830`);
-            const units = parseInt(req.body.units, 10);
+            const units = parseFloat(req.body.units);
             const totalCost = response.data.c * units;
             const marketPrice = response.data.c;
             if (req.user.availableBalance - totalCost < 0) {
                 throw new Error('Available Balance too low to purchase stocks');
             }
             const existingStock = await Stock.findOne({
-                portfolio: portfolio.id,
+                portfolio: req.portfolio.id,
                 ticker: req.body.ticker
             });
 
             if (!existingStock) {
 
                 const stock = new Stock({
-                    portfolio: portfolio.id,
+                    portfolio: req.portfolio.id,
                     ticker: req.body.ticker,
                     name: req.body.name,
                     averagePrice: marketPrice,
-                    numUnits: units });
+                    numUnits: units
+                });
 
                 if (!stock) {
                     throw new Error('Could not make stock');
@@ -79,13 +228,13 @@ export default class OrderController {
             } else {
                 const avg = (
                     (existingStock.numUnits * existingStock.averagePrice +
-                    units * marketPrice) / (existingStock.numUnits + units)
-                                                                ).toFixed(2);
+                        units * marketPrice) / (existingStock.numUnits + units)
+                ).toFixed(2);
 
                 existingStock.numUnits += units;
                 existingStock.averagePrice = parseFloat(avg);
 
-                req.user.balance = 
+                req.user.balance =
                     (req.user.balance - totalCost).toFixed(2);
                 req.user.availableBalance =
                     (req.user.availableBalance - totalCost).toFixed(2);
@@ -96,15 +245,15 @@ export default class OrderController {
 
             const order = new Order({
                 user: req.user.id,
-                portfolio: portfolio.id,
+                portfolio: req.portfolio.id,
                 numUnits: units,
                 executePrice: marketPrice,
                 ticker: req.body.ticker,
                 name: req.body.name,
                 executed: true,
-                direction: "BUY" });
-            if(!order)
-            {
+                direction: "BUY"
+            });
+            if (!order) {
                 throw new Error('Could not make order');
             }
             await order.save();
@@ -120,33 +269,24 @@ export default class OrderController {
         res: Response
     ): Promise<void> => {
         try {
-
-            const portfolio = await Portfolio.findOne({
-                user: req.user.id,
-                name: req.body.portfolio
-            });
-            if(!portfolio)
-            {
-                throw new Error('Could not find portfolio');
-            }
-
             const existingStock = await Stock.findOne({
-                portfolio: portfolio.id,
-                ticker: req.body.ticker });
+                portfolio: req.portfolio.id,
+                ticker: req.body.ticker
+            });
             if (!existingStock) {
                 throw new Error('This stock doesnt exist');
             }
 
             const response = await axios.get(
                 `https://finnhub.io/api/v1/quote?symbol=${req.body.ticker}&token=c5vln0iad3ibtqnna830`);
-            const units = parseInt(req.body.units, 10);
+            const units = parseFloat(req.body.units);
             const totalCost = response.data.c * units;
             const marketPrice = response.data.c;
 
             const avg = (
                 (existingStock.numUnits * existingStock.averagePrice -
-                units * marketPrice) / (existingStock.numUnits - units)
-                                                            ).toFixed(2);
+                    units * marketPrice) / (existingStock.numUnits - units)
+            ).toFixed(2);
 
             req.user.balance = (req.user.balance + totalCost).toFixed(2);
             req.user.availableBalance = (
@@ -163,15 +303,15 @@ export default class OrderController {
 
             const order = new Order({
                 user: req.user.id,
-                portfolio: portfolio.id,
+                portfolio: req.portfolio.id,
                 numUnits: units,
                 executePrice: marketPrice,
                 ticker: req.body.ticker,
                 name: req.body.name,
                 executed: true,
-                direction: "SELL" });
-            if(!order)
-            {
+                direction: "SELL"
+            });
+            if (!order) {
                 throw new Error('Could not make order');
             }
             await order.save();
@@ -183,5 +323,4 @@ export default class OrderController {
             res.status(400).json({ error: 'Bad Request' });
         }
     };
-
 }
