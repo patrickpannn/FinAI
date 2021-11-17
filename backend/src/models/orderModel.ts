@@ -79,6 +79,7 @@ OrderSchema.methods.getObject = async function (): Promise<{}> {
         }
 
         let orderObj = {
+            id: this._id,
             numUnits: this.numUnits,
             executePrice: this.executePrice,
             ticker: this.ticker,

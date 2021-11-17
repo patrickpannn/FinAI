@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import Order from '../models/orderModel';
+import Portfolio from '../models/portfolioModel';
 import Stock from '../models/stockModel';
 import axios from 'axios';
 
@@ -136,28 +137,31 @@ export default class OrderController {
         res: Response
     ): Promise<void> => {
         try {
-            const units = parseFloat(req.body.units);
-            const price = parseFloat(req.body.setPrice);
+
             const order = await Order.findOne({
-                user: req.user.id,
-                portfolio: req.portfolio.id,
-                ticker: req.body.ticker,
-                direction: req.body.direction,
-                executePrice: price,
-                numUnits: units,
-                executed: false,
+                id: req.body.id
             });
-            
             if (!order) {
                 throw new Error("This order doesn't exist");
             }
 
-            if (req.body.direction === Direction.Buy) {
+            const units = order.numUnits;
+            const price = order.executePrice;
+
+            const portfolio = await Portfolio.findOne({
+                id: order.portfolio
+            });
+            if(!portfolio)
+            {
+                throw new Error('Could not find portfolio');
+            }
+
+            if (order.direction === Direction.Buy) {
                 req.user.availableBalance += price * units;
             } else {
                 const stock = await Stock.findOne({
-                    portfolio: req.portfolio.id,
-                    ticker: req.body.ticker
+                    portfolio: portfolio.id,
+                    ticker: order.ticker
                 });
 
                 if (!stock) {

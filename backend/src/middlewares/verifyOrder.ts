@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import Portfolio from '../models/portfolioModel';
+import Order from '../models/orderModel';
 
 const stockBody = [
     'name',
@@ -71,6 +72,23 @@ class VerifyOrder {
             next();
         } catch (e) {
             res.status(403).json({ error: 'Order is incorrect' });
+        };
+    };
+
+        public static async verifyCancelOrder(
+            req: Request,
+            res: Response,
+            next: NextFunction
+    ): Promise<void> {
+        try {
+            if(Object.keys(req.body).length !== 1 || !req.body.id)
+            {
+                throw new Error('Invalid input');
+            }
+
+            next();
+        } catch (e) {
+            res.status(400).json({ error: 'Order is incorrect' });
         };
     };
 
