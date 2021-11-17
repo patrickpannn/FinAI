@@ -149,6 +149,7 @@ OrderSchema.post('save', { document : true }, async function (next): Promise<voi
             }
             user.balance -= 
                 parseFloat((this.executePrice * this.numUnits).toFixed(2));
+            user.numOrders --;
             user.save();
         }
     }
