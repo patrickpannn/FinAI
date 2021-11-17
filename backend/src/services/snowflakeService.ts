@@ -20,7 +20,13 @@ export default class SnowflakeService {
             const stockValue = cashFlow;
             const stockCost = stockQuote.data.c;
 
-            const value = (stockCost - stockValue) / stockCost;
+            let value = (stockCost - stockValue) / stockCost;
+
+            if (value > 1) {
+                value = 1;
+            } else if (value < 0) {
+                value = 0;
+            }
 
             return value;
         } catch (e) {
