@@ -17,9 +17,14 @@ const orderBody = [
     'portfolio'
 ];
 
+enum Direction {
+    Sell = "SELL",
+    Buy = "BUY",
+}
+
 enum PossibleOrders {
     bitcoin = "BINANCE:BTCUSDT",
-    etherium = "BINANCE:ETHUSDT"
+    ethereum = "BINANCE:ETHUSDT"
 };
 
 class VerifyOrder {
@@ -41,9 +46,14 @@ class VerifyOrder {
                     throw new Error('Bad Request');
                 }
             }
+            
+            if (req.body.direction !== Direction.Buy
+                && req.body.direction !== Direction.Sell) {
+                throw new Error('Bad Request');
+            }
 
             if(req.body.ticker !== PossibleOrders.bitcoin 
-                && req.body.ticker !== PossibleOrders.etherium)
+                && req.body.ticker !== PossibleOrders.ethereum)
             {
                 throw new Error('Bad Request');
             }
@@ -60,7 +70,7 @@ class VerifyOrder {
 
             next();
         } catch (e) {
-            res.status(401).json({ error: 'Order is incorrect' });
+            res.status(403).json({ error: 'Order is incorrect' });
         };
     };
 
