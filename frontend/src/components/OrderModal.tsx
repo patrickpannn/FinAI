@@ -29,7 +29,8 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
     ): Promise<void> => {
         e.preventDefault();
         try {
-            if (isNaN(+(Number(units)))|| units === '0') {
+            
+            if (isNaN(+(Number(units)))|| parseFloat(units) === 0) {
                 throw new Error('Please enter postive integer for units');
             } 
             const response = await fetch(`${url}/user/order/buyMarketOrder`, {
@@ -65,9 +66,9 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
         try {
             if (isNaN(+(Number(units))) && isNaN(+(Number(amount)))) {
                 throw new Error('Please enter integers for units and amount');
-            } else if (isNaN(+(Number(units))) || units === '0') {
+            } else if (isNaN(+(Number(units))) && parseFloat(units) === 0) {
                 throw new Error('Please enter postive integers');
-            } else if (isNaN(+(Number(amount))) || amount === '0') {
+            } else if (isNaN(+(Number(amount))) && parseFloat(amount) === 0) {
                 throw new Error('Please enter positive integers');
             } 
             const response = await fetch(`${url}/user/order/buyLimitOrder`, {
