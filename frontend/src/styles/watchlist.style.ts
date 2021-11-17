@@ -17,20 +17,20 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     cardTitle: {
         fontSize: "1em",
         [theme.breakpoints.down("sm")]: {
-        fontSize: "0.75em",
+            fontSize: "0.75em",
         },
     },
     cardBody: {
         fontSize: "0.75em",
         [theme.breakpoints.down("sm")]: {
-        fontSize: "0.5em",
+            fontSize: "0.5em",
         },
     },
     newsContainer: {
-        maxWidth: '1200px',
+        width: '100%',
     },
     progressBar: {
-        width: '100%', 
+        width: '100%',
         height: 'calc(100vh - 80px)',
     }
 }));
@@ -120,4 +120,18 @@ export const StyledTab = styled('div')({
         backgroundColor: '#d7eafd',
     }
 });
-
+export const OrderTab = styled('div')({
+    flex: 1,
+    borderTop: '1px solid #edece8',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    fontSize: '12pt',
+    fontWeight: 600,
+    color: '#0017ea',
+    fontFamily: 'Arial',
+    '&:hover': {
+        backgroundColor: '#d7eafd',
+    }
+});
