@@ -58,6 +58,16 @@ const UserSchema = new Schema<UserInterface>({
     resetToken: {
         type: String,
         default: "",
+    },
+    numOrders: {
+        type: Number,
+        default: 0,
+        validate(value: number): void {
+            if(value > 10)
+            {
+                throw new Error('Cannot have more than 10 orders');
+            }
+        }
     }
 });
 
