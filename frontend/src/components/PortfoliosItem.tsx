@@ -80,13 +80,13 @@ const PortfoliosItem: React.FC<ItemProps> =
 						{data.numUnits}
 					</TableCell>
 					<TableCell align="center">
-						{'$' + data.averagePrice * data.numUnits}
+						{'$' + (data.averagePrice * data.numUnits).toFixed(2)}
 					</TableCell>
 					<TableCell align="center" className={data.profit_loss && data.profit_loss > 0 ? styles.profit : styles.loss}>
-						{data.profit_loss ? '$' + data.profit_loss.toFixed(3) : ''}
+						{data.profit_loss ? '$' + data.profit_loss.toFixed(2) : ''}
 					</TableCell>
 					<TableCell align="center">
-						<Button onClick={handleSellOpen}>Sell</Button>
+						<Button className={styles.create_btn} variant="contained" onClick={handleSellOpen}>Sell</Button>
 					</TableCell>
 				</TableRow>
 
