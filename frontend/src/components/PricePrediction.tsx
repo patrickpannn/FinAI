@@ -36,7 +36,7 @@ const PricePrediction: React.FC<Props> = ({ ticker }) => {
                 label: "Price Prediction",
                 data: prices,
                 fill: false,
-                borderColor: "#9fa1b6",
+                borderColor: "#072bee",
             }
         ]
     };
