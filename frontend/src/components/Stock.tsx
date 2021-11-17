@@ -145,6 +145,7 @@ const Stock: React.FC<Props> = ({
                     Buy Shares
                 </BuyBtn>
             </ButtonGroup>
+            
             <StockInfo ticker={ticker} />
             <StockChart ticker={ticker} />
             <OrderModal
