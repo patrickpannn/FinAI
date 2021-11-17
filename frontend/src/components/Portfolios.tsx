@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
 import PortfoliosContent from './PortfoliosContent';
+import { useStyles } from '../styles/portfolios.style';
 
 const url = process.env.REACT_APP_URL || 'http://localhost:5000';
 
@@ -40,6 +41,7 @@ type SellObject = {
 const Portfolios: React.FC<Props> = () => {
   const dispatch = useDispatch();
   const { setToast } = bindActionCreators(actionCreators, dispatch);
+  const styles = useStyles();
   const [amountDialog, setAmountDialog] = useState(false);
   const [amount, setAmount] = useState(1);
   const [portfoliosName, setPortfoliosName] = useState('');
@@ -87,6 +89,11 @@ const Portfolios: React.FC<Props> = () => {
 
   const fetchTickerInfo = async (data: Array<string>): Promise<void> => {
     try {
+      data.forEach((symbol, index) => {
+        if (symbol === 'BINANCE:BTCUSDT') {
+          data[index] = 'BTC-USD'
+        }
+      })
       const response = await fetch(`https://api.twelvedata.com/time_series?symbol=${data.join(',')}&interval=1min&apikey=6910ca26066d4c8e92f91201d762c60f`, {
         method: 'GET',
         headers: {
@@ -125,7 +132,12 @@ const Portfolios: React.FC<Props> = () => {
               }) => {
               let total: number = 0;
               i.stocks.forEach((j: Stock) => {
-                const value = res[j.ticker];
+                let value
+                if (j.ticker === 'BINANCE:BTCUSDT') {
+                  value = res['BTC-USD'];
+                } else {
+                  value = res[j.ticker]
+                }
                 if (value.status === 'ok') {
                   j.close = value ? Number(value.values[0].close) : 0;
                   j.profit_loss = j.close - j.averagePrice;
@@ -211,7 +223,7 @@ const Portfolios: React.FC<Props> = () => {
         })
       });
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         setToast({ type: 'success', message: `A New Portfolio Built` });
         fetchPortfoliosList();
       } else {
@@ -288,15 +300,16 @@ const Portfolios: React.FC<Props> = () => {
           sx={{
             '& > :not(style)': { m: 1 },
             margin: '20px 0',
+            padding: '10px 48px',
             display: 'flex',
             alignItems: 'center'
           }}
           noValidate
           autoComplete="off"
         >
-          <span>Create</span>
+          <span className={styles.label}>Create</span>
           <TextField id="outlined-basic" label="name" variant="outlined" value={[portfoliosName]} onChange={(e): void => { setPortfoliosName(e.target.value); }} />
-          <Button onClick={handleCreate}>Create</Button>
+          <Button className={styles.create_btn} variant="contained" onClick={handleCreate}>Create</Button>
         </Box>
         <DndProvider backend={HTML5Backend}>
           <Box sx={{ flexGrow: 1, padding: '48px' }}>
