@@ -82,8 +82,7 @@ export default class SnowflakeService {
 
             const comparisonYield = compareResponse.data.metric.dividendYield5Y;
             
-            let x = 0.8 +
-                        ((stockYield - comparisonYield) / comparisonYield);
+            let x = (stockYield - comparisonYield) / comparisonYield;
 
             let value = 1 / (1 + Math.exp(-x));
 
