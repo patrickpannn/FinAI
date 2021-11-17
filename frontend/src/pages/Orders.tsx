@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStyles } from '../styles/orders.style';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
@@ -20,43 +20,23 @@ interface OrderInterface {
     portfolio: string, 
 }
 const Orders: React.FC = () => {
+    
     const styles = useStyles();
     const dispatch = useDispatch();
     const { setToast } = bindActionCreators(actionCreators, dispatch);
     const [orders, setOrders] = useState<OrderInterface[]>([]);
     const [id, setId] = useState('');
-    const fetchOrders = useCallback(async (): Promise<void> => {
-        try {
-            const response = await fetch(`${url}/user/order`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
-                },
-            });
-            if (response.status === 200) {
-                const data = await response.json();
-                console.log(data);
-                setOrders(data);
-            } else {
-                throw new Error('Failed to fetch order history');
-            }
-        } catch (e) {
-            setToast({ type: 'error', message: `${e}` });
-
-        }
-        // eslint-disable-next-line
-    }, []);
-
+    
     const handleSubmit = async (
         e: React.FormEvent<HTMLFormElement>
     ): Promise<void> => {
         e.preventDefault();
         try {
             const response = await fetch(`${url}/user/order/cancelOrder`, {
-                method: 'POST',
+                method: 'DELETE',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
                 },
                 body: JSON.stringify({
                     id
@@ -73,15 +53,35 @@ const Orders: React.FC = () => {
     };
 
     useEffect(() => {
+        const fetchOrders = async (): Promise<void> => {
+            try {
+                const response = await fetch(`${url}/user/order`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
+                    },
+                });
+                if (response.status === 200) {
+                    const data = await response.json();
+                    console.log(data);
+                    setOrders(data);
+                } else {
+                    throw new Error('Failed to fetch order history');
+                }
+            } catch (e) {
+                setToast({ type: 'error', message: `${e}` });
+            }
+        };
         fetchOrders();
-    }, [fetchOrders]);
-
+    });
 
     return (
         <div className={styles.tableSpace}>
             <OrderTitle>
                 <h2>My Orders</h2>
             </OrderTitle>
+            <form onSubmit={(e): Promise<void> => handleSubmit(e)}>
             <TableContainer component={Paper} >
                 <Table className={styles.tableSize} aria-label="simple table">
                     <TableHead>
@@ -96,12 +96,10 @@ const Orders: React.FC = () => {
                             <Cell>Status</Cell>
                         </TableRow>
                     </TableHead>
-                    {/* <form onSubmit={(e): Promise<void> => handleSubmit(e)}> */}
+            
                     <TableBody>
-                    
                         {orders && orders.map(order => (
-                            
-                            <Row key= {order.ticker}>
+                            <Row key= {order.id}>
                                 <Cell>{order.ticker}</Cell>
                                 <Cell>{order.name}</Cell>
                                 <Cell>{order.numUnits}</Cell>
@@ -115,24 +113,25 @@ const Orders: React.FC = () => {
                                     <Cell>Executed</Cell>
                                 }
                                 {!order.executed && 
-                                    <>
+                                    <Cell>
                                         <Button
-                                        type="submit"
-                                        variant="contained"
-                                        color="error"
-                                        onClick={(): void => setId(order.id)}
-                                    >
+                                            type="submit"
+                                            variant="contained"
+                                            color="error"
+                                            onClick={
+                                                (): void => setId(order.id)
+                                            }
+                                        >
                                         Cancel
                                         </Button>
-                                    </>
+                                    </Cell>
                                 }
                             </Row>                 
                         ))}
-                        
-                    </TableBody>
-                    {/* </form> */}
+                    </TableBody>   
                 </Table>
             </TableContainer>
+            </form>
         </div>
     );
 };
