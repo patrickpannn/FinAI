@@ -20,11 +20,19 @@ export default class SnowflakeService {
             const stockValue = cashFlow;
             const stockCost = stockQuote.data.c;
 
-            const value = (stockCost - stockValue) / stockCost;
+            let x = (stockValue - stockCost) / stockCost;
+            
+            let value = 1 / (1 + Math.exp(-x));
+
+            if (value > 1) {
+                value = 1;
+            } else if (value < 0) {
+                value = 0;
+            }
 
             return value;
         } catch (e) {
-            return -1;
+            return 0;
         }
 
     }
@@ -43,8 +51,9 @@ export default class SnowflakeService {
     ): Promise<number> {
 
         try {        
-            let value = 0.5 +
-                        ((stockRiskYear1 - stockRiskYear2) / stockRiskYear2);
+            let x = (stockRiskYear1 - stockRiskYear2) / stockRiskYear2;
+            
+            let value = 1 / (1 + Math.exp(x));
 
             if (value > 1) {
                 value = 1;
@@ -54,7 +63,7 @@ export default class SnowflakeService {
 
             return value;
         } catch (e) {
-            return -1;
+            return 0;
         }
     }
 
@@ -73,8 +82,9 @@ export default class SnowflakeService {
 
             const comparisonYield = compareResponse.data.metric.dividendYield5Y;
             
-            let value = 0.8 +
-                        ((stockYield - comparisonYield) / comparisonYield);
+            let x = (stockYield - comparisonYield) / comparisonYield;
+
+            let value = 1 / (1 + Math.exp(-x));
 
             if (value > 1) {
                 value = 1;
@@ -84,7 +94,7 @@ export default class SnowflakeService {
 
             return value;
         } catch (e) {
-            return -1;
+            return 0;
         }
     }
 }
