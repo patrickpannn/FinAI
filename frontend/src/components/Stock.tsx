@@ -136,15 +136,17 @@ const Stock: React.FC<Props> = ({
                     }
                 </IconButton>
             </Banner>
-            <ButtonGroup>
-                <BuyBtn
-                    variant="contained"
-                    type='button'
-                    onClick={(): void => setBuyOpen(true)}
-                >
-                    Buy Shares
-                </BuyBtn>
-            </ButtonGroup>
+            {(ticker !== 'BINANCE:BTCUSDT' &&  ticker !== 'BINANCE:ETHUSDT') && 
+                <ButtonGroup>
+                    <BuyBtn
+                        variant="contained"
+                        type='button'
+                        onClick={(): void => setBuyOpen(true)}
+                    >
+                        Buy Shares
+                    </BuyBtn>
+                </ButtonGroup>
+            }
             <StockInfo ticker={ticker} />
             <StockChart ticker={ticker} />
             <OrderModal
