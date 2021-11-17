@@ -1,6 +1,6 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { styled } from '@mui/material/styles';
-import { Button } from '@mui/material';
+import { Button, Avatar } from '@mui/material';
 
 export const DialogContent = styled('p')(({ theme }) => ({
     color: 'red',
@@ -22,6 +22,9 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
         fontSize: '14pt',
         margin: '0 8px',
+        '&:first-letter': {
+            textTransform: 'capitalize',
+        }
     },
     topup: {
         justifyContent: 'center',
@@ -44,8 +47,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         justifyContent: 'center',
         margin: '30px 0',
     },
-    avatar: {
-        width: 32, 
-        height: 32, 
-    }
 }));
+
+export const StyledAvatar = styled(Avatar)({
+    width: 40, 
+    height: 40, 
+    backgroundColor: 'blue',
+});

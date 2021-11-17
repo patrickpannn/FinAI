@@ -9,7 +9,6 @@ import {
     DialogTitle,
     DialogActions,
     Button,
-    Avatar,
 } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import BarChartIcon from '@mui/icons-material/BarChart';
@@ -22,9 +21,8 @@ import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
 import { useHistory } from 'react-router-dom';
-import { DialogContent, LargeButton, useStyles } from '../styles/sideBar.style';
+import { DialogContent, LargeButton, useStyles, StyledAvatar } from '../styles/sideBar.style';
 import SidebarBtn from './SidebarBtn';
-import { blue } from '@mui/material/colors';
 
 const url = process.env.REACT_APP_URL || 'http://localhost:5000';
 
@@ -130,12 +128,7 @@ const Sidebar: React.FC<Props> = ({
                     onKeyDown={onClose}
                 >
                     <div className={styles.userInfo}>
-                        <Avatar 
-                            className={styles.avatar} 
-                            sx={{ bgcolor: blue[700] }}
-                        >
-                            {nameFirstLetter}
-                        </Avatar>
+                        <StyledAvatar >{nameFirstLetter}</StyledAvatar>
                         <h1 className={styles.username}>
                             {name}
                         </h1>
