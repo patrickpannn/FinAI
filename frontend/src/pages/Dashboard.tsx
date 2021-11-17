@@ -4,6 +4,8 @@ import Topup from '../components/Topup';
 import UpdateProfile from '../components/UpdateProfile';
 import Watchlist from './Watchlist';
 import { Route } from 'react-router-dom';
+import Orders from '../pages/Orders';
+import Wallet from '../pages/Wallet';
 
 const Dashboard: React.FC = () => {
     const [topupOpen, setTopupOpen] = useState(false);
@@ -30,6 +32,12 @@ const Dashboard: React.FC = () => {
                     searchStockName={searchStockName}
                 />
             </Route>
+            <Route exact path="/dashboard/orderhistory">
+                <Orders />
+            </Route>
+            <Route exact path="/dashboard/balance">
+                  <Wallet />
+             </Route>
             <Topup open={topupOpen} onClose={(): void => setTopupOpen(false)} />
             <UpdateProfile
                 open={updateProfileOpen}

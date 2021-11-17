@@ -10,7 +10,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     },
 }));
 
-export const Cell = styled(TableCell)(({ theme }) => ({
+export const C = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.primary.main,
         color: theme.palette.common.white,

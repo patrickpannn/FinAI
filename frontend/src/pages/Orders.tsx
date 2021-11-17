@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
 import { useDispatch } from 'react-redux';
 import { Table, TableContainer , TableHead, TableRow, TableBody, Button } from '@mui/material';
-import { Row, Cell, OrderTitle } from '../styles/orders.style';
+import { Row, C, OrderTitle } from '../styles/orders.style';
 import Paper from '@mui/material/Paper';
 
 const url = process.env.REACT_APP_URL || 'http://localhost:5000';
@@ -82,55 +82,55 @@ const Orders: React.FC = () => {
                 <h2>My Orders</h2>
             </OrderTitle>
             <form onSubmit={(e): Promise<void> => handleSubmit(e)}>
-            <TableContainer component={Paper} >
-                <Table className={styles.tableSize} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <Cell>Symbol</Cell>
-                            <Cell>Stock Name</Cell>
-                            <Cell>Quantity</Cell>
-                            <Cell>Stock Price Each</Cell>
-                            <Cell>Total Price</Cell>
-                            <Cell>Direction</Cell>
-                            <Cell>Portfolio</Cell>
-                            <Cell>Status</Cell>
-                        </TableRow>
-                    </TableHead>
-            
-                    <TableBody>
-                        {orders && orders.map(order => (
-                            <Row key= {order.id}>
-                                <Cell>{order.ticker}</Cell>
-                                <Cell>{order.name}</Cell>
-                                <Cell>{order.numUnits}</Cell>
-                                <Cell>{order.executePrice}</Cell>
-                                <Cell>
-                                    {order.numUnits * order.executePrice}
-                                </Cell>
-                                <Cell>{order.direction}</Cell>
-                                <Cell>{order.portfolio}</Cell>
-                                {order.executed && 
-                                    <Cell>Executed</Cell>
-                                }
-                                {!order.executed && 
-                                    <Cell>
-                                        <Button
-                                            type="submit"
-                                            variant="contained"
-                                            color="error"
-                                            onClick={
-                                                (): void => setId(order.id)
-                                            }
-                                        >
-                                        Cancel
-                                        </Button>
-                                    </Cell>
-                                }
-                            </Row>                 
-                        ))}
-                    </TableBody>   
-                </Table>
-            </TableContainer>
+                <TableContainer component={Paper}>
+                    <Table className={styles.tableSize} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <C>Symbol</C>
+                                <C>Stock Name</C>
+                                <C>Quantity</C>
+                                <C>Stock Price Each</C>
+                                <C>Total Price</C>
+                                <C>Direction</C>
+                                <C>Portfolio</C>
+                                <C>Status</C>
+                            </TableRow>
+                        </TableHead>
+                
+                        <TableBody>
+                            {orders && orders.map(o => (
+                                <Row key= {o.id}>
+                                    <C>{o.ticker}</C>
+                                    <C>{o.name}</C>
+                                    <C>{o.numUnits}</C>
+                                    <C>{(o.executePrice).toFixed(2)}</C>
+                                    <C>
+                                    {(o.numUnits*o.executePrice).toFixed(2)}
+                                    </C>
+                                    <C>{o.direction}</C>
+                                    <C>{o.portfolio}</C>
+                                    {o.executed && 
+                                        <C>Executed</C>
+                                    }
+                                    {!o.executed && 
+                                        <C>
+                                            <Button
+                                                type="submit"
+                                                variant="contained"
+                                                color="error"
+                                                onClick={
+                                                    (): void => setId(o.id)
+                                                }
+                                            >
+                                            Cancel
+                                            </Button>
+                                        </C>
+                                    }
+                                </Row>                 
+                            ))}
+                        </TableBody>   
+                    </Table>
+                </TableContainer>
             </form>
         </div>
     );
