@@ -75,9 +75,24 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
         scales: {
             r: {
                 suggestedMin: 0,
-                suggestedMax: 1
+                suggestedMax: 1, 
+                pointLabels: {
+                    font: {
+                      size: 25
+                    }
+                }
+            },
+            
+        },
+        plugins: {
+            legend: {
+                labels: {
+                    font: {
+                        size: 25
+                    }
+                },
             }
-        }
+        },
     };
 
     return (
