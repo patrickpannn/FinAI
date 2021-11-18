@@ -101,7 +101,7 @@ OrderSchema.methods.getObject = async function (): Promise<{}> {
 };
 
 OrderSchema.post('save', { document : true }, async function (next): Promise<void> {
-    if(this.executed === true)
+    if(this.executed === true && this.isLimitOrder)
     {
         const user = await User.findOne({
             user: this.user });
@@ -154,7 +154,7 @@ OrderSchema.post('save', { document : true }, async function (next): Promise<voi
             }
             user.balance -= 
                 parseFloat((this.executePrice * this.numUnits).toFixed(2));
-            if(this.isLimitOrder) user.numOrders --;
+            user.numOrders --;
             await user.save();
         }
     }
