@@ -3,6 +3,18 @@ import Portfolio from './portfolioModel';
 import Stock from './stockModel';
 import User from './userModel';
 
+// Order structure
+// user : user ID
+// portfolio : the portfolio ID associated with this order
+// numUnits : the number of units (stock units) assigned to the order
+// executePrice : the price at which the order should be executed
+// ticker : the ticker associated with this order
+// name : the stock name of the order
+// executed : a boolean to identify whether this order has been executed or not
+// direction : an order can either be "BUY" or "SELL" which determines its functionality
+// isLimitOrder : a check needed for the post save method
+// getObject : return an order object for the frontend
+
 // Document interface
 interface OrderInterface extends Document {
     user: Schema.Types.ObjectId,
@@ -98,6 +110,10 @@ OrderSchema.methods.getObject = async function (): Promise<{}> {
     }
 };
 
+// The post save middleware is used by the real-time web app functionality
+// If we save an order once its executed status becomes true,
+// we want to check and add / remove the stock from our portfolio.
+// We need to make sure that the only orders allowed are limit orders
 OrderSchema.post('save', { document: true }, async function (next): Promise<void> {
     try {
         if (this.executed === true && this.isLimitOrder) {
