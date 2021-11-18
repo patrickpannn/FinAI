@@ -217,7 +217,10 @@ const Portfolios: React.FC<Props> = () => {
     }
   };
 
-  const handleCreate = async (): Promise<void> => {
+  const handleCreate = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
+    e.preventDefault();
     try {
       const response = await fetch(`${url}/user/portfolio/create`, {
         method: 'POST',
@@ -313,10 +316,11 @@ const Portfolios: React.FC<Props> = () => {
           }}
           noValidate
           autoComplete="off"
+          onSubmit={handleCreate}
         >
           <span className={styles.label}>Create</span>
           <TextField id="outlined-basic" label="name" variant="outlined" value={[portfoliosName]} onChange={(e): void => { setPortfoliosName(e.target.value); }} />
-          <Button className={styles.create_btn} variant="contained" onClick={handleCreate}>Create</Button>
+          <Button type="submit" className={styles.create_btn} variant="contained">Create</Button>
         </Box>
         <DndProvider backend={HTML5Backend}>
           <Box sx={{ flexGrow: 1, padding: '48px' }}>

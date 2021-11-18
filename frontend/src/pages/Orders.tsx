@@ -26,6 +26,7 @@ const Orders: React.FC = () => {
     const { setToast } = bindActionCreators(actionCreators, dispatch);
     const [orders, setOrders] = useState<OrderInterface[]>([]);
     const [id, setId] = useState('');
+    const [changed, setChanged] = useState(false);
 
     const handleSubmit = async (
         e: React.FormEvent<HTMLFormElement>
@@ -45,6 +46,7 @@ const Orders: React.FC = () => {
 
             if (response.status === 200) {
                 setToast({ type: 'success', message: 'Order cancelled' });
+                setChanged(!changed);
             }
         } catch (error) {
             setToast({ type: 'error', message: `${error}` });
@@ -74,7 +76,8 @@ const Orders: React.FC = () => {
             }
         };
         fetchOrders();
-    });
+        // eslint-disable-next-line
+    }, [changed]);
 
     return (
         <div className={styles.tableSpace}>

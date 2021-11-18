@@ -10,11 +10,13 @@ import { useHistory, Link } from 'react-router-dom';
 import CardMedia from '@mui/material/CardMedia';
 import signUpPage from '../assets/signupPage.png';
 
-interface Props { }
+interface Props {
+    updateLogin: (val: boolean) => void,
+}
 
 const url = process.env.REACT_APP_URL || 'http://localhost:5000';
 
-const Signup: React.FC<Props> = () => {
+const Signup: React.FC<Props> = ({ updateLogin }) => {
     const styles = useStyles();
     const dispatch = useDispatch();
     const { setToast } = bindActionCreators(actionCreators, dispatch);
@@ -52,6 +54,7 @@ const Signup: React.FC<Props> = () => {
                 } else {
                     const { token } = await response.json();
                     sessionStorage.setItem('access_token', token);
+                    updateLogin(true);
                     history.push('/dashboard');
                 }
             }

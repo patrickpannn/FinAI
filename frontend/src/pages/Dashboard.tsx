@@ -8,7 +8,11 @@ import Portfolios from '../components/Portfolios';
 import Orders from './Orders';
 import Wallet from '../pages/Wallet';
 
-const Dashboard: React.FC = () => {
+interface Props {
+    updateLogin: (val: boolean) => void,
+}
+
+const Dashboard: React.FC<Props> = ({ updateLogin }) => {
     const [topupOpen, setTopupOpen] = useState(false);
     const [updateProfileOpen, setUpdateProfileOpen] = useState(false);
     const [searchTicker, setSearchTicker] = useState('');
@@ -26,6 +30,7 @@ const Dashboard: React.FC = () => {
                 openTopupModal={(): void => setTopupOpen(true)}
                 openUpdateModal={(): void => setUpdateProfileOpen(true)}
                 handleSearch={handleSearch}
+                updateLogin={updateLogin}
             />
             <Route exact path="/dashboard">
                 <Watchlist
@@ -46,6 +51,7 @@ const Dashboard: React.FC = () => {
             <UpdateProfile
                 open={updateProfileOpen}
                 onClose={(): void => setUpdateProfileOpen(false)}
+                updateLogin={updateLogin}
             />
         </main>
     );

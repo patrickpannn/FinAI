@@ -19,6 +19,7 @@ interface Props {
     openTopupModal?: () => void,
     openUpdateModal?: () => void,
     handleSearch?(ticker: string, stockName: string): void,
+    updateLogin?: (val: boolean) => void,
 }
 
 interface Stock {
@@ -30,7 +31,8 @@ const Header: React.FC<Props> = ({
     page,
     openTopupModal,
     openUpdateModal,
-    handleSearch
+    handleSearch,
+    updateLogin,
 }) => {
 
     const history = useHistory();
@@ -165,6 +167,7 @@ const Header: React.FC<Props> = ({
                             onClose={(): void => setOpenSideBar(false)}
                             openTopupModal={openTopupModal}
                             openUpdateModal={openUpdateModal}
+                            updateLogin={updateLogin}
                         />
                     </>
                 }
