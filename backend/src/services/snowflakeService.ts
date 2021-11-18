@@ -1,11 +1,18 @@
 import axios from 'axios';
 
+
 const dividendStock = "OMC";
 
+// the ticker for the SMP500 US Index
 const SMP500 = "SPX";
 
+// The service for access each of the 5
+// snowflake indicators
 export default class SnowflakeService {
 
+    // get the value indicator of the stock.
+    // the cashflow for a given stock is compared to the actual stock value
+    // and the activated value is returned.
     public static async getValue(
         ticker: String,
         cashFlow: number
@@ -39,6 +46,10 @@ export default class SnowflakeService {
 
     }
 
+    // get the performance of the stock over the past year compared
+    // to the SMP500 (Compare US stock to US index).
+    // Compares the % growth in stock price for the index and stock and
+    // comnputes a score.
     public static async getPast(
         ticker: string
     ): Promise<number> {
@@ -72,6 +83,9 @@ export default class SnowflakeService {
         }
     }
 
+    // Get the future performance indicator of our stock.
+    // Checks the EBIT per share value of the stock and scales
+    // the ratio.
     public static async getFuture(
         ticker: string
     ): Promise<number> {
@@ -91,6 +105,9 @@ export default class SnowflakeService {
         }
     }
 
+    // get the risk associated with the stock.
+    // computes a risk gradient with risk given by the analysis controller
+    // and returns the activated value.
     public static async getRisk(
         stockRiskYear1: number,
         stockRiskYear2: number
@@ -113,6 +130,9 @@ export default class SnowflakeService {
         }
     }
 
+    // Get the divident indicator for the stock.
+    // the Stock yield is compared to the 5 year yield
+    // and scaled accordingly.
     public static async getDividend(
         stockYield: number
     ): Promise<number> {

@@ -9,6 +9,12 @@ interface StockObject {
     numUnits: number
 };
 
+// The portfolio controller handles all methods associated with the generation and
+// handling of a users portfolios. 
+// Create : create an empty portfolio for the user
+// List : Generate a portfolio list object with all portfolios owned by a user
+// Move : move a specified stock and quantity between 2 portfolios
+// Delete : delete the specified portfolio and move all stocks to the default portfolio
 export default class PortfolioController {
     public static create = async (
         req: Request,

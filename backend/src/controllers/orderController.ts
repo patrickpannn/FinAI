@@ -9,7 +9,14 @@ enum Direction {
     Buy = "BUY",
 }
 
+// The order controller handles all backend functionality to process
+// both market orders and limit orders (instantaneous and delayed orders)
+// Stocks/crypto can be bought and sold instantaneously or
+// crypto can be placed under a limit order.
 export default class OrderController {
+    // List out all orders that a specified user owns
+    // Order Model returns an order object which will be added to a list
+    // and sent to the frontend to parse
     public static list = async (
         req: Request,
         res: Response
@@ -35,6 +42,11 @@ export default class OrderController {
         }
     };
 
+    // Purchase a Limit Order
+    // The user cannot have more than 10 limit orders at a time
+    // The direction provided  must also be "BUY" which is stored in the document
+    // Once a buy Limit Order is allowable, the number of orders a user has
+    // will increase. The available Balance of the user will also decrease.
     public static buyLimitOrder = async (
         req: Request,
         res: Response
@@ -80,6 +92,11 @@ export default class OrderController {
         }
     };
 
+    // Sell Limit Order method
+    // For when a user wants to sell a stock at a specified price and quantity
+    // We check the order format and also if a stock exists to sell in
+    // one of our portfolios. If it does, we decrement by the stock quantity specified
+    // and increment the number of user limit orders
     public static sellLimitOrder = async (
         req: Request,
         res: Response
@@ -134,6 +151,13 @@ export default class OrderController {
         }
     };
 
+    // Cancel a Limit Order
+    // Check if the order has been executed already (not allowed)
+    // If it was a sell order we were cancelling, we want to add the 
+    // stock quantity set aside for selling back to the stock item itself.
+    // If it was a buy order we want to add the balance
+    // set aside for purchasing the stock back to the users available Balance.
+    // Once done, reduce the number of orders owned by the user.
     public static cancelOrder = async (
         req: Request,
         res: Response
@@ -189,6 +213,14 @@ export default class OrderController {
         }
     };
 
+    // Purchase a stock at the market price (instantaneous).
+    // fetch API data for the stock price, the total price
+    // is the stock price * the quantity.
+    // We check if the user balance is high enough.
+    // If we already own the stock, we need to add the units to the
+    // existing stock item, otherwise we make a new stock.
+    // An executed order will be left to show we successfully purchased
+    // this stock.
     public static buyMarketOrder = async (
         req: Request,
         res: Response
@@ -267,6 +299,11 @@ export default class OrderController {
         }
     };
 
+    // Sell an owned stock at the market price level.
+    // We must own the stock and have the quantity to sell.
+    // Once sold we can remove the stocks from our portfolio and
+    // add the value back to our user balance.
+    // An order is left to show we successfully sold our stocks.
     public static sellMarketOrder = async (
         req: Request,
         res: Response

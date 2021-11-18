@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Portfolio from '../models/portfolioModel';
 
+// the items found inside a stock json request
 const stockBody = [
     'name',
     'ticker',
@@ -8,6 +9,7 @@ const stockBody = [
     'units'
 ];
 
+// the items found inside an order json request
 const orderBody = [
     'direction',
     'units',
@@ -17,18 +19,26 @@ const orderBody = [
     'portfolio'
 ];
 
+// the directions which a limit order are allowed to have
 enum Direction {
     Sell = "SELL",
     Buy = "BUY",
 }
 
+// Due to our use of API's, we can only allow bitcoin and ethereum
+// to have Limit Order functionality
 enum PossibleOrders {
     bitcoin = "BINANCE:BTCUSDT",
     ethereum = "BINANCE:ETHUSDT"
 };
 
+// class to verify that a stockOrder or LimitOrder is
+// of the correct format. This middleware will reduce the
+// duplicate code potentially found in all orderController routes
 class VerifyOrder {
 
+    // verify that a limit order is of the correct format and
+    // the specified portfolio exists for a given user
     public static async verifyLimitOrder(
         req: Request,
         res: Response,
@@ -74,6 +84,8 @@ class VerifyOrder {
         };
     };
 
+    // verify that we are given a single item in our request,
+    // being the order ID
     public static async verifyCancelOrder(
         req: Request,
         res: Response,
@@ -91,6 +103,8 @@ class VerifyOrder {
         };
     };
 
+    // verify that the marketOrder is of the correct format and that
+    // the specified user has the given portfolio
     public static async verifyMarketOrder(
         req: Request,
         res: Response,
