@@ -21,10 +21,10 @@ Week 5
 
 Week 6
 - Discussed High Modality Figma pages for sprint 2 and made a sample watch list page
-- Made the news feed functionality working(give a string and match news from New York Times API)
+- Made the frontend news feed functionality working(give a string and match news from New York Times API)
 
 Week 7
-- Made the left hand side list(a list stocks) working and able to add and/delete items from the frontend
+- Made the watchlist left hand side list(a list stocks) working and able to add and/delete items from the frontend
 - Arranged a basic format of user history order page
 
 Week 8
@@ -37,5 +37,10 @@ Week 9
 - Researched the package for doing the frontend sentiment score component
 
 Week 10
-- Finished frontend profile, snowflake
-
+- Finished frontend profile
+- Finished snowflake frontend
+- Finished buy limit order frontend
+- Finished cancel limit order frontend
+- Fixed grey out problem when clicking the buy limit order tab twice
+- Increased the font size of snowflake attributes and label
+- Did the third party API part for the NYTimes
