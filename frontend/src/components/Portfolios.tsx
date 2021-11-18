@@ -78,7 +78,9 @@ const Portfolios: React.FC<Props> = () => {
             tickerList.push(j.ticker);
           });
         });
-        fetchTickerInfo([...new Set(tickerList)]);
+        if (tickerList.length !== 0) {
+          fetchTickerInfo([...new Set(tickerList)]);
+        }
       } else {
         throw new Error('Error');
       }
