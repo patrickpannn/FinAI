@@ -32,6 +32,7 @@ interface Props {
     openWallet? : () => void,
     openTopupModal?: () => void,
     openUpdateModal?: () => void,
+    openPortfolios?: () => void,
     openOrders?: () => void
 }
 
@@ -41,6 +42,7 @@ const Sidebar: React.FC<Props> = ({
     openWallet,
     openTopupModal,
     openUpdateModal,
+    openPortfolios,
     openOrders
 }) => {
     const [deleteAcDialog, setDeleteAcDialog] = React.useState(false);
@@ -159,7 +161,7 @@ const Sidebar: React.FC<Props> = ({
                         />
                         <SidebarBtn
                             text='Portfolios'
-                            onClick={(): void => console.log('portfolio')}
+                            onClick={(): void => history.push('/dashboard/portfolios')}
                             childNode={
                                 <BarChartIcon className={styles.btnColor} />
                             }

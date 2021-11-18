@@ -4,7 +4,8 @@ import Topup from '../components/Topup';
 import UpdateProfile from '../components/UpdateProfile';
 import Watchlist from './Watchlist';
 import { Route } from 'react-router-dom';
-import Orders from '../pages/Orders';
+import Portfolios from '../components/Portfolios';
+import Orders from '../components/Orders';
 import Wallet from '../pages/Wallet';
 
 const Dashboard: React.FC = () => {
@@ -17,7 +18,6 @@ const Dashboard: React.FC = () => {
         setSearchTicker(ticker);
         setSearchStockName(stockName);
     };
-
 
     return (
         <main>
@@ -32,6 +32,9 @@ const Dashboard: React.FC = () => {
                     searchTicker={searchTicker}
                     searchStockName={searchStockName}
                 />
+            </Route>
+            <Route exact path="/dashboard/portfolios">
+                <Portfolios />
             </Route>
             <Route exact path="/dashboard/orderhistory">
                 <Orders />
