@@ -81,8 +81,7 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
                       size: 25
                     }
                 }
-            },
-            
+            },  
         },
         plugins: {
             legend: {

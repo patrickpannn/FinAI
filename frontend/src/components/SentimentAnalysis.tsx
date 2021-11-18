@@ -45,7 +45,6 @@ const SentimentAnalysis: React.FC<Props> = ({ stockName }) => {
             if (stockName) {
                 setDropColor('');
                 setScore(0);
-                console.log(stockName);
                 const response = await fetch(`${url}/analysis/sentiment/${stockName}`, {
                     method: 'GET',
                     headers: {
