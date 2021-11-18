@@ -1,7 +1,7 @@
 import { Schema, model, Document } from 'mongoose';
 import Portfolio from './portfolioModel';
-import dotenv from 'dotenv';
-dotenv.config();
+import Stock from './stockModel';
+import User from './userModel';
 
 // Document interface
 interface OrderInterface extends Document {
@@ -13,14 +13,15 @@ interface OrderInterface extends Document {
     name: string,
     executed: boolean,
     direction: string,
+    isLimitOrder: boolean,
     getObject: () => {};
 }
 
 // Schema
 const OrderSchema = new Schema<OrderInterface>({
     user: {
-        type: Schema.Types.ObjectId, 
-        required: true, 
+        type: Schema.Types.ObjectId,
+        required: true,
         ref: 'user',
     },
     portfolio: {
@@ -29,11 +30,10 @@ const OrderSchema = new Schema<OrderInterface>({
         ref: 'portfolio',
     },
     numUnits: {
-        type: Number, 
+        type: Number,
         required: true,
         validate(units: number): void {
-            if(units <=0)
-            {
+            if (units <= 0) {
                 throw new Error('You must order a positive quantity of stock shares');
             }
         }
@@ -42,15 +42,14 @@ const OrderSchema = new Schema<OrderInterface>({
         type: Number,
         required: true,
         validate(price: number): void {
-            if(price <=0)
-            {
+            if (price <= 0) {
                 throw new Error('You must specify a positive price for your limit order');
             }
         }
     },
-    ticker: { 
-        type: String, 
-        required: true, 
+    ticker: {
+        type: String,
+        required: true,
         trim: true,
     },
     name: {
@@ -66,6 +65,10 @@ const OrderSchema = new Schema<OrderInterface>({
     direction: {
         type: String,
         required: true,
+    },
+    isLimitOrder: {
+        type: Boolean,
+        required: true,
     }
 }, { timestamps: true });
 
@@ -79,6 +82,7 @@ OrderSchema.methods.getObject = async function (): Promise<{}> {
         }
 
         let orderObj = {
+            id: this._id,
             numUnits: this.numUnits,
             executePrice: this.executePrice,
             ticker: this.ticker,
@@ -93,5 +97,63 @@ OrderSchema.methods.getObject = async function (): Promise<{}> {
         throw new Error('Could not return order object');
     }
 };
+
+OrderSchema.post('save', { document: true }, async function (next): Promise<void> {
+    try {
+        if (this.executed === true && this.isLimitOrder) {
+            const user = await User.findById(this.user);
+            if (!user) {
+                throw new Error('Could not find user');
+            }
+            const existingStock = await Stock.findOne({
+                user: this.user,
+                portfolio: this.portfolio,
+                ticker: this.ticker
+            });
+            if (this.direction === "SELL") // selling an existing stock
+            {
+                if (!existingStock) {
+                    throw new Error('Could not find stock!');
+                }
+                if (existingStock.numUnits === 0) {
+                    await existingStock.delete();
+                }
+                user.balance +=
+                    parseFloat((this.executePrice * this.numUnits).toFixed(2));
+            } else // purchasing a stock which may or may not already exist in the specified portfolio
+            {
+                if (existingStock) {
+                    const avg = (
+                        (existingStock.numUnits * existingStock.averagePrice +
+                            this.numUnits * this.executePrice) /
+                        (existingStock.numUnits + this.numUnits)).toFixed(2);
+
+                    existingStock.numUnits += this.numUnits;
+                    existingStock.averagePrice = parseFloat(avg);
+
+                    await existingStock.save();
+                } else {
+                    const newStock = new Stock({
+                        portfolio: this.portfolio,
+                        ticker: this.ticker,
+                        name: this.name,
+                        averagePrice: this.executePrice,
+                        numUnits: this.numUnits
+                    });
+                    if (!newStock) {
+                        throw new Error('Could not create stock');
+                    }
+                    await newStock.save();
+                }
+                user.balance -=
+                    parseFloat((this.executePrice * this.numUnits).toFixed(2));
+                user.numOrders--;
+                await user.save();
+            }
+        }
+    } catch (e) {
+        throw new Error('Failed to save the model');
+    }
+});
 
 export default model<OrderInterface>('order', OrderSchema);

@@ -1,6 +1,10 @@
 import { Button } from '@mui/material';
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { styled } from '@mui/material/styles';
+import styled from 'styled-components';
+
+interface StockInfoProps {
+    $isloading: boolean,
+}
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     selected: {
@@ -24,6 +28,9 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     down: {
         color: 'red',
+    },
+    progress: {
+        margin: 'auto',
     }
 }));
 
@@ -79,16 +86,20 @@ export const ButtonGroup = styled('div')({
     marginTop: '30px',
 });
 
-export const StockInfoBox = styled('div')({
+export const StockInfoBox = styled('div')<StockInfoProps>(({ 
+    $isloading 
+}: StockInfoProps) => ({
     width: '100%',
     height: '100px',
     margin: '20px 0',
     borderRadius: '5px',
     boxShadow: 'rgba(0, 0, 0, 0.25) 0px 5px 10px',
-    display: 'grid',
-    gridTemplateColumns: 'auto auto auto',
+    display: $isloading ? 'flex' : 'grid',
+    gridTemplateColumns: $isloading ? 'none' :'auto auto auto',
+    justifyContent: $isloading ? 'center' : 'normal',
+    alignItems: $isloading ? 'center' : 'normal',
     '& div': {
         textAlign: 'center',
         margin: 'auto 0',
-    } 
-});
+    }
+}));

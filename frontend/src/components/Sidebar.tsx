@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
     Box,
     Drawer,
@@ -9,7 +9,6 @@ import {
     DialogTitle,
     DialogActions,
     Button,
-    Avatar,
 } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import BarChartIcon from '@mui/icons-material/BarChart';
@@ -22,7 +21,7 @@ import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
 import { useHistory } from 'react-router-dom';
-import { DialogContent, LargeButton, useStyles } from '../styles/sideBar.style';
+import { DialogContent, LargeButton, useStyles, StyledAvatar } from '../styles/sideBar.style';
 import SidebarBtn from './SidebarBtn';
 
 const url = process.env.REACT_APP_URL || 'http://localhost:5000';
@@ -30,22 +29,29 @@ const url = process.env.REACT_APP_URL || 'http://localhost:5000';
 interface Props {
     open: boolean,
     onClose: () => void,
+    openWallet? : () => void,
     openTopupModal?: () => void,
     openUpdateModal?: () => void,
+    openPortfolios?: () => void,
+    openOrders?: () => void
 }
 
 const Sidebar: React.FC<Props> = ({
     open,
     onClose,
+    openWallet,
     openTopupModal,
-    openUpdateModal
+    openUpdateModal,
+    openPortfolios,
+    openOrders
 }) => {
     const [deleteAcDialog, setDeleteAcDialog] = React.useState(false);
     const history = useHistory();
     const styles = useStyles();
     const dispatch = useDispatch();
     const { setToast } = bindActionCreators(actionCreators, dispatch);
-
+    const [name, setName] = React.useState('');
+    const [nameFirstLetter, setNameFirstLetter] = React.useState('');
 
     const handleLogout = async (): Promise<void> => {
         try {
@@ -90,6 +96,33 @@ const Sidebar: React.FC<Props> = ({
             setToast({ type: 'error', message: `${error}` });
         }
     };
+    const handleProfile = useCallback(async (): Promise<void> => {
+        try {
+            const response = await fetch(`${url}/user/profile`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
+                },
+            });
+            if (response.status === 200) {
+                const data = await response.json();
+                setName(data.username);
+                setNameFirstLetter(data.username[0]);
+            } else {
+                
+                throw new Error('Failed to fetch user name');
+                
+            }
+        } catch (e) {
+            setToast({ type: 'error', message: `${e}` });
+        }
+         // eslint-disable-next-line
+    },[]);
+
+    useEffect(() => {
+        handleProfile();
+    }, [handleProfile]);
 
     return (
         <>
@@ -101,8 +134,10 @@ const Sidebar: React.FC<Props> = ({
                     onKeyDown={onClose}
                 >
                     <div className={styles.userInfo}>
-                        <Avatar sx={{ width: 32, height: 32 }}>J</Avatar>
-                        <h1 className={styles.username}>John</h1>
+                        <StyledAvatar >{nameFirstLetter}</StyledAvatar>
+                        <h1 className={styles.username}>
+                            {name}
+                        </h1>
                     </div>
                     <Stack className={styles.topup} direction="row">
                         <LargeButton
@@ -126,14 +161,14 @@ const Sidebar: React.FC<Props> = ({
                         />
                         <SidebarBtn
                             text='Portfolios'
-                            onClick={(): void => console.log('portfolio')}
+                            onClick={(): void => history.push('/dashboard/portfolios')}
                             childNode={
                                 <BarChartIcon className={styles.btnColor} />
                             }
                         />
                         <SidebarBtn
                             text='Wallet'
-                            onClick={(): void => console.log('wallet')}
+                            onClick={(): void => history.push('/dashboard/balance')}
                             childNode={
                                 <AccountBalanceWalletIcon
                                     className={styles.btnColor}
@@ -142,7 +177,7 @@ const Sidebar: React.FC<Props> = ({
                         />
                         <SidebarBtn
                             text='Orders'
-                            onClick={(): void => console.log('orderes')}
+                            onClick={(): void => history.push('/dashboard/orderhistory')}
                             childNode={
                                 <ListAltIcon className={styles.btnColor} />
                             }
