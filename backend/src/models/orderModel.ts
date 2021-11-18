@@ -13,6 +13,7 @@ interface OrderInterface extends Document {
     name: string,
     executed: boolean,
     direction: string,
+    isLimitOrder: boolean,
     getObject: () => {};
 }
 
@@ -67,6 +68,10 @@ const OrderSchema = new Schema<OrderInterface>({
         type: String,
         required: true,
     },
+    isLimitOrder: {
+        type: Boolean,
+        required: true,
+    }
 }, { timestamps: true });
 
 OrderSchema.methods.getObject = async function (): Promise<{}> {
@@ -145,12 +150,12 @@ OrderSchema.post('save', { document : true }, async function (next): Promise<voi
                 {
                     throw new Error('Could not create stock');
                 }
-                newStock.save();
+                await newStock.save();
             }
             user.balance -= 
                 parseFloat((this.executePrice * this.numUnits).toFixed(2));
-            user.numOrders --;
-            user.save();
+            if(this.isLimitOrder) user.numOrders --;
+            await user.save();
         }
     }
 });
