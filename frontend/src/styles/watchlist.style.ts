@@ -42,7 +42,8 @@ export const Main = styled('div')({
 });
 
 export const LeftBar = styled('div')({
-    flex: 2,
+    // flex: 2,
+    width: "450px",
     overflow: 'auto',
     borderRight: '1px solid #edece8',
     position: 'relative',
@@ -96,10 +97,10 @@ export const TabContainer = styled('div')({
 });
 
 export const StyledTabs = styled('div')({
-    width: '100%',
+    width: 'calc(100% - 450px)',
     height: '60px',
     display: 'flex',
-    position: 'sticky',
+    position: 'fixed',
     backgroundColor: 'white',
     bottom: 0,
 });
