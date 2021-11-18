@@ -232,7 +232,7 @@ const Portfolios: React.FC<Props> = () => {
         setToast({ type: 'success', message: `A New Portfolio Built` });
         fetchPortfoliosList();
       } else {
-        throw new Error('Existed Portfolio Name');
+        throw new Error('Existing Portfolio Name');
       }
 
     } catch (error) {
