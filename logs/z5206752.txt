@@ -65,3 +65,10 @@
 16/11/2021:
 - Refactored codebase for snowflake analysis past and future methods
 - looked into RNN method again, no headway made :(
+
+
+17/11/2021:
+- Adjusted snowflake getPast performance method and rescaled
+- Working through PR's with team
+- Refactored orderModel -> post save method should only work for Limit Orders, frontEnd needs to know the executed status of the order
+- Refactored orderController -> maximum number of orders
