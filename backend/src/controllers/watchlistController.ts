@@ -1,7 +1,13 @@
 import { Request, Response } from 'express';
 import Watchlist, { Ticker } from '../models/watchlistModel';
 
+// The watchlist controller handles all
+// backend functionality for watchlists.
+// The watchlist controller will return a list or add/remove
+// stocks for a specified user
 export default class WatchListController {
+    //return a list of watchlist tickers associated with items
+    // in the users watchlist
     public static list = async (
         req: Request,
         res: Response
@@ -31,6 +37,8 @@ export default class WatchListController {
         }
     };
 
+    // add a specific ticker item to the users watchlist
+    // the stockname is also included in the watchlist item
     public static addTicker = async (
         req: Request,
         res: Response
@@ -63,6 +71,7 @@ export default class WatchListController {
         }
     };
 
+    // remove a specified ticker from the users watchlist 
     public static removeTicker = async (
         req: Request,
         res: Response
