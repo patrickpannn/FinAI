@@ -4,7 +4,6 @@ import App from './app';
 import dotenv from 'dotenv';
 import PortfolioRoute from './routers/portfolioRoute';
 import AnalysisRoute from './routers/analysisRoute';
-import { Socket } from 'socket.io';
 import ExecuteOrder from './sockets/executeOrder';
 import OrderRoute from './routers/orderRoute';
 dotenv.config();
@@ -18,12 +17,8 @@ async function main(): Promise<void> {
         new OrderRoute(),
         new AnalysisRoute()
     ]);
-    const io = app.getIO();
-    io.on("connection", (socket: Socket) => {
-        console.log("new Connection", socket.id);
-        const executeOrder = new ExecuteOrder(socket);
-        executeOrder.initialize();
-    });
+    const executeOrder = new ExecuteOrder();
+    executeOrder.initialize();
     app.listen();
 }
 
