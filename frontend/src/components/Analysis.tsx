@@ -11,7 +11,7 @@ const Analysis: React.FC<Props> = ({ ticker, stockName }) => {
     return (
         <Main>
             <SentimentAnalysis stockName={stockName} />
-            <SnowFlake ticker={ticker}/>
+            {!(ticker === 'BINANCE:BTCUSDT' || ticker === 'BINANCE:ETHUSDT') && <SnowFlake ticker={ticker}/>}
         </Main>
     );
 };

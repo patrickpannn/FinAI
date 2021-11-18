@@ -3,11 +3,11 @@ import { Radar } from 'react-chartjs-2';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
 import { useDispatch } from 'react-redux';
-import { useStyles } from '../styles/snowflake.style';
+import { useStyles } from '../styles/analysis.style';
 import CircularProgress from '@mui/material/CircularProgress';
 
 const url = process.env.REACT_APP_URL || 'http://localhost:5000';
-interface Props { 
+interface Props {
     ticker: string,
 }
 
@@ -21,39 +21,35 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
     const [future, setFuture] = useState(0);
     const [risk, setRisk] = useState(0);
     const [dividend, setDividend] = useState(0);
-    const [display, setDisplay] = useState(false);
 
     const fetchSnowflake = useCallback(async (): Promise<void> => {
         try {
-            if (ticker === 'BINANCE:BTCUSDT' || ticker === 'BINANCE:ETHUSDT') {
-                setDisplay(false);
+
+            setHasData(false);
+            const response = await fetch(`${url}/analysis/snowflake/${ticker}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
+                },
+            });
+            if (response.status === 200) {
+                const data = await response.json();
+                setHasData(true);
+                setValue(data.value);
+                setPast(data.past);
+                setFuture(data.future);
+                setRisk(data.risk);
+                setDividend(data.dividend);
             } else {
-                setHasData(false);
-                const response = await fetch(`${url}/analysis/snowflake/${ticker}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
-                    },
-                });
-                if (response.status === 200) {
-                    const data = await response.json();
-                    setHasData(true);
-                    setDisplay(true);
-                    setValue(data.value);
-                    setPast(data.past);
-                    setFuture(data.future);
-                    setRisk(data.risk);
-                    setDividend(data.dividend);
-                } else {
-                    throw new Error('Failed to fetch data for snowflake');
-                }
+                throw new Error('Failed to fetch data for snowflake');
+
             }
-            
+
         } catch (e) {
             setToast({ type: 'error', message: `${e}` });
         }
-       // eslint-disable-next-line
+        // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
@@ -63,18 +59,18 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
     const data = {
         labels: ['Value', 'Future', 'Past', 'Risk', 'Dividend'],
         datasets: [
-          {
-            label: 'Value',
-            data: [value, past, future, risk, dividend],
-            fill: true, 
-            backgroundColor: '#0017ea',
-            borderColor: '#0017ea',
-            borderWidth: 3,
-            tension: 0.1,
-          },
+            {
+                label: 'Value',
+                data: [value, past, future, risk, dividend],
+                fill: true,
+                backgroundColor: '#0017ea',
+                borderColor: '#0017ea',
+                borderWidth: 3,
+                tension: 0.1,
+            },
         ],
-      };
-      
+    };
+
     const options = {
         scales: {
             r: {
@@ -85,16 +81,16 @@ const SnowFlake: React.FC<Props> = ({ ticker }) => {
     };
 
     return (
-        <div>
-            {display && !hasData && <h1><CircularProgress /></h1>}
-
-            {display && hasData &&
-                <>
-                <h2 className={styles.label}>Snowflake Analysis</h2>
-                <div className={styles.chartContainer}>  
-                    <Radar data={data} options={options} />   
+        <div className={styles.box}>
+            <h1>Snowflake Analysis</h1>
+            {!hasData
+                ? <div className={`${styles.label} ${styles.progressBar}`}>
+                    <CircularProgress />
                 </div>
-                </>
+                :
+                <div className={styles.chartContainer}>
+                    <Radar data={data} options={options} />
+                </div>
             }
         </div>
     );
