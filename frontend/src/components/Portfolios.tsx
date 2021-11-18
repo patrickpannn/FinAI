@@ -207,7 +207,7 @@ const Portfolios: React.FC<Props> = () => {
         });
         fetchPortfoliosList();
       } else {
-        throw new Error('Error');
+        throw new Error('Cannot Move Units');
       }
 
     } catch (error) {
