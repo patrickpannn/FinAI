@@ -82,7 +82,7 @@ const SentimentAnalysis: React.FC<Props> = ({ stockName }) => {
     }, [fetchScore]);
 
     return (
-        <div className={`${styles.box}`}>
+        <div className={styles.box}>
             <h1>Sentiment Score</h1>
             {dropColor === ''
                 ? <div className={`${styles.label} ${styles.progressBar}`}><CircularProgress /></div>

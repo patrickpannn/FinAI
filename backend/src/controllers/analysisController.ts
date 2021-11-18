@@ -86,7 +86,7 @@ export default class AnalysisController {
 
             res.status(200).json(snowflake);
         } catch (e) {
-            res.status(400).json({ error: 'Bad Request' });
+            res.status(400).json({ 'error': 'Bad Request' });
         }
     };
 }

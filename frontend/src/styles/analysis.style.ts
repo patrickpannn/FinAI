@@ -26,6 +26,11 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         justifyContent: 'center',
         margin: '40px 0',
     },
+    chartContainer: {
+        position: "relative",
+        height:'600px',
+        width:'600px',
+    },
 }));
 
 export const Main = styled('div')({
