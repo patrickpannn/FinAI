@@ -4,6 +4,8 @@ import Topup from '../components/Topup';
 import UpdateProfile from '../components/UpdateProfile';
 import Watchlist from './Watchlist';
 import { Route } from 'react-router-dom';
+import Portfolios from '../components/Portfolios';
+import Orders from './Orders';
 import Wallet from '../pages/Wallet';
 
 interface Props {
@@ -20,7 +22,7 @@ const Dashboard: React.FC<Props> = ({ updateLogin }) => {
         setSearchTicker(ticker);
         setSearchStockName(stockName);
     };
- 
+
     return (
         <main>
             <Header
@@ -35,6 +37,12 @@ const Dashboard: React.FC<Props> = ({ updateLogin }) => {
                     searchTicker={searchTicker}
                     searchStockName={searchStockName}
                 />
+            </Route>
+            <Route exact path="/dashboard/portfolios">
+                <Portfolios />
+            </Route>
+            <Route exact path="/dashboard/orderhistory">
+                <Orders />
             </Route>
             <Route exact path="/dashboard/balance">
                   <Wallet />

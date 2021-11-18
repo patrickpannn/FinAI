@@ -42,7 +42,6 @@ export const Main = styled('div')({
 });
 
 export const LeftBar = styled('div')({
-    // flex: 2,
     width: "450px",
     overflow: 'auto',
     borderRight: '1px solid #edece8',

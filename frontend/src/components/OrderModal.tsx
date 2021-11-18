@@ -29,7 +29,6 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
     ): Promise<void> => {
         e.preventDefault();
         try {
-
             if (isNaN(+(Number(units))) || parseFloat(units) <= 0) {
                 throw new Error('Please enter postive number for units');
             }
@@ -90,7 +89,7 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
             } else if (response.status === 401) {
                 throw new Error('Authentication Failed');
             } else {
-                throw new Error('Insufficient funds or exceed maximum number of orders');
+                throw new Error('Insufficient funds or Exceed the maximum number of orders allowed');
             }
         } catch (error) {
             setToast({ type: 'error', message: `${error}` });
@@ -127,25 +126,6 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
                             </DialogActions>
                         </form>
                     </DialogContent>
-                    {(ticker === 'BINANCE:BTCUSDT' || ticker === 'BINANCE:ETHUSDT') &&
-                        <>
-                            <TabContainer>
-                                <StyledTabs
-                                    aria-label="tabs"
-                                >
-                                    <OrderTab
-                                        className={`${page === 'BUY NOW' && styles.selected}`}
-                                        onClick={(): void => setPage('BUY NOW')} >
-                                        MARKET ORDER
-                                    </OrderTab>
-                                    <OrderTab
-                                        onClick={(): void => setPage('LIMIT ORDER')} >
-                                        LIMIT ORDER
-                                    </OrderTab>
-                                </StyledTabs>
-                            </TabContainer>
-                        </>
-                    }
                 </>
             }
             {page === 'LIMIT ORDER' &&
@@ -182,22 +162,28 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
                             </DialogActions>
                         </form>
                     </DialogContent>
+                </>
+                }
+                {(ticker === 'BINANCE:BTCUSDT' || ticker === 'BINANCE:ETHUSDT') &&
+                        
                     <TabContainer>
                         <StyledTabs
                             aria-label="tabs"
                         >
                             <OrderTab
+                                className={`${page === 'BUY NOW' && styles.selected}`}
                                 onClick={(): void => setPage('BUY NOW')} >
                                 MARKET ORDER
                             </OrderTab>
                             <OrderTab
                                 className={`${page === 'LIMIT ORDER' && styles.selected}`}
-                                onClick={(): void => setPage('BUY LIMIT ORDER')} >
+                                onClick={(): void => setPage('LIMIT ORDER')} >
                                 LIMIT ORDER
                             </OrderTab>
                         </StyledTabs>
                     </TabContainer>
-                </>}
+                        
+                }
         </BootstrapDialog>
     );
 };
