@@ -32,6 +32,7 @@ interface Props {
     openWallet? : () => void,
     openTopupModal?: () => void,
     openUpdateModal?: () => void,
+    openOrders?: () => void
 }
 
 const Sidebar: React.FC<Props> = ({
@@ -39,7 +40,8 @@ const Sidebar: React.FC<Props> = ({
     onClose,
     openWallet,
     openTopupModal,
-    openUpdateModal
+    openUpdateModal,
+    openOrders
 }) => {
     const [deleteAcDialog, setDeleteAcDialog] = React.useState(false);
     const history = useHistory();
@@ -173,7 +175,7 @@ const Sidebar: React.FC<Props> = ({
                         />
                         <SidebarBtn
                             text='Orders'
-                            onClick={(): void => console.log('orderes')}
+                            onClick={(): void => history.push('/dashboard/orderhistory')}
                             childNode={
                                 <ListAltIcon className={styles.btnColor} />
                             }
