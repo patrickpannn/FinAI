@@ -1,114 +1,138 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useStyles } from '../styles/orders.style';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
 import { useDispatch } from 'react-redux';
-import { styled } from '@mui/material/styles';
-import { Typography, Table, TableContainer, TableHead, TableRow, TableBody } from '@mui/material';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import { Table, TableContainer , TableHead, TableRow, TableBody, Button } from '@mui/material';
+import { Row, C, OrderTitle } from '../styles/orders.style';
 import Paper from '@mui/material/Paper';
 
 const url = process.env.REACT_APP_URL || 'http://localhost:5000';
 
 interface OrderInterface {
-    numUnits: number,
+    id: string,
+    numUnits: number, 
     executePrice: number,
     ticker: string,
-    name: string,
-    executed: boolean,
+    name: string, 
+    executed: boolean, 
     direction: string,
-    portfolio: string,
+    portfolio: string, 
 }
 const Orders: React.FC = () => {
-
+    
+    const styles = useStyles();
     const dispatch = useDispatch();
     const { setToast } = bindActionCreators(actionCreators, dispatch);
     const [orders, setOrders] = useState<OrderInterface[]>([]);
-    const fetchOrders = async (): Promise<void> => {
+    const [id, setId] = useState('');
+    
+    const handleSubmit = async (
+        e: React.FormEvent<HTMLFormElement>
+    ): Promise<void> => {
+        e.preventDefault();
         try {
-            const response = await fetch(`${url}/user/order`, {
-                method: 'GET',
+            const response = await fetch(`${url}/user/order/cancelOrder`, {
+                method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
                 },
+                body: JSON.stringify({
+                    id
+                })
             });
+
             if (response.status === 200) {
-                const data = await response.json();
-                setOrders(data);
-            } else {
-                throw new Error('Failed to fetch order history');
+                setToast({ type: 'success', message: 'Order cancelled' });
             }
-        } catch (e) {
-            setToast({ type: 'error', message: `${e}` });
-
+        } catch (error) {
+            setToast({ type: 'error', message: `${error}` });
         }
-    };
-    fetchOrders();
-    const StyledTableCell = styled(TableCell)(({ theme }) => ({
-        [`&.${tableCellClasses.head}`]: {
-            backgroundColor: theme.palette.primary.main,
-            color: theme.palette.common.white,
-        },
-        [`&.${tableCellClasses.body}`]: {
-            fontSize: 14,
-        },
-    }));
 
-    const StyledTableRow = styled(TableRow)(({ theme }) => ({
-        '&:nth-of-type(odd)': {
-            backgroundColor: theme.palette.action.hover,
-        },
-        // hide last border
-        '&:last-child td, &:last-child th': {
-            border: 0,
-        },
-    }));
+    };
+
+    useEffect(() => {
+        const fetchOrders = async (): Promise<void> => {
+            try {
+                const response = await fetch(`${url}/user/order`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
+                    },
+                });
+                if (response.status === 200) {
+                    const data = await response.json();
+                    console.log(data);
+                    setOrders(data);
+                } else {
+                    throw new Error('Failed to fetch order history');
+                }
+            } catch (e) {
+                setToast({ type: 'error', message: `${e}` });
+            }
+        };
+        fetchOrders();
+    });
+
     return (
-        <div style={{ padding: '50px' }}>
-            <Typography variant="h4">Order History</Typography>
-            <TableContainer component={Paper} >
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableCell>Symbol</StyledTableCell>
-                            <StyledTableCell>Stock Name</StyledTableCell>
-                            <StyledTableCell>Quantity</StyledTableCell>
-                            <StyledTableCell>Stock Price Each</StyledTableCell>
-                            <StyledTableCell>Total Price</StyledTableCell>
-                            <StyledTableCell>Direction</StyledTableCell>
-                            <StyledTableCell>Portfolio</StyledTableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {orders && orders.map(order => (
-                            <StyledTableRow key={order.ticker}>
-                                <StyledTableCell>
-                                    {order.ticker}
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                    {order.name}
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                    {order.numUnits}
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                    {order.executePrice}
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                    {order.numUnits * order.executePrice}
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                    {order.direction}
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                    {order.portfolio}
-                                </StyledTableCell>
-                            </StyledTableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+        <div className={styles.tableSpace}>
+            <OrderTitle>
+                <h2>My Orders</h2>
+            </OrderTitle>
+            <form onSubmit={(e): Promise<void> => handleSubmit(e)}>
+                <TableContainer component={Paper}>
+                    <Table className={styles.tableSize} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <C>Symbol</C>
+                                <C>Stock Name</C>
+                                <C>Quantity</C>
+                                <C>Stock Price Each</C>
+                                <C>Total Price</C>
+                                <C>Direction</C>
+                                <C>Portfolio</C>
+                                <C>Status</C>
+                            </TableRow>
+                        </TableHead>
+                
+                        <TableBody>
+                            {orders && orders.map(o => (
+                                <Row key= {o.id}>
+                                    <C>{o.ticker}</C>
+                                    <C>{o.name}</C>
+                                    <C>{o.numUnits}</C>
+                                    <C>{(o.executePrice).toFixed(2)}</C>
+                                    <C>
+                                    {(o.numUnits*o.executePrice).toFixed(2)}
+                                    </C>
+                                    <C>{o.direction}</C>
+                                    <C>{o.portfolio}</C>
+                                    {o.executed && 
+                                        <C>Executed</C>
+                                    }
+                                    {!o.executed && 
+                                        <C>
+                                            <Button
+                                                type="submit"
+                                                variant="contained"
+                                                color="error"
+                                                onClick={
+                                                    (): void => setId(o.id)
+                                                }
+                                            >
+                                            Cancel
+                                            </Button>
+                                        </C>
+                                    }
+                                </Row>                 
+                            ))}
+                        </TableBody>   
+                    </Table>
+                </TableContainer>
+            </form>
         </div>
     );
 };
-export default Orders;
+export default Orders;  
