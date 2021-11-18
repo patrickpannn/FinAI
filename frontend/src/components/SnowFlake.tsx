@@ -10,7 +10,7 @@ const url = process.env.REACT_APP_URL || 'http://localhost:5000';
 interface Props {
     ticker: string,
 }
-
+// Given the stock symbol, display the value, future, past, risk, dividend in a radar graph
 const SnowFlake: React.FC<Props> = ({ ticker }) => {
     const styles = useStyles();
     const dispatch = useDispatch();

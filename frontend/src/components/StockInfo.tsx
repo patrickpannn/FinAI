@@ -8,7 +8,13 @@ import CircularProgress from '@mui/material/CircularProgress';
 interface Props {
     ticker: string,
 }
-
+// Showing useful stock performance attributes including 
+// 52 week low
+// 52 week high
+// Market Cap
+// PE ratio
+// ROE
+// Profit Margin
 const StockInfo: React.FC<Props> = ({ ticker }) => {
     const dispatch = useDispatch();
     const { setToast } = bindActionCreators(actionCreators, dispatch);

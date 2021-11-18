@@ -9,7 +9,7 @@ interface DialogTitleProps {
     children?: React.ReactNode;
     onClose: () => void;
 }
-
+//Pop up window title 
 const StyledDialogTitle: React.FC<DialogTitleProps> = ({
     children, onClose
 }) => {

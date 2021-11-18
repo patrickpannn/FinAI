@@ -12,7 +12,7 @@ interface Props {
     open: boolean,
     onClose: () => void;
 }
-
+// Pop up top up window
 const Topup: React.FC<Props> = ({ open, onClose }) => {
     const [amount, setAmount] = useState<number>();
     const styles = useStyles();

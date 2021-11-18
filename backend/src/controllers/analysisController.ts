@@ -8,6 +8,11 @@ enum SnowflakeAnalysisIgnore {
     ethereum = "BINANCE:ETHUSDT"
 };
 
+// The analysis controller handles both the python services and snowflake Services.
+// The snowflake method sets up parameters useful for the Value, Dividend and Risk
+// indicators of the stock as returns the snowflake object
+// The getSentimentScore method uses the python service to call the
+// sentimentAnalysis python script to compute the sentiment score and passes it to the frontend
 export default class AnalysisController {
     // this is the controller to get sentiment score
     public static getSentimentScore = async (

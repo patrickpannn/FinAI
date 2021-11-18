@@ -36,7 +36,9 @@ interface Props {
     openPortfolios?: () => void,
     openOrders?: () => void
 }
-
+// The sidebar on the right hand side which enables to navigate between different pages/popup window
+// The pages and components are: Top up window, Watchlist page, Portfolio page, Wallet page, Orders page, 
+//                              Update Profile window,, Logout button, Logout button
 const Sidebar: React.FC<Props> = ({
     open,
     onClose,

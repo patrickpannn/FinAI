@@ -16,7 +16,18 @@ const password = process.env.FROMPASSWORD || '404isnotfound';
 
 /*
     Class UserController has several handlers to handle different endpoint requests
-    i.e. signup, login, sendCode, verifyCode, resetPassword, updateProfile
+    signup: allow user to make a new account 
+    logout: let user logout of the web page and remove the associated session token
+    login: let user login in and give them a unique token to continue accessing the web page
+    getProfile: return the profile details associated with our user
+    updateProfile: allow user to update their profile details
+    sendCode: allow user to send a email to get a reset code if they forget their password
+    verifyCode: check that the code given is correct
+    resetPassword: allow the user to reset their password after confirming their code
+    changeBalance: allow the user to change their balance by a specified amount
+    getBalance: get the current balance of the user
+    deleteAccount: delete all documents in database associated with the user
+
 */
 export default class UserController {
 

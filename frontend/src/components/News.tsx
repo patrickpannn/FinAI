@@ -11,6 +11,8 @@ interface Props {
     name: string,
 }
 
+// Given the company name of a stock, 
+// return all the related news including the news headline, abstract and lead paragraphy form NYTimes times
 const News: React.FC<Props> = ({ name }) => {
     const styles = useStyles();
     const [articles, setArticles] = useState([]);
