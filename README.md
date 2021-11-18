@@ -1,67 +1,51 @@
 # capstone-project-3900-h16a-404-not-found
 capstone-project-3900-h16a-404-not-found created by GitHub Classroom
 
+## Setup
+
+### Environment
+
+1. Install Lubuntu 20.4.1 LTS on your Virtual machine
+2. Install node (version 14) globally
+3. Install yarn globally
+4. Install python3 (version 3.8) globally
+5. Install pip3 (version 19) globally
+
+### MongoDB
+
+    - There is no need to set up the database
+    - Ensure in the backend folder there is a file names “.env” with the below line or add such a file if it does not exist.
+        - MONGODB_URL=mongodb+srv://smartPortfolio:404notfound@cluster0.dmydo.mongodb.net/ezfins?retryWrites=true&w=majority
+
+## Dependencies
+
+Backend:
+1. Open a new terminal
+2. Run “cd backend”	
+3. Run “yarn install”
+4. Run “cd src/AI”
+5. Run “pip3 install -r requirements.txt”
+6. Run “python3 download.py”
+
+Frontend:
+1. Open a new terminal
+2. Run “cd frontend”
+3. Run “yarn install”
+
+### To Run 
+
+Backend:
+1. Open a new terminal
+2. Run “cd backend”
+3. Run “yarn start”
+
+Frontend:
+1. Open a new terminal
+2. Run “cd frontend”
+3. Run “yarn start”
+
 ## Caveat: Don't use npm for the project
 ## Caveat: Don't work on main or develop branch
 ## Caveat: Branch off of develop branch
 ## Caveat: Create a Pull Request before merging into develop branch
 ## Caveat: Don't "git add .", just add the files you actuall modify
-
-## Database Setup
-1.  Download mongodb Community Server
-2.  Download robo 3t
-3.  Rename mongodb folder to be "mongodb" and create another folder "mongodb-data" in the same directory
-4.  Run the following command to start the DB server
-5.  Mac:  $YOURDIR/mongodb/bin/mongod --dbpath=$YOURDIR/mongodb-data/
-6.  Window: $YOURDIR/mongodb/bin/mongod.exe --dbpath=$YOURDIR/mongodb-data/
-
-## frontend Scripts
-
-In the frontend directory, you can run:
-
-### `yarn install`
-
-Run this command once you pull down the repo
-
-### `yarn start`
-
-Run the command to start the page.
-
-### `yarn lint`
-
-Run this command to check the linting style
-
-### `yarn format`
-
-to format your codes
-
-
-## backend Scripts
-
-In the backend directory, you can run:
-
-### `yarn install`
-
-Run this command once you pull down the repo
-
-### `yarn start`
-
-Run the command to start the server
-
-### `yarn lint`
-
-to check the linting style
-
-### `yarn format`
-
-to format your codes
-
-### `cd backend/src/AI`
-### then run `pip3 install -r requirements.txt`
-### then run `python3 download.py`
-
-to install python dependencies
-
-
-
-
