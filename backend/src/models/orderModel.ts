@@ -122,7 +122,7 @@ OrderSchema.post('save', { document : true }, async function (next): Promise<voi
             }
             if(existingStock.numUnits === 0)
             {
-                existingStock.delete();
+                await existingStock.delete();
             }
             user.balance += 
                 parseFloat((this.executePrice * this.numUnits).toFixed(2));
@@ -136,7 +136,7 @@ OrderSchema.post('save', { document : true }, async function (next): Promise<voi
                     (existingStock.numUnits + this.numUnits)).toFixed(2);
                 existingStock.numUnits += this.numUnits;
                 existingStock.averagePrice = parseFloat(avg);
-                existingStock.save();
+                await existingStock.save();
             } else
             {
                 const newStock = new Stock({
