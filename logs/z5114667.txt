@@ -72,3 +72,4 @@ Week 10
             - References
     - Presentation
         - Created basic slide layout
+    - Helped push a lot of front end pull requests through
