@@ -14,7 +14,7 @@ interface Props {
     onClose: () => void,
     updateLogin: (val: boolean) => void,
 }
-
+//Pop up window to update username and password
 const UpdateProfile: React.FC<Props> = ({ open, onClose, updateLogin }) => {
     const styles = useStyles();
     const history = useHistory();

@@ -7,7 +7,7 @@ interface Props {
     selected: boolean,
     selectTicker(): void;
 }
-
+// The style for left hand watchlist item
 const WatchlistTicker: React.FC<Props> = ({
     symbol,
     stockName,
