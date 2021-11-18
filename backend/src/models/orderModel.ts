@@ -98,8 +98,7 @@ OrderSchema.methods.getObject = async function (): Promise<{}> {
 OrderSchema.post('save', { document : true }, async function (next): Promise<void> {
     if(this.executed === true)
     {
-        const user = await User.findOne({
-            user: this.user });
+        const user = await User.findById(this.user);
         if(!user)
         {
             throw new Error('Could not find user');
@@ -117,7 +116,7 @@ OrderSchema.post('save', { document : true }, async function (next): Promise<voi
             }
             if(existingStock.numUnits === 0)
             {
-                existingStock.delete();
+                await existingStock.delete();
             }
             user.balance += 
                 parseFloat((this.executePrice * this.numUnits).toFixed(2));
@@ -129,9 +128,11 @@ OrderSchema.post('save', { document : true }, async function (next): Promise<voi
                     (existingStock.numUnits * existingStock.averagePrice +
                     this.numUnits * this.executePrice) / 
                     (existingStock.numUnits + this.numUnits)).toFixed(2);
+
                 existingStock.numUnits += this.numUnits;
                 existingStock.averagePrice = parseFloat(avg);
-                existingStock.save();
+
+                await existingStock.save();
             } else
             {
                 const newStock = new Stock({
@@ -145,11 +146,12 @@ OrderSchema.post('save', { document : true }, async function (next): Promise<voi
                 {
                     throw new Error('Could not create stock');
                 }
-                newStock.save();
+                await newStock.save();
             }
             user.balance -= 
                 parseFloat((this.executePrice * this.numUnits).toFixed(2));
-            user.save();
+
+            await user.save();
         }
     }
 });
