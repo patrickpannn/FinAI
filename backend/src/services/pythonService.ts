@@ -6,7 +6,7 @@ export default class ConnectionPY {
         args: string[]
     ): Promise<string> => {
         return new Promise<string>((resolved, error) => {
-            const pyConn = spawn('python3', [`${process.cwd()}/src/AI/${fileName}`, ...args]);
+            const pyConn = spawn('python', [`${process.cwd()}/src/AI/${fileName}`, ...args]);
 
             pyConn.stdout.on('data', function (data) {
                 resolved(data.toString());
