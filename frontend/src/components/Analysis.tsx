@@ -1,7 +1,6 @@
 import React from 'react';
 import { Main } from '../styles/analysis.style';
 import SentimentAnalysis from './SentimentAnalysis';
-import PricePrediction from './PricePrediction';
 import SnowFlake from './SnowFlake';
 
 interface Props {
@@ -13,7 +12,6 @@ const Analysis: React.FC<Props> = ({ ticker, stockName }) => {
     return (
         <Main>
             <SentimentAnalysis stockName={stockName} />
-            <PricePrediction ticker={ticker} />
             {!(ticker === 'BINANCE:BTCUSDT' || ticker === 'BINANCE:ETHUSDT') && <SnowFlake ticker={ticker} />}
         </Main>
     );
