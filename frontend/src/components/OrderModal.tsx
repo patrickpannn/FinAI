@@ -15,7 +15,9 @@ interface Props {
     stockName: string,
     onClose: () => void;
 }
-
+// Pop-up window for buying a stock 
+// For all stocks, users can select the units they want to purchase to make an order
+// For Bitcoin and Ethereum, users can enter the price they expected and the quantity to make a limit order
 const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
     const [units, setUnits] = useState('');
     const styles = useStyles();

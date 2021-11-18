@@ -11,7 +11,7 @@ interface Props {
     childNode: React.ReactNode,
     onClick?: () => void,
 }
-
+// The buttons in the sidebar
 const SidebarBtn: React.FC<Props> = ({ text, childNode, onClick }) => {
     const styles = useStyles();
 

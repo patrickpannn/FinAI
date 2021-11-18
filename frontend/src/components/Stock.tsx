@@ -20,7 +20,9 @@ interface Props {
 }
 
 type Color = 'normal' | 'up' | 'down';
-
+// Displaying real time price of the stocks
+// Adding and deleting stocks from the watchlist
+// Giving users option to buy stocks
 const Stock: React.FC<Props> = ({
     ticker,
     stockName,

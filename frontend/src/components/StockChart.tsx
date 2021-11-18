@@ -18,7 +18,7 @@ interface DataItem {
 interface Props {
     ticker: string,
 }
-
+// The candle stick chart that showing the price of the stocks in the past 2 months
 const StockChart: React.FC<Props> = ({ ticker }) => {
     const dispatch = useDispatch();
     const { setToast } = bindActionCreators(actionCreators, dispatch);
