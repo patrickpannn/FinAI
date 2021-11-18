@@ -16,6 +16,9 @@ export const SubmitButton = styled(Button)({
 });
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
+    selected: {
+        backgroundColor: '#d7eafd',
+    },
     dialogtitle: {
         m: 0,
         p: 2,

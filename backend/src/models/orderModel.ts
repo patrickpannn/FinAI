@@ -1,7 +1,7 @@
 import { Schema, model, Document } from 'mongoose';
 import Portfolio from './portfolioModel';
-import dotenv from 'dotenv';
-dotenv.config();
+import Stock from './stockModel';
+import User from './userModel';
 
 // Document interface
 interface OrderInterface extends Document {
@@ -66,7 +66,7 @@ const OrderSchema = new Schema<OrderInterface>({
     direction: {
         type: String,
         required: true,
-    }
+    },
 }, { timestamps: true });
 
 OrderSchema.methods.getObject = async function (): Promise<{}> {
@@ -79,6 +79,7 @@ OrderSchema.methods.getObject = async function (): Promise<{}> {
         }
 
         let orderObj = {
+            id: this._id,
             numUnits: this.numUnits,
             executePrice: this.executePrice,
             ticker: this.ticker,
@@ -93,5 +94,64 @@ OrderSchema.methods.getObject = async function (): Promise<{}> {
         throw new Error('Could not return order object');
     }
 };
+
+OrderSchema.post('save', { document : true }, async function (next): Promise<void> {
+    if(this.executed === true)
+    {
+        const user = await User.findOne({
+            user: this.user });
+        if(!user)
+        {
+            throw new Error('Could not find user');
+        }
+        const existingStock = await Stock.findOne({
+            user: this.user,
+            portfolio: this.portfolio,
+            ticker: this.ticker
+        });
+        if(this.direction === "SELL") // selling an existing stock
+        {
+            if(!existingStock)
+            {
+                throw new Error('Could not find stock!');
+            }
+            if(existingStock.numUnits === 0)
+            {
+                existingStock.delete();
+            }
+            user.balance += 
+                parseFloat((this.executePrice * this.numUnits).toFixed(2));
+        } else // purchasing a stock which may or may not already exist in the specified portfolio
+        {
+            if(existingStock)
+            {
+                const avg = (
+                    (existingStock.numUnits * existingStock.averagePrice +
+                    this.numUnits * this.executePrice) / 
+                    (existingStock.numUnits + this.numUnits)).toFixed(2);
+                existingStock.numUnits += this.numUnits;
+                existingStock.averagePrice = parseFloat(avg);
+                existingStock.save();
+            } else
+            {
+                const newStock = new Stock({
+                    portfolio: this.portfolio,
+                    ticker: this.ticker,
+                    name: this.name,
+                    averagePrice: this.executePrice, // TO BE CONFIRMED
+                    numUnits: this.numUnits
+                });
+                if(!newStock)
+                {
+                    throw new Error('Could not create stock');
+                }
+                newStock.save();
+            }
+            user.balance -= 
+                parseFloat((this.executePrice * this.numUnits).toFixed(2));
+            user.save();
+        }
+    }
+});
 
 export default model<OrderInterface>('order', OrderSchema);
