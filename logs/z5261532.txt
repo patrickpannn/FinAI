@@ -1,0 +1,41 @@
+Week1
+- Watched React frontend videos
+- Watched MongoDB implementation videos
+- Discussed and wrote some user stories for the proposal
+
+Week 2
+- Took inspiration from 4 user interface pages Bingyu made(homepage, login, register and stock performance) and finished user interface design on Balsamiq(an interface design tool)
+
+Week 3
+- Got feedback from team members and modified the UI on Balsamiq(an interface design tool)
+- Finalised the storyboards for the proposal
+- Added adding money to account functionality and extra reset email password pages to UI, updated storyboard accordingly
+
+Week 4
+- Implemented the initial UI version code for Bar, Homepage, Login, Recharge, ResetActivation, ResetPassword, UpdateProfile and committed to homepage_ui branch.
+- Made the high modality UI by using Figma(Homepage, login, sign up, reset password, rest password activation, recharge)
+- Changed the UI components code from javascript to typescript
+
+Week 5
+- Made changes to Bar/Recharge/ResetActivation/ResetPassword/Update components to keep consistency with exiting sign up/sign pages
+
+Week 6
+- Discussed High Modality Figma pages for sprint 2 and made a sample watch list page
+- Made the news feed functionality working(give a string and match news from New York Times API)
+
+Week 7
+- Made the left hand side list(a list stocks) working and able to add and/delete items from the frontend
+- Arranged a basic format of user history order page
+
+Week 8
+- Extended the watchlist page to be capable of taking other components such as Price component and Analysis component and styled the layout according to the feedback from scrum master
+- Finished the order page frontend
+
+Week 9
+- Fix the frontend order page and News styles according to the feedback from scrum master
+- Finished frontend wallet page
+- Researched the package for doing the frontend sentiment score component
+
+Week 10
+- Finished frontend profile, snowflake
+
