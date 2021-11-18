@@ -89,7 +89,7 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
             } else if (response.status === 401) {
                 throw new Error('Authentication Failed');
             } else {
-                throw new Error('Insufficient funds');
+                throw new Error('Insufficient funds or Exceed the maximum number of orders allowed');
             }
         } catch (error) {
             setToast({ type: 'error', message: `${error}` });
