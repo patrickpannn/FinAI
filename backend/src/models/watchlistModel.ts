@@ -8,6 +8,10 @@ interface WatchlistInterface extends Document {
   tickers: Array<Ticker>
 }
 
+// Watchlist Model 
+// user : user ID
+// tickers: a list of tickers underneath the users watchlist. Contains the ticker itself and its name
+
 // Schema
 const WatchlistSchema = new Schema<WatchlistInterface>({
   user: {
