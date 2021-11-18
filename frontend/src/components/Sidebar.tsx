@@ -29,9 +29,10 @@ const url = process.env.REACT_APP_URL || 'http://localhost:5000';
 interface Props {
     open: boolean,
     onClose: () => void,
-    openWallet? : () => void,
+    openWallet?: () => void,
     openTopupModal?: () => void,
     openUpdateModal?: () => void,
+    updateLogin?: (val: boolean) => void,
     openPortfolios?: () => void,
     openOrders?: () => void
 }
@@ -42,6 +43,7 @@ const Sidebar: React.FC<Props> = ({
     openWallet,
     openTopupModal,
     openUpdateModal,
+    updateLogin,
     openPortfolios,
     openOrders
 }) => {
@@ -63,9 +65,10 @@ const Sidebar: React.FC<Props> = ({
                 },
             });
             const data = await response.json();
-            if (response.status === 200) {
+            if (response.status === 200 && updateLogin !== undefined) {
                 setToast({ type: 'success', message: `${data.response}` });
-                sessionStorage.setItem('access_token', '');
+                sessionStorage.clear();
+                updateLogin(false);
                 history.push('/');
             } else {
                 throw new Error(`${data.error}`);
@@ -85,9 +88,10 @@ const Sidebar: React.FC<Props> = ({
                 },
             });
             const data = await response.json();
-            if (response.status === 200) {
+            if (response.status === 200 && updateLogin !== undefined) {
                 setToast({ type: 'success', message: 'Delete Successfully' });
-                sessionStorage.setItem('access_token', '');
+                sessionStorage.clear();
+                updateLogin(false);
                 history.push('/');
             } else {
                 throw new Error(`${data.error}`);
@@ -110,15 +114,15 @@ const Sidebar: React.FC<Props> = ({
                 setName(data.username);
                 setNameFirstLetter(data.username[0]);
             } else {
-                
+
                 throw new Error('Failed to fetch user name');
-                
+
             }
         } catch (e) {
             setToast({ type: 'error', message: `${e}` });
         }
-         // eslint-disable-next-line
-    },[]);
+        // eslint-disable-next-line
+    }, []);
 
     useEffect(() => {
         handleProfile();

@@ -30,13 +30,13 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         position: "relative",
         height:'600px',
         width:'600px',
+        marginBottom: '60px',
     },
 }));
 
 export const Main = styled('div')({
     width: '70%',
     margin: '0 auto',
-    height: 'calc(100% - 60px)',
 });
 
 export const Indicator = styled('div')({
