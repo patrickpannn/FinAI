@@ -5,7 +5,7 @@ import UpdateProfile from '../components/UpdateProfile';
 import Watchlist from './Watchlist';
 import { Route } from 'react-router-dom';
 import Portfolios from '../components/Portfolios';
-import Orders from '../components/Orders';
+import Orders from './Orders';
 import Wallet from '../pages/Wallet';
 
 const Dashboard: React.FC = () => {
