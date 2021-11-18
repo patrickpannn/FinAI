@@ -47,37 +47,13 @@ export default class SnowflakeService {
               `https://finnhub.io/api/v1/stock/candle?symbol=${ticker}&resolution=M&from=${Math.floor(Date.now() / 1000 - 31536000)}&to=${Math.floor(Date.now() / 1000)}&token=c5vln0iad3ibtqnna830`);
     
             const stockPrices = Array(stockResponse.data.c)[0];
-    
-            let stockDiffSum: number = 0.0;
-            let prevPrice: number = 0.0;
-            let xCounter: number = 0.0;
-    
-            stockPrices.forEach((element: number) => {
-                if(xCounter !== 0){
-                    stockDiffSum += element-prevPrice;
-                }
-                prevPrice = element;
-                xCounter++;
-            });
-            const stockGrad = stockDiffSum/(xCounter-1);
+            const stockGrad = +stockPrices[stockPrices.length-1] - +stockPrices[0];
     
             const index = await axios.get(
                 `https://api.twelvedata.com/time_series?symbol=${SMP500}&interval=1month&outputsize=12&apikey=614acd00d55849d19a5fca8f5f6ca17a`);
     
             const indexPrices = index.data.values;
-    
-            let indexDiffSum: number = 0.0;
-            for(let currentX: number = indexPrices.length-1; 
-                                        currentX> 0; currentX--){
-
-                if(currentX !== indexPrices.length){
-                    indexDiffSum += 
-                        Number(indexPrices[currentX-1].close)-
-                        Number(indexPrices[currentX].close);
-                }
-
-            }
-            const indexGrad = indexDiffSum/(indexPrices.length-1);
+            const indexGrad = +indexPrices[0].close - +indexPrices[indexPrices.length-1].close;
     
             const stockValueGrowth = stockGrad / 
                 Number(stockPrices[stockPrices.length-1]) * 100;
@@ -86,8 +62,8 @@ export default class SnowflakeService {
                 Number(indexPrices[0].close) * 100;
     
             return +(1/(1+
-                Math.exp(-(stockValueGrowth - indexValueGrowth))))
-                .toFixed(2);
+                Math.exp(-0.05*(stockValueGrowth - indexValueGrowth))))
+                .toFixed(3);
 
         } catch(e)
         {
