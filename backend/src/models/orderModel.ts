@@ -13,6 +13,7 @@ interface OrderInterface extends Document {
     name: string,
     executed: boolean,
     direction: string,
+    isLimitOrder: boolean,
     getObject: () => {};
 }
 
@@ -65,6 +66,10 @@ const OrderSchema = new Schema<OrderInterface>({
         type: String,
         required: true,
     },
+    isLimitOrder: {
+        type: Boolean,
+        required: true,
+    }
 }, { timestamps: true });
 
 OrderSchema.methods.getObject = async function (): Promise<{}> {
@@ -95,7 +100,7 @@ OrderSchema.methods.getObject = async function (): Promise<{}> {
 
 OrderSchema.post('save', { document: true }, async function (next): Promise<void> {
     try {
-        if (this.executed === true) {
+        if (this.executed === true && this.isLimitOrder) {
             const user = await User.findById(this.user);
             if (!user) {
                 throw new Error('Could not find user');
@@ -132,7 +137,7 @@ OrderSchema.post('save', { document: true }, async function (next): Promise<void
                         portfolio: this.portfolio,
                         ticker: this.ticker,
                         name: this.name,
-                        averagePrice: this.executePrice, // TO BE CONFIRMED
+                        averagePrice: this.executePrice,
                         numUnits: this.numUnits
                     });
                     if (!newStock) {
@@ -142,7 +147,7 @@ OrderSchema.post('save', { document: true }, async function (next): Promise<void
                 }
                 user.balance -=
                     parseFloat((this.executePrice * this.numUnits).toFixed(2));
-
+                user.numOrders--;
                 await user.save();
             }
         }
