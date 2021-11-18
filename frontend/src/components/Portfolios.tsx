@@ -92,7 +92,9 @@ const Portfolios: React.FC<Props> = () => {
     try {
       data.forEach((symbol, index) => {
         if (symbol === 'BINANCE:BTCUSDT') {
-          data[index] = 'BTC-USD'
+          data[index] = 'BTC/USD'
+        } else if (symbol === 'BINANCE:ETHUSDT') {
+          data[index] = 'ETH/USD'
         }
       })
       const response = await fetch(`https://api.twelvedata.com/time_series?symbol=${data.join(',')}&interval=1min&apikey=6910ca26066d4c8e92f91201d762c60f`, {
@@ -135,7 +137,9 @@ const Portfolios: React.FC<Props> = () => {
               i.stocks.forEach((j: Stock) => {
                 let value
                 if (j.ticker === 'BINANCE:BTCUSDT') {
-                  value = res['BTC-USD'];
+                  value = res['BTC/USD'];
+                } else if (j.ticker === 'BINANCE:ETHUSDT') {
+                  value = res['ETH/USD'];
                 } else {
                   value = res[j.ticker]
                 }
@@ -351,11 +355,14 @@ const Portfolios: React.FC<Props> = () => {
         </DialogTitle>
         <DialogActions>
           <Button
+            className={styles.create_btn} variant="contained"
             onClick={(): void => setAmountDialog(false)}
           >
             Cancel
           </Button>
-          <Button onClick={handleMove} autoFocus>
+          <Button
+            className={styles.create_btn} variant="contained"
+            onClick={handleMove} autoFocus>
             Confirm
           </Button>
         </DialogActions>

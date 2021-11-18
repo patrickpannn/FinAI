@@ -74,7 +74,7 @@ const PortfoliosItem: React.FC<ItemProps> =
 						{data.ticker}
 					</TableCell>
 					<TableCell align="center">
-						{'$' + data.averagePrice}
+						{'$' + data.averagePrice.toFixed(2)}
 					</TableCell>
 					<TableCell align="center">
 						{data.numUnits}
@@ -113,22 +113,25 @@ const PortfoliosItem: React.FC<ItemProps> =
 					</DialogTitle>
 					<DialogActions>
 						<Button
+							className={styles.create_btn} variant="contained"
 							onClick={(): void => setSellAmountDialog(false)}
 						>
 							Cancel
 						</Button>
-						<Button onClick={(): void => {
-							handleSell(
-								{
-									name: data.name,
-									units: sellAmount,
-									portfolio: name,
-									ticker: data.ticker
-								}, (): void => {
-									setSellAmount(1);
-									setSellAmountDialog(false);
-								});
-						}} autoFocus>
+						<Button
+							className={styles.create_btn} variant="contained"
+							onClick={(): void => {
+								handleSell(
+									{
+										name: data.name,
+										units: sellAmount,
+										portfolio: name,
+										ticker: data.ticker
+									}, (): void => {
+										setSellAmount(1);
+										setSellAmountDialog(false);
+									});
+							}} autoFocus>
 							Confirm
 						</Button>
 					</DialogActions>

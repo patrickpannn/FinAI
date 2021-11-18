@@ -2,10 +2,10 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
 	profit: {
-		color: 'red!important'
+		color: 'green!important'
 	},
 	loss: {
-		color: 'green!important'
+		color: 'red!important'
 	},
 	content: {
 		background: '#eee',
