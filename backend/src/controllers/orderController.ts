@@ -63,6 +63,7 @@ export default class OrderController {
                 executePrice: price,
                 ticker: req.body.ticker,
                 name: req.body.name,
+                isLimitOrder: true,
                 direction: req.body.direction
             });
 
@@ -115,6 +116,7 @@ export default class OrderController {
                 ticker: req.body.ticker,
                 name: req.body.name,
                 direction: req.body.direction,
+                isLimitOrder: true,
                 portfolio: req.portfolio.id
             });
 
@@ -251,6 +253,7 @@ export default class OrderController {
                 ticker: req.body.ticker,
                 name: req.body.name,
                 executed: true,
+                isLimitOrder: false,
                 direction: "BUY"
             });
             if (!order) {
@@ -309,6 +312,7 @@ export default class OrderController {
                 ticker: req.body.ticker,
                 name: req.body.name,
                 executed: true,
+                isLimitOrder: false,
                 direction: "SELL"
             });
             if (!order) {

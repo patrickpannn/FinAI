@@ -17,7 +17,8 @@ const Dashboard: React.FC = () => {
         setSearchTicker(ticker);
         setSearchStockName(stockName);
     };
- 
+
+
     return (
         <main>
             <Header
