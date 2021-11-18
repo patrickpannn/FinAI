@@ -29,7 +29,6 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
     ): Promise<void> => {
         e.preventDefault();
         try {
-
             if (isNaN(+(Number(units))) || parseFloat(units) <= 0) {
                 throw new Error('Please enter postive number for units');
             }
@@ -163,7 +162,8 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
                             </DialogActions>
                         </form>
                     </DialogContent>
-                </>}
+                </>
+                }
                 {(ticker === 'BINANCE:BTCUSDT' || ticker === 'BINANCE:ETHUSDT') &&
                         
                     <TabContainer>
@@ -183,7 +183,7 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
                         </StyledTabs>
                     </TabContainer>
                         
-                    }
+                }
         </BootstrapDialog>
     );
 };
