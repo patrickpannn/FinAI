@@ -29,14 +29,44 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     container: {
         width: '450px',
-        height: '300px',
+        height: '350px',
+        position: 'relative',
+        overflow: 'hidden'
     },
     form: {
         width: '100%',
-        height: '100%',
+        height: '300px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-around'
     }
 }
 ));
+
+export const StyledTab = styled('div')({
+    display: 'flex',
+    height: '40px',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    fontSize: '18pt',
+    fontWeight: 600,
+    color: '#0017ea',
+    fontFamily: 'Arial',
+    '&:hover': {
+        backgroundColor: '#d7eafd',
+    }
+});
+
+export const TabContainer = styled('div')({
+    width: '100%',
+    height: '60px',
+});
+export const StyledTabs = styled('div')({
+    width: '100%',
+    height: '60px',
+    display: 'flex',
+    position: 'absolute',
+    backgroundColor: 'white',
+    bottom: 0,
+});

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { DialogContent, DialogActions, TextField } from '@mui/material';
-import { BootstrapDialog, useStyles, SubmitButton } from '../styles/dialog.style';
+import { BootstrapDialog, useStyles, SubmitButton, TabContainer, StyledTabs } from '../styles/dialog.style';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
 import StyledDialogTitle from './StyledDialogTitle';
-import { TabContainer, StyledTabs, OrderTab } from '../styles/watchlist.style';
+import { OrderTab } from '../styles/watchlist.style';
 
 const url = process.env.REACT_APP_URL || 'http://localhost:5000';
 
@@ -103,71 +103,58 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
             aria-labelledby="buy order"
             open={open}
         >
-            {page === 'BUY NOW' &&
-                <>
-                    <StyledDialogTitle id="buy-title" onClose={onClose}>
-                        Market Order
-                    </StyledDialogTitle>
-                    <DialogContent className={styles.container} dividers>
-                        <form onSubmit={handleNormal} className={styles.form}>
-                            <TextField
-                                id="outlined-number"
-                                label="Units"
-                                type="text"
-                                value={units}
-                                onChange={
-                                    (e): void => setUnits(e.target.value)
-                                }
-                                required
-                                fullWidth
-                            />
-                            <DialogActions>
-                                <SubmitButton autoFocus type='submit' variant="contained">
-                                    Place buy Order
-                                </SubmitButton>
-                            </DialogActions>
-                        </form>
-                    </DialogContent>
-                </>
-            }
-            {page === 'LIMIT ORDER' &&
-                <>
-                    <StyledDialogTitle id="buy-title" onClose={onClose}>
-                        Limit Order
-                    </StyledDialogTitle>
-                    <DialogContent className={styles.container} dividers>
-                        <form onSubmit={handleLimit} className={styles.form}>
-                            <TextField
-                                label="Price"
-                                type="text"
-                                value={amount}
-                                onChange={
-                                    (e): void => setAmount(e.target.value)
-                                }
-                                required
-                                fullWidth
-                            />
-                            <TextField
-                                label="Units"
-                                type="text"
-                                value={units}
-                                onChange={
-                                    (e): void => setUnits(e.target.value)
-                                }
-                                required
-                                fullWidth
-                            />
-                            <DialogActions>
-                                <SubmitButton autoFocus type='submit' variant="contained">
-                                    Place Limit Order
-                                </SubmitButton>
-                            </DialogActions>
-                        </form>
-                    </DialogContent>
-                </>
+            <StyledDialogTitle id="buy-title" onClose={onClose}>
+                {page === 'BUY NOW' ? 'Market Order' : 'Limit Order'}
+            </StyledDialogTitle>
+            <DialogContent className={styles.container} dividers>
+                {page === 'BUY NOW' &&
+                    <form onSubmit={handleNormal} className={styles.form}>
+                        <TextField
+                            id="outlined-number"
+                            label="Units"
+                            type="text"
+                            value={units}
+                            onChange={
+                                (e): void => setUnits(e.target.value)
+                            }
+                            required
+                            fullWidth
+                        />
+                        <DialogActions>
+                            <SubmitButton autoFocus type='submit' variant="contained">
+                                Place buy Order
+                            </SubmitButton>
+                        </DialogActions>
+                    </form>
                 }
+                {page === 'LIMIT ORDER' && <form onSubmit={handleLimit} className={styles.form}>
+                    <TextField
+                        label="Price"
+                        type="text"
+                        value={amount}
+                        onChange={
+                            (e): void => setAmount(e.target.value)
+                        }
+                        required
+                        fullWidth
+                    />
+                    <TextField
+                        label="Units"
+                        type="text"
+                        value={units}
+                        onChange={
+                            (e): void => setUnits(e.target.value)
+                        }
+                        required
+                        fullWidth
+                    />
+                    <DialogActions>
+                        <SubmitButton autoFocus type='submit' variant="contained">
+                            Place Limit Order
+                        </SubmitButton>
+                    </DialogActions>
+                </form>}
                 {(ticker === 'BINANCE:BTCUSDT' || ticker === 'BINANCE:ETHUSDT') &&
-                        
                     <TabContainer>
                         <StyledTabs
                             aria-label="tabs"
@@ -184,8 +171,9 @@ const OrderModal: React.FC<Props> = ({ open, ticker, stockName, onClose }) => {
                             </OrderTab>
                         </StyledTabs>
                     </TabContainer>
-                        
+
                 }
+            </DialogContent>
         </BootstrapDialog>
     );
 };
