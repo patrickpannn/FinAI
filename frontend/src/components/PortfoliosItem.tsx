@@ -77,7 +77,7 @@ const PortfoliosItem: React.FC<ItemProps> =
 						{'$' + data.averagePrice.toFixed(2)}
 					</TableCell>
 					<TableCell align="center">
-						{data.numUnits}
+						{data.numUnits.toFixed(2)}
 					</TableCell>
 					<TableCell align="center">
 						{'$' + (data.averagePrice * data.numUnits).toFixed(2)}

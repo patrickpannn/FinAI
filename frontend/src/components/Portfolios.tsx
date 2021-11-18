@@ -92,11 +92,11 @@ const Portfolios: React.FC<Props> = () => {
     try {
       data.forEach((symbol, index) => {
         if (symbol === 'BINANCE:BTCUSDT') {
-          data[index] = 'BTC/USD'
+          data[index] = 'BTC/USD';
         } else if (symbol === 'BINANCE:ETHUSDT') {
-          data[index] = 'ETH/USD'
+          data[index] = 'ETH/USD';
         }
-      })
+      });
       const response = await fetch(`https://api.twelvedata.com/time_series?symbol=${data.join(',')}&interval=1min&apikey=6910ca26066d4c8e92f91201d762c60f`, {
         method: 'GET',
         headers: {
@@ -135,13 +135,13 @@ const Portfolios: React.FC<Props> = () => {
               }) => {
               let total: number = 0;
               i.stocks.forEach((j: Stock) => {
-                let value
+                let value;
                 if (j.ticker === 'BINANCE:BTCUSDT') {
                   value = res['BTC/USD'];
                 } else if (j.ticker === 'BINANCE:ETHUSDT') {
                   value = res['ETH/USD'];
                 } else {
-                  value = res[j.ticker]
+                  value = res[j.ticker];
                 }
                 if (value.status === 'ok') {
                   j.close = value ? Number(value.values[0].close) : 0;
