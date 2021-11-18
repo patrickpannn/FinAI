@@ -30,42 +30,42 @@ export default class AnalysisController {
     ): Promise<void> => {
         try {
 
-            if(req.params.ticker === SnowflakeAnalysisIgnore.bitcoin 
+            if (req.params.ticker === SnowflakeAnalysisIgnore.bitcoin
                 || req.params.ticker === SnowflakeAnalysisIgnore.ethereum) {
                 throw new Error('Bad Request');
             }
 
             const stockResponse = await axios.get(
                 `https://finnhub.io/api/v1/stock/metric?symbol=${req.params.ticker}&metric=all&token=c5vln0iad3ibtqnna830`);
-            
+
             let valueValue = 0;
 
             if (!stockResponse.data.metric.freeCashFlowPerShareTTM) {
                 valueValue = 0;
             } else {
-                const cashFlow = 
+                const cashFlow =
                     stockResponse.data.metric.freeCashFlowPerShareTTM /
                     (1 - 0.05);
 
                 valueValue = await SnowflakeService.getValue(
-                                            req.params.ticker, cashFlow);
+                    req.params.ticker, cashFlow);
             }
 
             let riskValue = 0;
 
-            if (!stockResponse.data.series.annual.currentRatio[0] || 
+            if (!stockResponse.data.series.annual.currentRatio[0] ||
                 !stockResponse.data.series.annual.currentRatio[1]) {
-                    riskValue = 0;
+                riskValue = 0;
             } else {
-                const stockRiskYear1 = 
+                const stockRiskYear1 =
                     stockResponse.data.series.annual.currentRatio[0].v;
 
-                const stockRiskYear2 = 
+                const stockRiskYear2 =
                     stockResponse.data.series.annual.currentRatio[1].v;
 
                 riskValue = await SnowflakeService.getRisk(
-                                        stockRiskYear1, stockRiskYear2);
-            }    
+                    stockRiskYear1, stockRiskYear2);
+            }
 
             let dividendValue = 0;
 
@@ -76,9 +76,11 @@ export default class AnalysisController {
                 dividendValue = await SnowflakeService.getDividend(stockYield);
             }
 
-            const futureValue = await SnowflakeService.getFuture(req.params.ticker);
+            const futureValue = await SnowflakeService.getFuture(
+                req.params.ticker
+            );
             const pastValue = await SnowflakeService.getPast(req.params.ticker);
-            
+
             const snowflake = {
                 value: valueValue,
                 past: pastValue,

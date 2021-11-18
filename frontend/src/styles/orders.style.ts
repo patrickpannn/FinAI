@@ -8,6 +8,9 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     tableSize: {
         minWidth: 650,
     },
+    executedColor: {
+        color: 'green!important',
+    }
 }));
 
 export const C = styled(TableCell)(({ theme }) => ({

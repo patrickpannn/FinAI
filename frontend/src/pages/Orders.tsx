@@ -3,7 +3,7 @@ import { useStyles } from '../styles/orders.style';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state/index';
 import { useDispatch } from 'react-redux';
-import { Table, TableContainer , TableHead, TableRow, TableBody, Button } from '@mui/material';
+import { Table, TableContainer, TableHead, TableRow, TableBody, Button } from '@mui/material';
 import { Row, C, OrderTitle } from '../styles/orders.style';
 import Paper from '@mui/material/Paper';
 
@@ -11,22 +11,22 @@ const url = process.env.REACT_APP_URL || 'http://localhost:5000';
 
 interface OrderInterface {
     id: string,
-    numUnits: number, 
+    numUnits: number,
     executePrice: number,
     ticker: string,
-    name: string, 
-    executed: boolean, 
+    name: string,
+    executed: boolean,
     direction: string,
-    portfolio: string, 
+    portfolio: string,
 }
 const Orders: React.FC = () => {
-    
+
     const styles = useStyles();
     const dispatch = useDispatch();
     const { setToast } = bindActionCreators(actionCreators, dispatch);
     const [orders, setOrders] = useState<OrderInterface[]>([]);
     const [id, setId] = useState('');
-    
+
     const handleSubmit = async (
         e: React.FormEvent<HTMLFormElement>
     ): Promise<void> => {
@@ -96,23 +96,29 @@ const Orders: React.FC = () => {
                                 <C>Status</C>
                             </TableRow>
                         </TableHead>
-                
+
                         <TableBody>
                             {orders && orders.map(o => (
-                                <Row key= {o.id}>
+                                <Row key={o.id}>
                                     <C>{o.ticker}</C>
                                     <C>{o.name}</C>
                                     <C>{o.numUnits}</C>
                                     <C>{(o.executePrice).toFixed(2)}</C>
                                     <C>
-                                    {(o.numUnits*o.executePrice).toFixed(2)}
+                                        {(o.numUnits
+                                            * o.executePrice).toFixed(2)
+                                        }
                                     </C>
                                     <C>{o.direction}</C>
                                     <C>{o.portfolio}</C>
-                                    {o.executed && 
-                                        <C>Executed</C>
+                                    {o.executed &&
+                                        <C
+                                            className={styles.executedColor}
+                                        >
+                                            Executed
+                                        </C>
                                     }
-                                    {!o.executed && 
+                                    {!o.executed &&
                                         <C>
                                             <Button
                                                 type="submit"
@@ -122,17 +128,17 @@ const Orders: React.FC = () => {
                                                     (): void => setId(o.id)
                                                 }
                                             >
-                                            Cancel
+                                                Cancel
                                             </Button>
                                         </C>
                                     }
-                                </Row>                 
+                                </Row>
                             ))}
-                        </TableBody>   
+                        </TableBody>
                     </Table>
                 </TableContainer>
             </form>
         </div>
     );
 };
-export default Orders;  
+export default Orders;
