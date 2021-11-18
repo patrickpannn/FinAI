@@ -1,0 +1,74 @@
+1/10/2021:
+-Setup DB with Mongoose
+-Tested DB
+
+2/10/2021:
+- Setup MongoDB with Robo T3
+
+4/10/2021:
+- Made skeletons for database models
+
+6/10/2021:
+- Made simple watchlistModel and User Model
+- Discussed a means of defining a user order such that it expires in 24 hrs
+- MongoDB has inbuilt functions to remove an entry after a certain amount of time
+
+15/10/2021:
+- Updated watchlistModel and added all key functionality
+
+20/10/2021:
+- Begun Order Model
+- Implemented timeout for order model as well as order direction
+- added order routes for buy and sell market order
+- hooked up order model using api data from axios
+
+25/10/2021:
+- added order functionality for market orders
+   - market orders will also store an executed order for later viewing
+ 
+28/10/2021:
+- added limit order routes for orders
+- have buyLimitOrder, sellLimitOrder, and cancel Order
+- removed timeout functionality of orders -> orders will exist forever
+
+5/11/2021:
+- Refactored orderController and added verifyPortfolio middleware
+- portfolio now included in the request as an input for the orderController limit order related methods
+- Added post save middleware for order model to handle executed orders -> create / delete stocks when an order (buy or sell order) is executed)
+
+
+10/11/2021:
+- Begun research on future sentiment analysis
+    - following online tutorials and videos
+    - implement using pytorch and using nytimes article search api
+    
+12/11/2021:
+- Working on data pre-processing for RNN's
+- Considering using "basic financials" api data from finnhub
+
+13/11/2021:
+- Working on past performance snowflake indicator
+- Working on finding api which has data for global indices -> finnhub does not provide
+- Selected and testing twelvedata api
+- found activation function to map results from 0 to 1
+
+14/11/2021:
+- Working on future performance snowflake indicator
+- Looked into another potential RNN implementation
+- Researching interpolating methods of future price prediction rather than Sentiment Analysis based
+   - Results are less than spectacular
+   - Work needs to be done to predict long-term stock price behaviour -> currently extremely volatile
+- Simpler implementation developed -> using EbitPerShare ratio
+   - good indicator of stock health and future potential (too high a ratio and the stock is overvalues, too low and the stock is undervalued)
+
+
+16/11/2021:
+- Refactored codebase for snowflake analysis past and future methods
+- looked into RNN method again, no headway made :(
+
+
+17/11/2021:
+- Adjusted snowflake getPast performance method and rescaled
+- Working through PR's with team
+- Refactored orderModel -> post save method should only work for Limit Orders, frontEnd needs to know the executed status of the order
+- Refactored orderController -> maximum number of orders

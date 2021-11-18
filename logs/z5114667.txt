@@ -1,0 +1,75 @@
+Week 1
+    - Group creation and project selection
+    - Discussed features that could be implemented into our project
+    - Read through documentation around RestAPI and MongoDB
+    - Created proposal document and prepared formatting
+    - Started research for background information for project proposal
+
+Week 2
+    - Finished project proposal background and problem statement
+    - Worked with Andre to finish the existing work comparison
+    - Created an initial database structure drawing
+    - Started writing up some user stories with the team and assisted Andre in moving them to JIRA
+
+Week 3
+    - Assisted with interface and flow diagram discussions in team meeting
+    - Cleaned up the database drawing and added this to the project proposal
+    - Added a section to the proposal for project objectives
+    - Wrote in acceptance criteria for the user stories
+
+Week 4
+    - Final edits and formatting for the report including referencing
+    - Did some initial defining of some database tables with Andre
+    - Had some issues with software set up so slow to get going initially
+    - Re-defined the database models for stocks and portfolios
+    - Added in code to verify an attempt at login in the backend
+
+Week 5
+    - Database models for stocks and portfolios were cleaned up further and merged into develop
+    - Log in code was tested and merged into the develop branch
+    - Added code for:
+        - Changing user details such as passwords and usernames
+        - Create a default portfolio on user sign up
+        - Creating new portfolios
+    - Prepared for the first progressive demonstration
+    - Took notes for the first retrospective
+
+Week 6
+    - Took part of the first team code review session
+        - In this session I fixed up code relating to:
+            - Modifying user details
+            - Creating a portfolio
+        - Modifying user details code was pushed into develop
+        - Minor changes to creating a portfolio were required and were pushed to the branch awaiting final approval
+    - Started code for deleting a portfolio
+
+Week 7
+    - Significant changes to the delete portfolio function code for clarity and consistency
+    - Started code for change a stocks portfolio
+    - Made some efficiency changes around how input fields were checked for a few functions
+    - Created a merging function for when stocks move from portfolio to portfolio
+
+Week 8
+    - Made changes based on changes Andre made to the underlying data structure
+    - Created a list of portfolios function as well as a get balance function
+    - Made even more efficiency changes to error handling as well as code readability
+    - Assisted Andre with some basic functionalities as he was getting swamped with more complex tasks
+    - Began delete user code
+
+Week 9
+    - Finally pushed to get my older pull requested merged, in particular
+        - Delete portfolio
+        - Delete user
+    - Laid out the skeleton code for the snowflake analysis section
+
+Week 10
+    - Completed the value, risk, and dividend sectoin of the snowflake analysis
+    - Final report
+        - Created the final report template
+        - Completed and assistend with sections relating to
+            - Overview
+            - Implmentation Challenges
+            - References
+    - Presentation
+        - Created basic slide layout
+    - Helped push a lot of front end pull requests through
