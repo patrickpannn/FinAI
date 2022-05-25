@@ -43,9 +43,3 @@ Frontend:
 1. Open a new terminal
 2. Run “cd frontend”
 3. Run “yarn start”
-
-## Caveat: Don't use npm for the project
-## Caveat: Don't work on main or develop branch
-## Caveat: Branch off of develop branch
-## Caveat: Create a Pull Request before merging into develop branch
-## Caveat: Don't "git add .", just add the files you actuall modify
