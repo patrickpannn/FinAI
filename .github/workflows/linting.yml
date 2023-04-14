@@ -1,4 +1,4 @@
-name: Lining CI
+name: Linting CI
 
 on:
   push:
