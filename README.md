@@ -1,5 +1,4 @@
-# capstone-project-3900-h16a-404-not-found
-capstone-project-3900-h16a-404-not-found created by GitHub Classroom
+# FinAI powered by AI
 
 ## Setup
 
@@ -15,7 +14,7 @@ capstone-project-3900-h16a-404-not-found created by GitHub Classroom
 
     - There is no need to set up the database
     - Ensure in the backend folder there is a file names “.env” with the below line or add such a file if it does not exist.
-        - MONGODB_URL=mongodb+srv://smartPortfolio:404notfound@cluster0.dmydo.mongodb.net/ezfins?retryWrites=true&w=majority
+        - MONGODB_URL=[mongodb+srv://smartPortfolio:404notfound@cluster0.dmydo.mongodb.net/ezfins?retryWrites=true&w=majority]
 
 ## Dependencies
 
